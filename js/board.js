@@ -1,4 +1,5 @@
 function Init_Chessboard() {
+<<<<<<< Updated upstream
     
     var cfg = {
         draggable: true,
@@ -13,6 +14,13 @@ function Init_Chessboard() {
         statusEl = $('#status'),
         fenEl = $('#fen'),
         pgnEl = $('#pgn');
+=======
+    var board
+        , game = new Chess()
+        , statusEl = $('#status')
+        , fenEl = $('#fen')
+        , pgnEl = $('#pgn');
+>>>>>>> Stashed changes
 
     // do not pick up pieces if the game is over
     // only pick up pieces for the side to move
@@ -27,9 +35,9 @@ function Init_Chessboard() {
     var onDrop = function (source, target) {
         // see if the move is legal
         var move = game.move({
-            from: source,
-            to: target,
-            promotion: 'q' // NOTE: always promote to a queen for example simplicity
+            from: source
+            , to: target
+            , promotion: 'q' // NOTE: always promote to a queen for example simplicity
         });
 
         // illegal move
@@ -72,15 +80,25 @@ function Init_Chessboard() {
             }
         }
 
-        statusEl.html(status);
-        fenEl.html(game.fen());
-        pgnEl.html(game.pgn());
+        statusEl.html("STATUS:\t" + status);
+        fenEl.html("FEN:\t" + game.fen());
+        pgnEl.html("PGN:\t" + game.pgn());
     };
 
+<<<<<<< Updated upstream
     
     
     
     //Tie the configuration to the chessboard
+=======
+    var cfg = {
+        draggable: true
+        , position: 'start'
+        , onDragStart: onDragStart
+        , onDrop: onDrop
+        , onSnapEnd: onSnapEnd
+    };
+>>>>>>> Stashed changes
     board = ChessBoard('Chessboard', cfg);
 
     updateStatus();

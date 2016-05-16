@@ -1,0 +1,10 @@
+#Debug {
+    position: fixed;
+    width: 100%;
+    height: 300px;
+    background-color: darkgray;
+    font-size: 20px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
