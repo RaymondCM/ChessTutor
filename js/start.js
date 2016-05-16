@@ -1,4 +1,8 @@
 window.onload = function () {
-    alert("hello");
+    /*
+        GLOBAL VARIABLES
+    */
+    ct_debug = false;
+    
     Init_Chessboard();
 }
