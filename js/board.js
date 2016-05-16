@@ -1,6 +1,6 @@
 function Init_Chessboard() {
     var board,
-        game = new Chess(),
+        game = new Chess(), 
         statusEl = $('#status'),
         fenEl = $('#fen'),
         pgnEl = $('#pgn');
