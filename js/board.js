@@ -31,12 +31,6 @@ function Init_Chessboard() {
         updateStatus();
     };
 
-    // update the board position after the piece snap 
-    // for castling, en passant, pawn promotion
-    var onSnapEnd = function () {
-        board.position(game.fen());
-    };
-
     var updateStatus = function () {
         var status = '',
             check = '',
@@ -63,13 +57,58 @@ function Init_Chessboard() {
         checkmateEl.html("COLOUR IN CHECKMATE: " + checkmate);
     };
 
+    var removeGreySquares = function () {
+        $('#board .square-55d63').css('background', '');
+    };
+
+    var greySquare = function (square) {
+        var squareEl = $('#board .square-' + square);
+
+        var background = '#a9a9a9';
+        if (squareEl.hasClass('black-3c85d') === true) {
+            background = '#696969';
+        }
+
+        squareEl.css('background', background);
+    };
+
+    var onMouseoverSquare = function (square, piece) {
+        // get list of possible moves for this square
+        var moves = game.moves({
+            square: square,
+            verbose: true
+        });
+
+        // exit if there are no moves available for this square
+        if (moves.length === 0) return;
+
+        // highlight the square they moused over
+        greySquare(square);
+
+        // highlight the possible squares for this piece
+        for (var i = 0; i < moves.length; i++) {
+            greySquare(moves[i].to);
+        }
+    };
+
+    var onMouseoutSquare = function (square, piece) {
+        removeGreySquares();
+    };
+
+    var onSnapEnd = function () {
+        board.position(game.fen());
+    };
+
     var cfg = {
         draggable: true,
         position: 'start',
         onDragStart: onDragStart,
         onDrop: onDrop,
+        onMouseoutSquare: onMouseoutSquare,
+        onMouseoverSquare: onMouseoverSquare,
         onSnapEnd: onSnapEnd
     };
+
     board = ChessBoard('Chessboard', cfg);
 
     updateStatus();
