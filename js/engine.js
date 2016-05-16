@@ -1,21 +1,21 @@
 function Init_Stockfish() {
     queue = [];
     
-    stockfish = new Worker('stockfish.js');
+    engine = STOCKFISH();
     
     
     AskEngine('opp', 'white');
 }
 
 //Query the engine from the tutor or opponent
-function AskEngine(var source, side){
+function AskEngine(source, side){
     var query = {
                 source: source,
                 side: side,
                 move: 'undefined'
             };
     requestQueue.push(query);
-};
+}
 
 //Message recieved
 engine.onmessage = function(event) {
@@ -24,4 +24,5 @@ engine.onmessage = function(event) {
         if (String(event.data).substring(0, 8) == 'bestmove') {
             //Format the results
             console.log(event.data);
-};
+        }
+}
