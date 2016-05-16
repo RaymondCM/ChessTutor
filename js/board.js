@@ -1,18 +1,18 @@
 function Init_Chessboard() {
-    
+
     var cfg = {
-        draggable: true,
-        position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onSnapEnd: onSnapEnd
+        draggable: true
+        , position: 'start'
+        , onDragStart: onDragStart
+        , onDrop: onDrop
+        , onSnapEnd: onSnapEnd
     };
-    
-    var board,
-        game = new Chess(), 
-        statusEl = $('#status'),
-        fenEl = $('#fen'),
-        pgnEl = $('#pgn');
+
+    var board
+        , game = new Chess()
+        , statusEl = $('#status')
+        , fenEl = $('#fen')
+        , pgnEl = $('#pgn');
 
     // do not pick up pieces if the game is over
     // only pick up pieces for the side to move
@@ -27,9 +27,9 @@ function Init_Chessboard() {
     var onDrop = function (source, target) {
         // see if the move is legal
         var move = game.move({
-            from: source,
-            to: target,
-            promotion: 'q' // NOTE: always promote to a queen for example simplicity
+            from: source
+            , to: target
+            , promotion: 'q' // NOTE: always promote to a queen for example simplicity
         });
 
         // illegal move
@@ -72,14 +72,14 @@ function Init_Chessboard() {
             }
         }
 
-        statusEl.html(status);
-        fenEl.html(game.fen());
-        pgnEl.html(game.pgn());
+        statusEl.html("Status: " + status);
+        fenEl.html("FEN: " + game.fen());
+        pgnEl.html("PGN: " + game.pgn());
     };
 
-    
-    
-    
+
+
+
     //Tie the configuration to the chessboard
     board = ChessBoard('Chessboard', cfg);
 
