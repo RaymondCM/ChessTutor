@@ -77,40 +77,6 @@ function Init_Chessboard() {
         pgnEl.html("PGN: " + game.pgn());
     };
 
-    var onMouseoverSquare = function (square, piece) {
-        // get list of possible moves for this square
-        var moves = game.moves({
-            square: square
-            , verbose: true
-        });
-
-        // exit if there are no moves available for this square
-        if (moves.length === 0) return;
-
-        // highlight the square they moused over
-        greySquare(square);
-
-        // highlight the possible squares for this piece
-        for (var i = 0; i < moves.length; i++) {
-            greySquare(moves[i].to);
-        }
-    };
-
-    var removeGreySquares = function () {
-        $('#board .square-55d63').css('background', '');
-    };
-
-    var greySquare = function (square) {
-        var squareEl = $('#board .square-' + square);
-
-        var background = '#a9a9a9';
-        if (squareEl.hasClass('black-3c85d') === true) {
-            background = '#696969';
-        }
-
-        squareEl.css('background', background);
-    };
-
     //Tie the configuration to the chessboard
     board = ChessBoard('Chessboard', cfg);
 
