@@ -1,10 +1,7 @@
+engine = typeof STOCKFISH === "function" ? STOCKFISH() : new Worker(options.stockfishjs || 'stockfish.js');
+
 function Init_Stockfish() {
     queue = [];
-
-
-    engine = STOCKFISH();
-
-
     AskEngine('opp', 'white');
 }
 
@@ -15,22 +12,20 @@ function AskEngine(source, side) {
         side: side,
         move: 'undefined'
     }
-    
-    requestQueue.push(query);
+    queue.push(query);
     if (queue.length === 1) {
-        console.log('queuelength = 0');
+        console.log('queuelength = 1');
         engine.postMessage("position startpos");
         engine.postMessage("go depth 15");
-    }  
+    }
 }
 
 //Message recieved
 engine.onmessage = function (event) {
-
-    console.log(event.data);
+    console.log(event.data)[0];
     //When the engine outputs 'bestmove' the search has finished
     if (String(event.data).substring(0, 8) == 'bestmove') {
         //Format the results
-        console.log(event.data);
+        console.log(String(event.data));
     }
 }
