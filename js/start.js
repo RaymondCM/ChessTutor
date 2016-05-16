@@ -5,4 +5,5 @@ window.onload = function () {
     ct_debug = false;
     
     Init_Chessboard();
+    Init_Stockfish();
 }
