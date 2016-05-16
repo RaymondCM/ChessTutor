@@ -1,5 +1,8 @@
 function Init_Chessboard() {
 
+    if (!ct_debug)
+        $('#Debug').css('display', 'none');
+
     var board, game = new Chess(),
         statusEl = $('#status'),
         fenEl = $('#fen'),
@@ -57,16 +60,16 @@ function Init_Chessboard() {
         checkmateEl.html("COLOUR IN CHECKMATE: " + checkmate);
     };
 
-    var removeGreySquares = function () {
-        $('#board .square-55d63').css('background', '');
+    var removeHighlighting = function () {
+        $('#Chessboard .square-55d63').css('background', '');
     };
 
-    var greySquare = function (square) {
-        var squareEl = $('#board .square-' + square);
+    var highlightSquare = function (square) {
+        var squareEl = $('#Chessboard .square-' + square);
 
-        var background = '#a9a9a9';
+        var background = cb_possiblePlacesColourWhiteSq;
         if (squareEl.hasClass('black-3c85d') === true) {
-            background = '#696969';
+            background = cb_possiblePlacesColourBlackSq;
         }
 
         squareEl.css('background', background);
@@ -83,16 +86,16 @@ function Init_Chessboard() {
         if (moves.length === 0) return;
 
         // highlight the square they moused over
-        greySquare(square);
+        highlightSquare(square);
 
         // highlight the possible squares for this piece
         for (var i = 0; i < moves.length; i++) {
-            greySquare(moves[i].to);
+            highlightSquare(moves[i].to);
         }
     };
 
     var onMouseoutSquare = function (square, piece) {
-        removeGreySquares();
+        removeHighlighting();
     };
 
     var onSnapEnd = function () {
