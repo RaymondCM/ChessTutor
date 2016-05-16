@@ -1,3 +1,3 @@
-function Init_Chessboard(){
+function Init_Chessboard() {
     var board = ChessBoard('Chessboard', 'start');
 };
