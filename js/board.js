@@ -1,4 +1,13 @@
 function Init_Chessboard() {
+    
+    var cfg = {
+        draggable: true,
+        position: 'start',
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onSnapEnd: onSnapEnd
+    };
+    
     var board,
         game = new Chess(), 
         statusEl = $('#status'),
@@ -68,13 +77,10 @@ function Init_Chessboard() {
         pgnEl.html(game.pgn());
     };
 
-    var cfg = {
-        draggable: true,
-        position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onSnapEnd: onSnapEnd
-    };
+    
+    
+    
+    //Tie the configuration to the chessboard
     board = ChessBoard('Chessboard', cfg);
 
     updateStatus();
