@@ -1,18 +1,12 @@
 function Init_Chessboard() {
 
-    var cfg = {
-        draggable: true
-        , position: 'start'
-        , onDragStart: onDragStart
-        , onDrop: onDrop
-        , onSnapEnd: onSnapEnd
-    };
-
     var board
         , game = new Chess()
         , statusEl = $('#status')
         , fenEl = $('#fen')
-        , pgnEl = $('#pgn');
+        , pgnEl = $('#pgn')
+        , checkEl = $('#check')
+        , checkmateEl = $('#checkmate');
 
     // do not pick up pieces if the game is over
     // only pick up pieces for the side to move
@@ -46,11 +40,9 @@ function Init_Chessboard() {
 
     var updateStatus = function () {
         var status = '';
+        var check = '';
 
-        var moveColor = 'White';
-        if (game.turn() === 'b') {
-            moveColor = 'Black';
-        }
+        var moveColor = (game.turn() === 'b' ? "Black" : "White");
 
         // checkmate?
         if (game.in_checkmate() === true) {
@@ -64,7 +56,7 @@ function Init_Chessboard() {
 
         // game still on
         else {
-            status = moveColor + ' to move';
+            status = moveColor;
 
             // check?
             if (game.in_check() === true) {
@@ -72,12 +64,20 @@ function Init_Chessboard() {
             }
         }
 
-        statusEl.html("Status: " + status);
+        statusEl.html("TURN: " + status);
         fenEl.html("FEN: " + game.fen());
         pgnEl.html("PGN: " + game.pgn());
+        checkEl.html("CHECK: " + check);
+
     };
 
-    //Tie the configuration to the chessboard
+    var cfg = {
+        draggable: true
+        , position: 'start'
+        , onDragStart: onDragStart
+        , onDrop: onDrop
+        , onSnapEnd: onSnapEnd
+    };
     board = ChessBoard('Chessboard', cfg);
 
     updateStatus();
