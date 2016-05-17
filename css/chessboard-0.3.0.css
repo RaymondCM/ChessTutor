@@ -55,6 +55,14 @@
     color: #f0d9b5;
 }
 
+.whiteSquare {
+    background-color: aqua;
+}
+
+.blackSquare {
+    background-color: pink;
+}
+
 
 /* highlighted square */
 
