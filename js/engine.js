@@ -1,4 +1,4 @@
-engine = typeof STOCKFISH === "function" ? STOCKFISH() : new Worker(options.stockfishjs || 'stockfish.js');
+engine = new Worker('js/stockfish.js');
 
 function Init_Stockfish() {
     queue = [];
@@ -22,7 +22,6 @@ function AskEngine(source, side) {
 
 //Message recieved
 engine.onmessage = function (event) {
-    console.log(event.data)[0];
     //When the engine outputs 'bestmove' the search has finished
     if (String(event.data).substring(0, 8) == 'bestmove') {
         //Format the results
