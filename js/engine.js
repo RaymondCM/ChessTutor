@@ -3,50 +3,45 @@ queue = [];
 
 function Init_Stockfish() {
     
-    //AskEngine('opp', 'white', 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
-    
-    
 }
 
 //Query the engine from the tutor or opponent
-function AskEngine(source, side, fen) {
+function AskEngine(source, side, fen, turnCount) {
     var query = {
+        turnCount: turnCount,
         source: source,
         side: side,
         fen: fen,
-        move: 'undefined'
+        move: 'QUERY UNRESOLVED'
     }
-    
+    queue.push(query);
     //If first item, send the query straight away
-    if (queue.length === 0) {
-        queue.push(query);
-        console.log("None in the query queue");;
-        engine.postMessage("position fen " + queue[0]["fen"]);
-        engine.postMessage("go depth " + sf_searchDepth);
-    } else {
-        //Otherwise, add to the queue
-        console.log("More than 1 in the query queue");
-        queue.push(query);
-    }
+    if (queue.length === 1)
+        QueryEngine(query["fen"], sf_searchDepth);
+    console.log("Queue length: " + queue.length);
 }
-
+ 
 //Message recieved
 engine.onmessage = function (event) {
     //When the engine outputs 'bestmove' the search has finished
     if (String(event.data).substring(0, 8) == 'bestmove') {
-        //Format the results
+        //Get specific move characters
         queue[0]["move"] = String(event.data).substring(9, 13);
         //Remove the head of the queue
         ReturnQuery(queue.shift());
+        //If the queue still has queries, go to next query
         if (queue.length > 0)
-            {
-                //If the queue still has queries, go to next query
-                engine.postMessage("position fen " + queue[0]["fen"]);
-                engine.postMessage("go depth " + sf_searchDepth);
-            }
+                QueryEngine(queue[0]["fen"], sf_searchDepth);
+        console.log("Queue length: " + queue.length);
     }
 }
 
+//Format string for engine message
+function QueryEngine(fen, depth) {
+    engine.postMessage("position fen " + fen);
+    engine.postMessage("go depth " + depth);
+}
+
 function ReturnQuery(query){
-    console.log("LAST RESULT---- Side: " + query['side'] + " Move: " + query['move']);
+    console.log("Turn: " + query['turnCount'] + " Side: " + query['side'] + " Move: " + query['move']);
 }
