@@ -3,6 +3,7 @@ window.onload = function () {
         GLOBAL VARIABLES
     */
     ct_debug = true;
+    
 
     themes = [{
         name: "default",
@@ -14,7 +15,10 @@ window.onload = function () {
 
     cb_possiblePlacesColourWhiteSq = "blue";
     cb_possiblePlacesColourBlackSq = "red";
+    
+    sf_searchDepth = '15';
 
     Init_Chessboard();
     Init_Stockfish();
+    
 }

@@ -31,7 +31,11 @@ function Init_Chessboard() {
         });
 
         // illegal move
-        if (move === null) return 'snapback';
+        
+        if (move === null){ return 'snapback'; }else {
+            //Ask the engine about current config
+            
+        };
 
         updateStatus();
     };
@@ -60,6 +64,9 @@ function Init_Chessboard() {
         statusEl.html("TURN: " + status);
         checkEl.html("COLOUR IN CHECK: " + check);
         checkmateEl.html("COLOUR IN CHECKMATE: " + checkmate);
+        
+        //Query the engine
+        AskEngine('INSERT SOURCE', game.turn(), game.fen());
     };
 
     var removeHighlighting = function () {
@@ -117,6 +124,7 @@ function Init_Chessboard() {
     board = ChessBoard('Chessboard', cfg);
 
     updateStatus();
+    
 }
 
 function SetTheme(theme) {
