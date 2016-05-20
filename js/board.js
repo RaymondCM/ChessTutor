@@ -1,4 +1,5 @@
 function Init_Chessboard() {
+    
     turnCount = 1;
     
     SetTheme(themes[0]);
@@ -63,7 +64,7 @@ function Init_Chessboard() {
         checkEl.html("COLOUR IN CHECK: " + check);
         checkmateEl.html("COLOUR IN CHECKMATE: " + checkmate);
         turnCount++;
-        //Query the engine
+        //Query the engine with turnCount DIV 2
         AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
     };
 
