@@ -23,9 +23,17 @@ window.onload = function () {
         blackPossiblePlaces: "rgba(245, 255, 0, 0.55)"
     }];
 
+<<<<<<< HEAD
     cb_currentTheme = themes[1];
 
     sf_searchDepth = '1';
+=======
+    cb_possiblePlacesColourWhiteSq = "blue";
+    cb_possiblePlacesColourBlackSq = "red";
+    cb_playerSide = 'w';
+    
+    sf_searchDepth = '13';
+>>>>>>> origin/master
 
     Init_Chessboard();
     Init_Stockfish();
