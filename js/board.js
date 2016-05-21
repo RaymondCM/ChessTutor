@@ -1,13 +1,10 @@
 function Init_Chessboard() {
-<<<<<<< HEAD
+
+    turnCount = 1;
+
+    SetTheme(themes[0]);
 
     SetTheme(cb_currentTheme);
-=======
-    
-    turnCount = 1;
-    
-    SetTheme(themes[0]);
->>>>>>> origin/master
 
     if (!ct_debug)
         $('#Debug').css('display', 'none');
@@ -38,7 +35,8 @@ function Init_Chessboard() {
         });
 
         // illegal move
-<<<<<<< HEAD
+
+        if (move === null) return 'snapback';
 
         if (move === null) {
             return 'snapback';
@@ -46,10 +44,6 @@ function Init_Chessboard() {
             //Ask the engine about current config
 
         };
-=======
-        
-        if (move === null) return 'snapback';
->>>>>>> origin/master
 
         updateStatus();
     };
@@ -78,15 +72,12 @@ function Init_Chessboard() {
         statusEl.html("TURN: " + status);
         checkEl.html("COLOUR IN CHECK: " + check);
         checkmateEl.html("COLOUR IN CHECKMATE: " + checkmate);
-<<<<<<< HEAD
-
-        //Query the engine
-        AskEngine('INSERT SOURCE', game.turn(), game.fen());
-=======
         turnCount++;
         //Query the engine with turnCount DIV 2
         AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
->>>>>>> origin/master
+
+        //Query the engine
+        AskEngine('INSERT SOURCE', game.turn(), game.fen());
     };
 
     var removeHighlighting = function () {
