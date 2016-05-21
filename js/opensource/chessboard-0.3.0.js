@@ -598,6 +598,7 @@
                         'id="' + SQUARE_ELS_IDS[square] + '" ' +
                         'data-square="' + square + '">';
 
+
                     if (cfg.showNotation === true) {
                         // alpha notation
                         if ((orientation === 'white' && row === 1) ||

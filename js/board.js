@@ -1,6 +1,6 @@
 function Init_Chessboard() {
 
-    SetTheme(themes[0]);
+    SetTheme(cb_currentTheme);
 
     if (!ct_debug)
         $('#Debug').css('display', 'none');
@@ -31,10 +31,12 @@ function Init_Chessboard() {
         });
 
         // illegal move
-        
-        if (move === null){ return 'snapback'; }else {
+
+        if (move === null) {
+            return 'snapback';
+        } else {
             //Ask the engine about current config
-            
+
         };
 
         updateStatus();
@@ -64,7 +66,7 @@ function Init_Chessboard() {
         statusEl.html("TURN: " + status);
         checkEl.html("COLOUR IN CHECK: " + check);
         checkmateEl.html("COLOUR IN CHECKMATE: " + checkmate);
-        
+
         //Query the engine
         AskEngine('INSERT SOURCE', game.turn(), game.fen());
     };
@@ -76,9 +78,9 @@ function Init_Chessboard() {
     var highlightSquare = function (square) {
         var squareEl = $('#Chessboard .square-' + square);
 
-        var background = cb_possiblePlacesColourWhiteSq;
+        var background = cb_currentTheme.whitePossiblePlaces;
         if (squareEl.hasClass('black-3c85d') === true) {
-            background = cb_possiblePlacesColourBlackSq;
+            background = cb_currentTheme.blackPossiblePlaces;
         }
 
         squareEl.css('background', background);
@@ -124,36 +126,41 @@ function Init_Chessboard() {
     board = ChessBoard('Chessboard', cfg);
 
     updateStatus();
-    
+
 }
 
 function SetTheme(theme) {
-
-    $(".whiteSquare").removeClass(".whiteSquare");
-
-
-
-    //changeCss('.white-1e1d7', "background-color: " + cb_whiteSqColour + ";" + " color:" + cb_whiteSqTextColour + ";");
-
-    //changeCss('.black-3c85d', "background-color: " + cb_blackSqColour + ";" + " color:" + cb_blackSqTextColour + ";");
+    alterCSS('.white-1e1d7', theme.whiteSquare, theme.whiteSquareText);
+    alterCSS('.black-3c85d', theme.blackSquare, theme.blackSquareText);
 }
 
-function changeCss(className, classValue) {
-    // we need invisible container to store additional css definitions
-    var cssMainContainer = $('#css-modifier-container');
-    if (cssMainContainer.length == 0) {
-        var cssMainContainer = $('<div id="css-modifier-container"></div>');
-        cssMainContainer.hide();
-        cssMainContainer.appendTo($('body'));
+function alterCSS(className, backgroundColour, textColour) {
+
+    //Create CSS var
+    var classCSS = "background-color: " + backgroundColour + ";" + " color:" + textColour + ";"
+
+    //Remove Inline Style/Attr
+    if ($(className).removeProp) {
+        $(className).removeProp('background-color');
+    } else {
+        $(className).removeAttr('background-color');
     }
 
-    // and we need one div for each class
-    classContainer = cssMainContainer.find('div[data-class="' + className + '"]');
+    //Create a hidden div for storing CSS information (add to eof)
+    var tempCSSContainer = $('#temp-css-store-c34jw2-f32r12');
+    if (tempCSSContainer.length == 0) {
+        var tempCSSContainer = $('<div id="temp-css-store-c34jw2-f32r12"></div>');
+        tempCSSContainer.hide();
+        tempCSSContainer.appendTo($('body'));
+    }
+
+    //Create a Div for each class element found with className and append to HTML
+    classContainer = tempCSSContainer.find('div[data-class="' + className + '"]');
     if (classContainer.length == 0) {
         classContainer = $('<div data-class="' + className + '"></div>');
-        classContainer.appendTo(cssMainContainer);
+        classContainer.appendTo(tempCSSContainer);
     }
 
-    // append additional style
-    classContainer.html('<style>' + className + ' {' + classValue + '}</style>');
+    //Add the additional style to the parent Div and Style it with overridden CSS
+    classContainer.html('<style>' + className + ' {' + classCSS + '}</style>');
 }
