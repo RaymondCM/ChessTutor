@@ -30,6 +30,7 @@
 .square-55d63 {
     float: left;
     position: relative;
+    margin: 0px;
     /* disable any native browser highlighting */
     -webkit-touch-callout: none;
     -webkit-user-select: none;

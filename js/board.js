@@ -143,6 +143,10 @@ function Init_Chessboard() {
 
 function SetTheme(theme) {
     addCSS(".square-55d63", cb_shapes[cb_currentTheme.boardShape]);
+
+    if (cb_shapes[cb_currentTheme.boardShape] == cb_shapes["Diamond"])
+        addCSS(".square-55d63 img", cb_shapes["DiamondIMGFix"]);
+
     alterCSS('.white-1e1d7', theme.whiteSquare, theme.whiteSquareText);
     alterCSS('.black-3c85d', theme.blackSquare, theme.blackSquareText);
 }
