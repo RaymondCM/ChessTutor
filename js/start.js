@@ -23,7 +23,7 @@ window.onload = function () {
         blackPossiblePlaces: "rgba(245, 255, 0, 0.55)"
     }];
 
-    cb_currentTheme = themes[1];
+    cb_currentTheme = themes[0];
     cb_playerSide = 'w';
 
     sf_searchDepth = '13';
