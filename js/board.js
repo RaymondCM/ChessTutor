@@ -2,8 +2,6 @@ function Init_Chessboard() {
 
     turnCount = 1;
 
-    SetTheme(themes[0]);
-
     SetTheme(cb_currentTheme);
 
     if (!ct_debug)
@@ -25,6 +23,8 @@ function Init_Chessboard() {
             return false;
         }
     };
+
+
 
     var onDrop = function (source, target) {
         // see if the move is legal
@@ -72,6 +72,9 @@ function Init_Chessboard() {
         statusEl.html("TURN: " + status);
         checkEl.html("COLOUR IN CHECK: " + check);
         checkmateEl.html("COLOUR IN CHECKMATE: " + checkmate);
+
+
+
         turnCount++;
         //Query the engine with turnCount DIV 2
         AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
@@ -139,6 +142,7 @@ function Init_Chessboard() {
 }
 
 function SetTheme(theme) {
+    addCSS(".square-55d63", cb_shapes[cb_currentTheme.boardShape]);
     alterCSS('.white-1e1d7', theme.whiteSquare, theme.whiteSquareText);
     alterCSS('.black-3c85d', theme.blackSquare, theme.blackSquareText);
 }
@@ -147,6 +151,34 @@ function alterCSS(className, backgroundColour, textColour) {
 
     //Create CSS var
     var classCSS = "background-color: " + backgroundColour + ";" + " color:" + textColour + ";"
+
+    //Remove Inline Style/Attr
+    if ($(className).removeProp) {
+        $(className).removeProp('background-color');
+    } else {
+        $(className).removeAttr('background-color');
+    }
+
+    //Create a hidden div for storing CSS information (add to eof)
+    var tempCSSContainer = $('#temp-css-store-c34jw2-f32r12');
+    if (tempCSSContainer.length == 0) {
+        var tempCSSContainer = $('<div id="temp-css-store-c34jw2-f32r12"></div>');
+        tempCSSContainer.hide();
+        tempCSSContainer.appendTo($('body'));
+    }
+
+    //Create a Div for each class element found with className and append to HTML
+    classContainer = tempCSSContainer.find('div[data-class="' + className + '"]');
+    if (classContainer.length == 0) {
+        classContainer = $('<div data-class="' + className + '"></div>');
+        classContainer.appendTo(tempCSSContainer);
+    }
+
+    //Add the additional style to the parent Div and Style it with overridden CSS
+    classContainer.html('<style>' + className + ' {' + classCSS + '}</style>');
+}
+
+function addCSS(className, classCSS) {
 
     //Remove Inline Style/Attr
     if ($(className).removeProp) {

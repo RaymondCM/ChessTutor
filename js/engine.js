@@ -4,12 +4,13 @@ The engine queries are organised in a queue so that the engine is asked sequenti
 
 
 /* Stockfish Globals */
-Engine = new Worker('js/stockfish.js');
+Engine = typeof STOCKFISH === "function" ? STOCKFISH() : new Worker('js/stockfish.js');
+
 queryQueue = [];
 /*                   */
 
 function Init_Stockfish() {
-    
+
 }
 
 //Query the engine from the tutor or opponent
@@ -27,7 +28,7 @@ function AskEngine(source, side, fen, turnCount) {
         QueryEngine(query["fen"], sf_searchDepth);
     console.log("Queue length: " + queryQueue.length);
 }
- 
+
 //Message recieved
 Engine.onmessage = function (event) {
     //When the engine outputs 'bestmove' the search has finished
@@ -38,7 +39,7 @@ Engine.onmessage = function (event) {
         ReturnQuery(queryQueue.shift());
         //If the queue still has queries, go to next query
         if (queryQueue.length > 0)
-                QueryEngine(queryQueue[0]["fen"], sf_searchDepth);
+            QueryEngine(queryQueue[0]["fen"], sf_searchDepth);
         console.log("Queue length: " + queryQueue.length);
     }
 }
@@ -49,6 +50,7 @@ function QueryEngine(fen, depth) {
     Engine.postMessage("go depth " + depth);
 }
 
-function ReturnQuery(query){
-    console.log("Turn: " + query['turnCount'] + " Side: " + query['side'] + " Move: " + query['move']);
+function ReturnQuery(query) {
+    $("#suggestedMove").html("SUGGESTED MOVE FOR " + (query['side'] == "w" ? "WHITE" : "BLACK") + ": " + query['move']);
+    console.log(queryQueue.length + "   " + "Turn: " + query['turnCount'] + "Side: " + query['side'] + "Move: " + query['move']);
 }
