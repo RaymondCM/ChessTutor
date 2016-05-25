@@ -35,9 +35,9 @@ window.onload = function () {
     }];
 
     cb_currentTheme = cb_themes[1];
-    cb_playerSide = 'w';
+    cb_playerSide = 'b';
 
-    sf_searchDepth = '15';
+    sf_searchDepth = '13';
 
     Init_Chessboard();
     Init_Stockfish();
