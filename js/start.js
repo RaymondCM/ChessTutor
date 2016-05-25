@@ -36,10 +36,11 @@ window.onload = function () {
 
     cb_currentTheme = cb_themes[1];
     cb_playerSide = 'w';
+    cb_autoPlay = true;
+    cb_autoPlayDelay = 0;
 
     sf_searchDepth = '0';
 
     Init_Chessboard();
     Init_Stockfish();
-
 }

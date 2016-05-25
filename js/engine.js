@@ -22,31 +22,36 @@ function AskEngine(source, side, fen, turnCount) {
         fen: fen,
         move: 'QUERY UNRESOLVED'
     }
+
     queryQueue.push(query);
     //If first item, send the query straight away
     if (queryQueue.length === 1)
         QueryEngine(query["fen"], sf_searchDepth);
+    else //Stop the engine search
+    {
+        Engine.postMessage("stop");
+        queryQueue[0]['move'] = 'STOP';
+    }
     console.log("Queue length: " + queryQueue.length);
 }
 
 //Message recieved
 Engine.onmessage = function (event) {
-    //When the engine outputs 'bestmove' the search has finished
-    if (String(event.data).substring(0, 8) == 'bestmove') {
-        //Get specific move characters
-        queryQueue[0]["move"] = String(event.data).substring(9, 13);
-        //Remove the head of the queue
-        ReturnQuery(queryQueue.shift());
-        //If the queue still has queries, go to next query
-        if (queryQueue.length > 0) {
-            //Engine.postMessage("stop");
-            QueryEngine(queryQueue[0]["fen"], sf_searchDepth);
+        //When the engine outputs 'bestmove' the search has finished
+        if (String(event.data).substring(0, 8) == 'bestmove') {
+            //If no interruption, assign the move info
+            if (queryQueue[0]['move'] != 'STOP')
+                queryQueue[0]["move"] = String(event.data).substring(9, 13);
+            //Remove the head of the queue
+            ReturnQuery(queryQueue.shift());
+            //If the queue still has queries, go to next query
+            if (queryQueue.length > 0) {
+                //Engine.postMessage("stop");
+                QueryEngine(queryQueue[0]["fen"], sf_searchDepth);
+            }
         }
-        console.log("Queue length: " + queryQueue.length);
     }
-}
-
-//Format string for engine message
+    //Format string for engine message
 function QueryEngine(fen, depth) {
     Engine.postMessage("position fen " + fen);
     Engine.postMessage("go depth " + depth);
@@ -67,14 +72,12 @@ function ReturnQuery(query) {
 
     MovePiece(query.move.substr(0, 2), query.move.substr(2, 4));
 
-
     $("#suggestedMove").html("SUGGESTED MOVE FOR " + (query['side'] == "w" ? "WHITE" : "BLACK") + ": " + query['move']);
     console.log("Turn: " + query['turnCount'] + " Side: " + query['side'] + " Move: " + query['move']);
-    console.log(game.in_stalemate() + game.game_over());
+
     if (game.game_over()) return;
 
-    setTimeout(updateStatus, 0);
-
-
+    if (cb_autoPlay)
+        setTimeout(updateStatus, cb_autoPlayDelay);
 
 }
