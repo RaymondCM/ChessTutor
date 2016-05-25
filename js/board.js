@@ -7,7 +7,8 @@ function Init_Chessboard() {
     if (!ct_debug)
         $('#Debug').css('display', 'none');
 
-    var board, game = new Chess(),
+    board = "";
+    var game = new Chess(),
         statusEl = $('#status'),
         fenEl = $('#fen'),
         pgnEl = $('#pgn'),
@@ -48,7 +49,7 @@ function Init_Chessboard() {
         updateStatus();
     };
 
-    var updateStatus = function () {
+    updateStatus = function () {
         var status = '',
             check = '',
             checkmate = '';
