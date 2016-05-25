@@ -5,8 +5,8 @@ window.onload = function () {
     ct_debug = true;
 
     cb_shapes = {
-        Square: "border-radius: 50px;",
-        RoundedSquare: "border-radius: 50px;",
+        Square: "border-radius: 0px;",
+        RoundedSquare: "border-radius: 10px;",
         Circle: "border-radius: 50px;",
         Skew: "-webkit-transform: rotate(-45deg); - moz - transform: rotate(-45 deg); - ms - transform: rotate(-45 deg); - o - transform: rotate(-45 deg);transform: rotate(-45 deg); - webkit - transform - origin: 0 100 % ; - moz - transform - origin: 0 100 % ; - ms - transform - origin: 0 100 % ; - o - transform - origin: 0 100 % ;transform - origin: 0 100 % ;",
         Diamond: "-webkit-transform: rotate(-45deg); - moz - transform: rotate(-45 deg); - ms - transform: rotate(-45 deg); - o - transform: rotate(-45 deg);transform: rotate(-45 deg); - webkit - transform - origin: 0 100 % ; - moz - transform - origin: 0 100 % ; - ms - transform - origin: 0 100 % ; - o - transform - origin: 0 100 % ;transform - origin: 0 100 % ;",
@@ -34,8 +34,9 @@ window.onload = function () {
         boardShape: "Skew"
     }];
 
-    cb_currentTheme = cb_themes[1];
-    cb_playerSide = 'b';
+
+    cb_currentTheme = cb_themes[0];
+    cb_playerSide = 'w';
 
     sf_searchDepth = '13';
 
