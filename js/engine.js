@@ -38,7 +38,7 @@ Engine.onmessage = function (event) {
         //Remove the head of the queue
         ReturnQuery(queryQueue.shift());
         //If the queue still has queries, go to next query
-        if (queryQueue.length > 0){
+        if (queryQueue.length > 0) {
             //Engine.postMessage("stop");
             QueryEngine(queryQueue[0]["fen"], sf_searchDepth);
         }
@@ -52,7 +52,29 @@ function QueryEngine(fen, depth) {
     Engine.postMessage("go depth " + depth);
 }
 
+function MovePiece(from, to) {
+    game.move({
+        from: from,
+        to: to,
+        promotion: 'q'
+    });
+
+    board.position(game.fen());
+    $('#fen').html("FEN: " + game.fen() + "<br><br>");
+}
+
 function ReturnQuery(query) {
+
+    MovePiece(query.move.substr(0, 2), query.move.substr(2, 4));
+
+
     $("#suggestedMove").html("SUGGESTED MOVE FOR " + (query['side'] == "w" ? "WHITE" : "BLACK") + ": " + query['move']);
     console.log("Turn: " + query['turnCount'] + " Side: " + query['side'] + " Move: " + query['move']);
+    console.log(game.in_stalemate() + game.game_over());
+    if (game.game_over()) return;
+
+    setTimeout(updateStatus, 0);
+
+
+
 }

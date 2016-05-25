@@ -8,8 +8,9 @@ function Init_Chessboard() {
         $('#Debug').css('display', 'none');
 
     board = "";
-    var game = new Chess(),
-        statusEl = $('#status'),
+    game = new Chess();
+
+    var statusEl = $('#status'),
         fenEl = $('#fen'),
         pgnEl = $('#pgn'),
         checkEl = $('#check'),

@@ -34,10 +34,10 @@ window.onload = function () {
         boardShape: "Skew"
     }];
 
-    cb_currentTheme = cb_themes[0];
+    cb_currentTheme = cb_themes[1];
     cb_playerSide = 'w';
 
-    sf_searchDepth = '15';
+    sf_searchDepth = '0';
 
     Init_Chessboard();
     Init_Stockfish();
