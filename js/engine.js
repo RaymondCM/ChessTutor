@@ -52,5 +52,5 @@ function QueryEngine(fen, depth) {
 
 function ReturnQuery(query) {
     $("#suggestedMove").html("SUGGESTED MOVE FOR " + (query['side'] == "w" ? "WHITE" : "BLACK") + ": " + query['move']);
-    console.log(queryQueue.length + "   " + "Turn: " + query['turnCount'] + "Side: " + query['side'] + "Move: " + query['move']);
+    console.log("Turn: " + query['turnCount'] + " Side: " + query['side'] + " Move: " + query['move']);
 }

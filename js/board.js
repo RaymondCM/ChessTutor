@@ -77,10 +77,9 @@ function Init_Chessboard() {
 
         turnCount++;
         //Query the engine with turnCount DIV 2
-        AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
 
         //Query the engine
-        AskEngine('INSERT SOURCE', game.turn(), game.fen());
+        AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
     };
 
     var removeHighlighting = function () {

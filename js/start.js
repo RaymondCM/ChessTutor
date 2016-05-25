@@ -37,7 +37,7 @@ window.onload = function () {
     cb_currentTheme = cb_themes[1];
     cb_playerSide = 'w';
 
-    sf_searchDepth = '13';
+    sf_searchDepth = '15';
 
     Init_Chessboard();
     Init_Stockfish();
