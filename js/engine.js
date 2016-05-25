@@ -4,7 +4,7 @@ The engine queries are organised in a queue so that the engine is asked sequenti
 
 
 /* Stockfish Globals */
-Engine = typeof STOCKFISH === "function" ? STOCKFISH() : new Worker('js/stockfish.js');
+Engine = typeof STOCKFISH === "function" ? STOCKFISH() : new Worker('js/opensource/stockfish.js');
 
 queryQueue = [];
 /*                   */
@@ -38,8 +38,10 @@ Engine.onmessage = function (event) {
         //Remove the head of the queue
         ReturnQuery(queryQueue.shift());
         //If the queue still has queries, go to next query
-        if (queryQueue.length > 0)
+        if (queryQueue.length > 0){
+            //Engine.postMessage("stop");
             QueryEngine(queryQueue[0]["fen"], sf_searchDepth);
+        }
         console.log("Queue length: " + queryQueue.length);
     }
 }
