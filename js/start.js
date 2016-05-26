@@ -37,9 +37,9 @@ window.onload = function () {
     cb_currentTheme = cb_themes[1];
     cb_playerSide = 'w';
     cb_autoPlay = true;
-    cb_autoPlayDelay = 0;
+    cb_autoPlayDelay = 200;
 
-    sf_searchDepth = '0';
+    sf_searchDepth = '7';
 
     Init_Chessboard();
     Init_Stockfish();

@@ -65,7 +65,7 @@ function MovePiece(from, to) {
     });
 
     board.position(game.fen());
-    $('#fen').html("FEN: " + game.fen() + "<br><br>");
+    updateDebugLog();
 }
 
 function ReturnQuery(query) {
