@@ -3,6 +3,7 @@ window.onload = function () {
         GLOBAL VARIABLES
     */
     ct_debug = true;
+    ct_startupDelay = 0;
 
     cb_shapes = {
         Square: "border-radius: 0px;",
@@ -34,13 +35,15 @@ window.onload = function () {
         boardShape: "Skew"
     }];
 
-    cb_currentTheme = cb_themes[1];
+    cb_currentTheme = cb_themes[0];
     cb_playerSide = 'w';
     cb_autoPlay = true;
-    cb_autoPlayDelay = 200;
+    cb_autoPlayDelay = 0;
 
-    sf_searchDepth = '7';
+    sf_searchDepth = '0';
 
-    Init_Chessboard();
-    Init_Stockfish();
+    setTimeout(function () {
+        Init_Chessboard();
+        Init_Stockfish();
+    }, ct_startupDelay);
 }
