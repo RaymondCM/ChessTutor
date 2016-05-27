@@ -1,6 +1,7 @@
 function Init_Chessboard() {
 
     turnCount = 1;
+    fenHistory = [];
 
     SetTheme(cb_currentTheme);
 
@@ -50,6 +51,12 @@ function Init_Chessboard() {
         turnCount++;
         //Query the engine
         AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
+        if (fenHistory.lengh <= cb_fenHistoryMaxLength )
+            fenHistory.push(game.fen());
+        else {
+            fenHistory.shift();
+            fenHistory.push(game.fen());
+        }
     };
 
     var removeHighlighting = function () {

@@ -38,9 +38,10 @@ window.onload = function () {
     cb_currentTheme = cb_themes[0];
     cb_playerSide = 'w';
     cb_autoPlay = true;
-    cb_autoPlayDelay = 0;
+    cb_autoPlayDelay = 70;
+    cb_fenHistoryMaxLength = 10;
 
-    sf_searchDepth = '0';
+    sf_searchDepth = '15';
 
     setTimeout(function () {
         Init_Chessboard();
