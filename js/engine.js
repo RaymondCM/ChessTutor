@@ -46,7 +46,6 @@ Engine.onmessage = function (event) {
             ReturnQuery(queryQueue.shift());
             //If the queue still has queries, go to next query
             if (queryQueue.length > 0) {
-                //Engine.postMessage("stop");
                 QueryEngine(queryQueue[0]["fen"], sf_searchDepth);
             }
         }
@@ -65,7 +64,7 @@ function MovePiece(from, to) {
     });
 
     board.position(game.fen());
-    $('#fen').html("FEN: " + game.fen() + "<br><br>");
+    updateDebugLog();
 }
 
 function ReturnQuery(query) {

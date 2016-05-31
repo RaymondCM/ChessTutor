@@ -1,6 +1,7 @@
 function Init_Chessboard() {
 
     turnCount = 1;
+    fenHistory = [];
 
     SetTheme(cb_currentTheme);
 
@@ -9,12 +10,6 @@ function Init_Chessboard() {
 
     board = "";
     game = new Chess();
-
-    var statusEl = $('#status'),
-        fenEl = $('#fen'),
-        pgnEl = $('#pgn'),
-        checkEl = $('#check'),
-        checkmateEl = $('#checkmate');
 
     // do not pick up pieces if the game is over
     // only pick up pieces for the side to move
@@ -51,37 +46,17 @@ function Init_Chessboard() {
     };
 
     updateStatus = function () {
-        var status = '',
-            check = '',
-            checkmate = '';
-
-        var moveColor = (game.turn() === 'b' ? "Black" : "White");
-
-        // checkmate?
-        if (game.in_checkmate() === true) {
-            checkmate = moveColor;
-        } else if (game.in_draw() === true) {
-            status = 'DRAW';
-        } else {
-            status = moveColor;
-            if (game.in_check() === true) {
-                check = moveColor;
-            }
-        }
-
-        fenEl.html("FEN: " + game.fen() + "<br><br>");
-        //pgnEl.html("PGN: " + game.pgn());
-        statusEl.html("TURN: " + status);
-        checkEl.html("COLOUR IN CHECK: " + check);
-        checkmateEl.html("COLOUR IN CHECKMATE: " + checkmate);
-
-
+        updateDebugLog();
 
         turnCount++;
-        //Query the engine with turnCount DIV 2
-
         //Query the engine
         AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
+        if (fenHistory.lengh <= cb_fenHistoryMaxLength )
+            fenHistory.push(game.fen());
+        else {
+            fenHistory.shift();
+            fenHistory.push(game.fen());
+        }
     };
 
     var removeHighlighting = function () {
@@ -141,6 +116,31 @@ function Init_Chessboard() {
 
     updateStatus();
 
+}
+
+function updateDebugLog() {
+    var status = '',
+        check = '',
+        checkmate = '';
+
+    var moveColor = (game.turn() === 'b' ? "Black" : "White");
+
+    // checkmate?
+    if (game.in_checkmate() === true) {
+        checkmate = moveColor;
+    } else if (game.in_draw() === true) {
+        status = 'DRAW';
+    } else {
+        status = moveColor;
+        if (game.in_check() === true) {
+            check = moveColor;
+        }
+    }
+
+    $('#status').html("FEN: " + game.fen() + "<br><br>");
+    $('#fen').html("TURN: " + status);
+    $('#check').html("COLOUR IN CHECK: " + check);
+    $('#checkmate').html("COLOUR IN CHECKMATE: " + checkmate);
 }
 
 function SetTheme(theme) {

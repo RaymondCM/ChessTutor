@@ -40,6 +40,7 @@ window.onload = function () {
     cb_currentTheme = cb_themes[0];
     cb_autoPlay = false;
     cb_autoPlayDelay = 10000;
+    cb_fenHistoryMaxLength = 10;
     
     sf_searchDepth = '0';
 
