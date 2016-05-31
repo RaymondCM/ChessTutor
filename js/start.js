@@ -34,11 +34,13 @@ window.onload = function () {
         boardShape: "Skew"
     }];
 
-    cb_currentTheme = cb_themes[1];
-    cb_playerSide = 'w';
-    cb_autoPlay = true;
-    cb_autoPlayDelay = 0;
-
+    game_pve = true;
+    game_playerSide = 'w';
+    
+    cb_currentTheme = cb_themes[0];
+    cb_autoPlay = false;
+    cb_autoPlayDelay = 10000;
+    
     sf_searchDepth = '0';
 
     Init_Chessboard();

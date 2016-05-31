@@ -69,15 +69,17 @@ function MovePiece(from, to) {
 }
 
 function ReturnQuery(query) {
-
-    MovePiece(query.move.substr(0, 2), query.move.substr(2, 4));
-
     $("#suggestedMove").html("SUGGESTED MOVE FOR " + (query['side'] == "w" ? "WHITE" : "BLACK") + ": " + query['move']);
+    
     console.log("Turn: " + query['turnCount'] + " Side: " + query['side'] + " Move: " + query['move']);
 
     if (game.game_over()) return;
-
-    if (cb_autoPlay)
-        setTimeout(updateStatus, cb_autoPlayDelay);
+    
+    //Make opponent moves
+    if (cb_autoPlay || (game_pve && (game_playerSide != query.side)))
+        {
+            setTimeout(MovePiece(query.move.substr(0, 2), query.move.substr(2, 4)), cb_autoPlayDelay);
+            updateStatus();
+        }
 
 }

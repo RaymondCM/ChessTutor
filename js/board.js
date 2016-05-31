@@ -137,6 +137,7 @@ function Init_Chessboard() {
     };
 
     board = ChessBoard('Chessboard', cfg);
+    board.orientation((game_playerSide === 'w') ? 'white' : 'black');
 
     updateStatus();
 
