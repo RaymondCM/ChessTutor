@@ -35,14 +35,14 @@ window.onload = function () {
     }];
 
     game_pve = true;
-    game_playerSide = 'w';
+    game_playerSide = 'b';
     
     cb_currentTheme = cb_themes[0];
-    cb_autoPlay = false;
-    cb_autoPlayDelay = 10000;
+    cb_autoPlay = true;
+    cb_autoPlayDelay = 100;
     cb_fenHistoryMaxLength = 10;
     
-    sf_searchDepth = '0';
+    sf_searchDepth = '15';
 
     Init_Chessboard();
     Init_Stockfish();

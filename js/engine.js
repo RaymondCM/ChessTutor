@@ -22,7 +22,8 @@ function AskEngine(source, side, fen, turnCount) {
         fen: fen,
         move: 'QUERY UNRESOLVED'
     }
-
+    console.log('pushing');
+    console.log(query);
     queryQueue.push(query);
     //If first item, send the query straight away
     if (queryQueue.length === 1)
@@ -38,10 +39,11 @@ function AskEngine(source, side, fen, turnCount) {
 //Message recieved
 Engine.onmessage = function (event) {
         //When the engine outputs 'bestmove' the search has finished
-        if (String(event.data).substring(0, 8) == 'bestmove') {
+        if ((String(event.data).substring(0, 8) == 'bestmove') && queryQueue[0]) {
+            console.log('BEST MOVE');
             //If no interruption, assign the move info
-            if (queryQueue[0]['move'] != 'STOP')
-                queryQueue[0]["move"] = String(event.data).substring(9, 13);
+            if (queryQueue[0].move !== 'STOP')
+                queryQueue[0].move = String(event.data).substring(9, 13);
             //Remove the head of the queue
             ReturnQuery(queryQueue.shift());
             //If the queue still has queries, go to next query
@@ -57,11 +59,16 @@ function QueryEngine(fen, depth) {
 }
 
 function MovePiece(from, to) {
+    var boardPosition = board.position();
+    
+    //console.log('MOVING PIECE FROM AI');
     game.move({
         from: from,
         to: to,
         promotion: 'q'
     });
+    
+    checkForTaken(boardPosition, to);
 
     board.position(game.fen());
     updateDebugLog();
@@ -77,8 +84,12 @@ function ReturnQuery(query) {
     //Make opponent moves
     if (cb_autoPlay || (game_pve && (game_playerSide != query.side)))
         {
-            setTimeout(MovePiece(query.move.substr(0, 2), query.move.substr(2, 4)), cb_autoPlayDelay);
+            console.log('MOVING PIECE FROM AI');
+            //var makeMove = function () MovePiece(query.move.substr(0, 2), query.move.substr(2, 4));
+            setTimeout(MovePiece, cb_autoPlayDelay, query.move.substr(0, 2), query.move.substr(2, 4));
             updateStatus();
+            //AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
         }
+    
 
 }

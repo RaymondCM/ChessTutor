@@ -24,7 +24,12 @@ function Init_Chessboard() {
 
 
     var onDrop = function (source, target) {
+        
+        
+        
         // see if the move is legal
+        var boardPosition = board.position();
+        
         var move = game.move({
             from: source,
             to: target,
@@ -34,29 +39,32 @@ function Init_Chessboard() {
         // illegal move
 
         if (move === null) return 'snapback';
-
-        if (move === null) {
-            return 'snapback';
-        } else {
-            //Ask the engine about current config
-
-        };
-
-        updateStatus();
+        
+        console.log('DROP');
+        //CHECK FOR TAKEN
+        checkForTaken(boardPosition, target);
+        
+        
+        //updateStatus();
+        
     };
 
     updateStatus = function () {
         updateDebugLog();
+        console.log('UPDATE STATUS');
 
         turnCount++;
         //Query the engine
-        AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
+        
+        
         if (fenHistory.lengh <= cb_fenHistoryMaxLength )
             fenHistory.push(game.fen());
         else {
             fenHistory.shift();
             fenHistory.push(game.fen());
         }
+        
+        AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
     };
 
     var removeHighlighting = function () {
@@ -116,6 +124,22 @@ function Init_Chessboard() {
 
     updateStatus();
 
+}
+
+function piece(colour, name){
+    this.colour = colour;
+    this.name = name;
+}
+
+function checkForTaken(boardPosition, target){
+    //Check there is a piece in the position already
+    if (boardPosition.hasOwnProperty(target))
+        {
+            //Decide whether it is a black or white piece
+            div = (boardPosition[target].substr(0,1) == 'w') ? document.getElementById('whiteCaptured') : document.getElementById('blackCaptured');
+            div.innerHTML = div.innerHTML + boardPosition[target] + ', ';
+        }
+    
 }
 
 function updateDebugLog() {
