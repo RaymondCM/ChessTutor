@@ -1,4 +1,4 @@
-window.onload = function () {
+$(document).ready(function () {
 	/*
 	    GLOBAL VARIABLES
 	*/
@@ -35,7 +35,7 @@ window.onload = function () {
     }];
 
 	game_pve = true;
-	game_playerSide = 'b';
+	game_playerSide = 'w';
 
 	cb_currentTheme = cb_themes[0];
 	cb_autoPlay = false;
@@ -46,4 +46,11 @@ window.onload = function () {
 
 	Init_Chessboard();
 	Init_Stockfish();
-}
+
+	//BIND FUNCTIONS
+	$("#undoBtn").click(function () {
+		game.undo();
+		board.position(game.fen());
+		updateStatus();
+	});
+});

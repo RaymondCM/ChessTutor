@@ -59,8 +59,6 @@ function QueryEngine(fen, depth) {
 }
 
 function MovePiece(from, to) {
-	var boardPosition = board.position();
-
 	//console.log('MOVING PIECE FROM AI');
 	game.move({
 		from: from,
@@ -71,7 +69,6 @@ function MovePiece(from, to) {
 	checkForTaken(boardPosition, to);
 
 	board.position(game.fen());
-	updateDebugLog();
 	updateStatus();
 
 }

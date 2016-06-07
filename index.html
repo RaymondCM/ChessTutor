@@ -2,48 +2,51 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="js/opensource/jQuery1.12.3.js"></script>
+	<script src="js/opensource/jQuery1.12.3.js"></script>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/chessboard-0.3.0.css">
-    <!--------->
+	<!-- CSS -->
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/chessboard-0.3.0.css">
+	<!--------->
 
-    <!-- CHESSBOARD -->
-    <script src="js/chess.js"></script>
-    <script src="js/opensource/chessboard-0.3.0.js"></script>
-    <script src="js/board.js"></script>
-    <script src="js/engine.js"></script>
-    <!---------------->
+	<!-- CHESSBOARD -->
+	<script src="js/chess.js"></script>
+	<script src="js/opensource/chessboard-0.3.0.js"></script>
+	<script src="js/board.js"></script>
+	<script src="js/engine.js"></script>
+	<!---------------->
 
-    <script src="js/start.js"></script>
+	<script src="js/start.js"></script>
 
-    <title>Chess Tutor Prototype</title>
+	<title>Chess Tutor Prototype</title>
 </head>
 
 <body>
-    <div id="Chessboard" style="width: 400px"></div>
-    <div id="blackCaptured">
-        BLACK CAPTURES:
-    </div>
-    <div id="whiteCaptured">
-        WHITE CAPTURES:
-    </div>
+	<div id="Chessboard" style="width: 400px"></div>
+	<div id="blackCaptured">
+		BLACK CAPTURES:
+	</div>
+	<div id="whiteCaptured">
+		WHITE CAPTURES:
+	</div>
+
+	<form>
+		<button id="undoBtn" type="button">[UNDO]</button>
+	</form>
 
 
-
-    <div id="Debug">
-        <div id="fen"></div>
-        <div id="pgn"></div>
-        <div id="status"></div>
-        <div id="check"></div>
-        <div id="checkmate"></div>
-        <div id="suggestedMove"></div>
-    </div>
+	<div id="Debug">
+		<div id="fen"></div>
+		<div id="pgn"></div>
+		<div id="status"></div>
+		<div id="check"></div>
+		<div id="checkmate"></div>
+		<div id="suggestedMove"></div>
+	</div>
 </body>
 
 </html>
