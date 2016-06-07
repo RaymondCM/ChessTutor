@@ -38,7 +38,7 @@ window.onload = function () {
 	game_playerSide = 'w';
 
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = false;
+	cb_autoPlay = true;
 	cb_autoPlayDelay = 3000;
 	cb_fenHistoryMaxLength = 10;
 
@@ -46,4 +46,11 @@ window.onload = function () {
 
 	Init_Chessboard();
 	Init_Stockfish();
-}
+
+	//BIND FUNCTIONS
+	$("#undoBtn").click(function () {
+		game.undo();
+		board.position(game.fen(), false);
+		updateStatus();
+	});
+});
