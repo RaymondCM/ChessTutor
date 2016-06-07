@@ -86,7 +86,7 @@ function ReturnQuery(query) {
 	if (cb_autoPlay || (game_pve && (game_playerSide != query.side))) {
 		console.log('MOVING PIECE FROM AI');
 		//var makeMove = function () MovePiece(query.move.substr(0, 2), query.move.substr(2, 4));
-		setTimeout(MovePiece, cb_autoPlayDelay, query.move.substr(0, 2), query.move.substr(2, 4));
+		cb_autoPlayMove = setTimeout(MovePiece, cb_autoPlayDelay, query.move.substr(0, 2), query.move.substr(2, 4));
 		//AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
 	}
 

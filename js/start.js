@@ -37,9 +37,10 @@ $(document).ready(function () {
 	game_pve = true;
 	game_playerSide = 'w';
 
+	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = false;
-	cb_autoPlayDelay = 3000;
+	cb_autoPlay = true;
+	cb_autoPlayDelay = 1000;
 	cb_fenHistoryMaxLength = 10;
 
 	sf_searchDepth = '6';
@@ -49,6 +50,7 @@ $(document).ready(function () {
 
 	//BIND FUNCTIONS
 	$("#undoBtn").click(function () {
+		clearTimeout(cb_autoPlayMove);
 		game.undo();
 		board.position(game.fen(), false);
 		updateStatus();
