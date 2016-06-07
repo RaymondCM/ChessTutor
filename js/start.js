@@ -38,7 +38,7 @@ $(document).ready(function () {
 	game_playerSide = 'w';
 
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = false;
+	cb_autoPlay = true;
 	cb_autoPlayDelay = 3000;
 	cb_fenHistoryMaxLength = 10;
 
@@ -50,7 +50,7 @@ $(document).ready(function () {
 	//BIND FUNCTIONS
 	$("#undoBtn").click(function () {
 		game.undo();
-		board.position(game.fen());
+		board.position(game.fen(), false);
 		updateStatus();
 	});
 });
