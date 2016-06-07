@@ -35,7 +35,7 @@ window.onload = function () {
     }];
 
 	game_pve = true;
-	game_playerSide = 'b';
+	game_playerSide = 'w';
 
 	cb_currentTheme = cb_themes[0];
 	cb_autoPlay = false;

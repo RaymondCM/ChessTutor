@@ -10,6 +10,16 @@ function Init_Chessboard() {
 
     board = "";
     game = new Chess();
+    
+    //Piece Map
+    pieces = {
+        K: "King",
+        N: "Knight",
+        P: "Pawn",
+        B: "Bishop",
+        Q: "Queen",
+        R: "Rook"
+    };
 
     // do not pick up pieces if the game is over
     // only pick up pieces for the side to move
@@ -126,18 +136,25 @@ function Init_Chessboard() {
 
 }
 
-function piece(colour, name){
-    this.colour = colour;
-    this.name = name;
+
+
+function piece(code){
+    this.colourLetter = code.substr(0, 1);
+    this.nameletter = code.substr(1, 2);
+    this.colorWord = code.substr(0, 1) == 'w' ? 'White' : 'Black';
+    this.nameWord = pieces[code.substr(1, 2)];
 }
 
 function checkForTaken(boardPosition, target){
     //Check there is a piece in the position already
     if (boardPosition.hasOwnProperty(target))
         {
+            var takenPiece = new piece(boardPosition[target]);
             //Decide whether it is a black or white piece
-            div = (boardPosition[target].substr(0,1) == 'w') ? document.getElementById('whiteCaptured') : document.getElementById('blackCaptured');
-            div.innerHTML = div.innerHTML + boardPosition[target] + ', ';
+            div = (boardPosition[target].substr(0,1) == 'w') ? document.getElementById('whiteCaptured'): document.getElementById('blackCaptured');
+            
+            
+            div.innerHTML = div.innerHTML + takenPiece.nameWord + ', ';
         }
     
 }
