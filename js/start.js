@@ -1,4 +1,4 @@
-window.onload = function () {
+$(document).ready(function () {
 	/*
 	    GLOBAL VARIABLES
 	*/
@@ -38,7 +38,7 @@ window.onload = function () {
 	game_playerSide = 'w';
 
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = true;
+	cb_autoPlay = false;
 	cb_autoPlayDelay = 3000;
 	cb_fenHistoryMaxLength = 10;
 
