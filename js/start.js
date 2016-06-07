@@ -35,12 +35,12 @@ $(document).ready(function () {
     }];
 
 	game_pve = true;
-	game_playerSide = 'w';
+	game_playerSide = 'b';
 
 	cb_autoPlayMove = setTimeout(function () {}, 0);
-	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = true;
-	cb_autoPlayDelay = 1000;
+	cb_currentTheme = cb_themes[1];
+	cb_autoPlay = false;
+	cb_autoPlayDelay = 100;
 	cb_fenHistoryMaxLength = 10;
 
 	sf_searchDepth = '6';

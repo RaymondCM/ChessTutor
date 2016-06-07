@@ -53,9 +53,7 @@ function Init_Chessboard() {
         console.log('DROP');
         //CHECK FOR TAKEN
         checkForTaken(boardPosition, target);
-        
-        
-        //updateStatus();
+        updateStatus();
         
     };
 
