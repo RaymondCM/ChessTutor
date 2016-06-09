@@ -36,11 +36,7 @@ function Init_Chessboard() {
 
 
 	var onDrop = function (source, target) {
-
-
-
 		// see if the move is legal
-		var boardPosition = board.position();
 
 		var move = game.move({
 			from: source,
@@ -54,7 +50,7 @@ function Init_Chessboard() {
 
 		console.log('DROP');
 		//CHECK FOR TAKEN
-		checkForTaken(boardPosition, target);
+		checkForTaken(board.position(), target);
 		updateStatus();
 
 	};
@@ -167,15 +163,58 @@ function piece(code) {
 }
 
 function checkForTaken(boardPosition, target) {
-	//Check there is a piece in the position already
+    pieceCount = {
+        wQ: 0,
+        wR: 0,
+        wB: 0,
+        wN: 0,
+        wP: 0,
+        wK: 0,
+        bQ: 0,
+        bR: 0,
+        bB: 0,
+        bN: 0,
+        bP: 0,
+        bK: 0,
+    };
+    
+    //Tally each piece
+    for (var property in boardPosition)
+            if (boardPosition.hasOwnProperty(property))
+                    pieceCount[boardPosition[property]]++;
+    
+    //Count differences to expected counts
+    pieceCount.wP = (-1) * (pieceCount.wP - 8);
+    pieceCount.bP = (-1) * (pieceCount.bP - 8);
+    pieceCount.bR = (-1) * (pieceCount.bR - 2);
+    pieceCount.bN = (-1) * (pieceCount.bN - 2);
+    pieceCount.bB = (-1) * (pieceCount.bB - 2);
+    pieceCount.bQ = (-1) * (pieceCount.bQ - 1);
+    pieceCount.bK = (-1) * (pieceCount.bK - 1);
+    pieceCount.wR = (-1) * (pieceCount.wR - 2);
+    pieceCount.wN = (-1) * (pieceCount.wN - 2);
+    pieceCount.wB = (-1) * (pieceCount.wB - 2);
+    pieceCount.wQ = (-1) * (pieceCount.wQ - 1);
+    pieceCount.wK = (-1) * (pieceCount.wK - 1);
+    
+    //for (var property in pieceCount)
+            //if (boardPosition.hasOwnProperty(pieceCount))
+    
+                    
+    //OLD CODE, REPLACE WITH DRAWIMG
+	//Check there is a piece in the position already 
 	if (boardPosition.hasOwnProperty(target)) {
 		var takenPiece = new piece(boardPosition[target]);
 		//Decide whether it is a black or white piece
 		div = (boardPosition[target].substr(0, 1) == 'w') ? document.getElementById('whiteCaptured') : document.getElementById('blackCaptured');
-
-
 		div.innerHTML = div.innerHTML + takenPiece.nameWord + ', ';
 	}
+}
+
+
+function drawImg(src, container, count)
+{
+    
 }
 
 

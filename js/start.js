@@ -38,7 +38,7 @@ $(document).ready(function () {
 		boardShape: "Skew"
     }];
 
-	game_pve = false;
+	game_pve = true;
 	game_playerSide = 'w';
 
 	cb_autoPlayMove = setTimeout(function () {}, 0);
