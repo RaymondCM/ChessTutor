@@ -21,7 +21,9 @@ $(document).ready(function () {
 		blackSquare: "#8d5b36",
 		blackSquareText: "#ffeccc",
 		whitePossiblePlaces: "rgba(210, 211, 210, 0.05)",
+		permWhitePossiblePlaces: "rgba(245, 255, 0, 0.55)",
 		blackPossiblePlaces: "rgba(210, 211, 210, 0.15)",
+		permBlackPossiblePlaces: "rgba(245, 255, 0, 0.55)",
 		boardShape: "Square"
     }, {
 		name: "whacky",
@@ -30,18 +32,21 @@ $(document).ready(function () {
 		blackSquare: "#00f7f7",
 		blackSquareText: "#ffccf5",
 		whitePossiblePlaces: "rgba(245, 255, 0, 0.55)",
+		permWhitePossiblePlaces: "rgba(245, 255, 0, 0.55)",
 		blackPossiblePlaces: "rgba(245, 255, 0, 0.55)",
+		permBlackPossiblePlaces: "rgba(245, 255, 0, 0.55)",
 		boardShape: "Skew"
     }];
 
-	game_pve = true;
-	game_playerSide = 'b';
+	game_pve = false;
+	game_playerSide = 'w';
 
 	cb_autoPlayMove = setTimeout(function () {}, 0);
-	cb_currentTheme = cb_themes[1];
+	cb_currentTheme = cb_themes[0];
 	cb_autoPlay = false;
 	cb_autoPlayDelay = 100;
 	cb_fenHistoryMaxLength = 10;
+	cb_permHighlighted = ["a6"];
 
 	sf_searchDepth = '6';
 
@@ -55,4 +60,6 @@ $(document).ready(function () {
 		board.position(game.fen(), false);
 		updateStatus();
 	});
+
+	$("#redoBtn").click(function () {});
 });

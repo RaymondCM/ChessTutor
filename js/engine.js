@@ -83,7 +83,7 @@ function ReturnQuery(query) {
 	if (game.game_over()) return;
 
 	//Make opponent moves
-	if (cb_autoPlay || (game_pve && game_playerSide != query.side)) {
+	if (cb_autoPlay || ((game_pve && game_playerSide) != query.side)) {
 		console.log('MOVING PIECE FROM AI');
 		//var makeMove = function () MovePiece(query.move.substr(0, 2), query.move.substr(2, 4));
 		cb_autoPlayMove = setTimeout(MovePiece, cb_autoPlayDelay, query.move.substr(0, 2), query.move.substr(2, 4));
