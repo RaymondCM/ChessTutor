@@ -37,27 +37,34 @@ $(document).ready(function () {
 		permBlackPossiblePlaces: "rgba(245, 255, 0, 0.55)",
 		boardShape: "Skew"
     }];
-
+    
+    /* GAME CONFIG */
 	game_pve = true;
-	game_playerSide = 'w';
-
+	game_playerSide = 'b';
+    
+    /* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = false;
+	cb_autoPlay = true;
 	cb_autoPlayDelay = 100;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
-
+    
+    /* STOCKFISH */
 	sf_searchDepth = '6';
     
+    /* HTML */
     gui_blackCapturedId = "blackCaptured";
     gui_whiteCapturedId = "whiteCaptured";
+    gui_scoreBlackId = "blackScore";
+    gui_scoreWhiteId = "whiteScore";
     gui_capturedPieceSize = "50px";
-
+    
+    
 	Init_Chessboard();
 	Init_Stockfish();
 
-	//BIND FUNCTIONS
+	/* BIND FUNCTIONS */
 	$("#undoBtn").click(function () {
 		clearTimeout(cb_autoPlayMove);
 		game.undo();
