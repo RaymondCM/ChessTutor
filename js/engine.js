@@ -66,7 +66,7 @@ function MovePiece(from, to) {
 		promotion: 'q'
 	});
 	board.position(game.fen());
-    checkForTaken(board.position(), to);
+    checkForTaken(board.position());
 	updateStatus();
 
 }

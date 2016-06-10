@@ -49,6 +49,10 @@ $(document).ready(function () {
 	cb_permHighlighted = ["a6"];
 
 	sf_searchDepth = '6';
+    
+    gui_blackCapturedId = "blackCaptured";
+    gui_whiteCapturedId = "whiteCaptured";
+    gui_capturedPieceSize = "50px";
 
 	Init_Chessboard();
 	Init_Stockfish();
@@ -59,6 +63,7 @@ $(document).ready(function () {
 		game.undo();
 		board.position(game.fen(), false);
 		updateStatus();
+        checkForTaken(board.position());
 	});
 
 	$("#redoBtn").click(function () {});

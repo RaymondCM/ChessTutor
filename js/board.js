@@ -50,19 +50,16 @@ function Init_Chessboard() {
 
 		console.log('DROP');
 		//CHECK FOR TAKEN
-		checkForTaken(board.position(), target);
+		checkForTaken(board.position());
 		updateStatus();
 
 	};
 
 	updateStatus = function () {
 		updateDebugLog();
-		console.log('UPDATE STATUS');
-
 		turnCount++;
-		//Query the engine
-
-
+		
+        
 		if (fenHistory.lengh <= cb_fenHistoryMaxLength)
 			fenHistory.push(game.fen());
 		else {
@@ -162,20 +159,9 @@ function piece(code) {
 	this.nameWord = pieces[code.substr(1, 2)];
 }
 
-function checkForTaken(boardPosition, target) {
+function checkForTaken(boardPosition) {
     pieceCount = {
-        wQ: 0,
-        wR: 0,
-        wB: 0,
-        wN: 0,
-        wP: 0,
-        wK: 0,
-        bQ: 0,
-        bR: 0,
-        bB: 0,
-        bN: 0,
-        bP: 0,
-        bK: 0,
+        wQ: 0, wR: 0, wB: 0, wN: 0, wP: 0, wK: 0, bQ: 0, bR: 0, bB: 0, bN: 0, bP: 0, bK: 0
     };
     
     //Tally each piece
@@ -196,25 +182,35 @@ function checkForTaken(boardPosition, target) {
     pieceCount.wB = (-1) * (pieceCount.wB - 2);
     pieceCount.wQ = (-1) * (pieceCount.wQ - 1);
     pieceCount.wK = (-1) * (pieceCount.wK - 1);
-    
-    //for (var property in pieceCount)
-            //if (boardPosition.hasOwnProperty(pieceCount))
-    
                     
-    //OLD CODE, REPLACE WITH DRAWIMG
-	//Check there is a piece in the position already 
-	if (boardPosition.hasOwnProperty(target)) {
-		var takenPiece = new piece(boardPosition[target]);
-		//Decide whether it is a black or white piece
-		div = (boardPosition[target].substr(0, 1) == 'w') ? document.getElementById('whiteCaptured') : document.getElementById('blackCaptured');
-		div.innerHTML = div.innerHTML + takenPiece.nameWord + ', ';
-	}
-}
-
-
-function drawImg(src, container, count)
-{
+    //Remove old pieces
+    var blackNode = document.getElementById(gui_blackCapturedId);
+    while (blackNode.firstChild)
+        blackNode.removeChild(blackNode.firstChild);
+    var whiteNode = document.getElementById(gui_whiteCapturedId);
+    while (whiteNode.firstChild)
+        whiteNode.removeChild(whiteNode.firstChild);
+    whiteNode.innerHTML = 'CAPTURED WHITE PIECES';
+    blackNode.innerHTML = 'CAPTURED BLACK PIECES';
     
+    
+    for (var property in pieceCount)
+        if (pieceCount.hasOwnProperty(property))
+            {
+            var div = (property.substr(0, 1) == 'w') ? document.getElementById(gui_whiteCapturedId) : document.getElementById(gui_blackCapturedId);
+            drawImg("img/chesspieces/wikipedia/" + property + ".png", div, pieceCount[property]);
+            }
+	}
+
+
+function drawImg(src, container, count) {
+    for (var i = 0; i < count; i++) {
+        img = document.createElement("img");
+        img.src = src;
+        img.style.height = gui_capturedPieceSize;
+        img.style.width = gui_capturedPieceSize;
+        container.appendChild(img);
+    }
 }
 
 
