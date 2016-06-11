@@ -46,12 +46,12 @@ $(document).ready(function () {
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
 	cb_autoPlay = true;
-	cb_autoPlayDelay = 100;
+	cb_autoPlayDelay = 50;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
     
     /* STOCKFISH */
-	sf_searchDepth = '6';
+	sf_searchDepth = '5';
     
     /* HTML */
     gui_blackCapturedId = "blackCaptured";
@@ -68,8 +68,11 @@ $(document).ready(function () {
 	$("#undoBtn").click(function () {
 		clearTimeout(cb_autoPlayMove);
 		game.undo();
+        
+        
 		board.position(game.fen(), false);
 		updateStatus();
+        if (turnCount != 0) turnCount--;
         checkForTaken(board.position());
 	});
 

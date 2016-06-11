@@ -10,10 +10,9 @@ function Init_Stockfish() {
 }
 
 //Query the engine from the tutor or opponent
-function AskEngine(source, side, fen, turnCount) {
+function AskEngine(source, side, fen) {
     var query = {
-        turnCount: turnCount
-        , source: source
+          source: source
         , side: side
         , fen: fen
         , move: 'QUERY UNRESOLVED'
@@ -51,16 +50,14 @@ function QueryEngine(fen, depth) {
 }
 
 function ReturnQuery(query) {
-    $("#suggestedMove").html("SUGGESTED MOVE FOR " + (query['side'] == "w" ? "WHITE" : "BLACK") + ": " + query['move']);
-
-    console.log("Turn: " + query['turnCount'] + " Side: " + query['side'] + " Move: " + query['move']);
+    $("#suggestedMove").html("SUGGESTED MOVE FOR " + (query['side'] == "w" ? "White" : "Black") + ": " + query['move']);
+    
+    console.log(" * Turn: " + (turnCount === 0 ? "1" : Math.floor(turnCount / 2)) + " Side: " + query['side'] + " Move: " + query['move']);
 
     if (game.game_over()) return;
 
     //Make opponent moves
     if (cb_autoPlay || (game_pve && (game_playerSide != query.side))) {
-        //var makeMove = function () MovePiece(query.move.substr(0, 2), query.move.substr(2, 4));
         cb_autoPlayMove = setTimeout(MovePiece, cb_autoPlayDelay, query.move.substr(0, 2), query.move.substr(2, 4));
-        //AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
     }
 }

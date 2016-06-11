@@ -1,6 +1,6 @@
 function Init_Chessboard() {
 
-    turnCount = 1;
+    turnCount = 0;
     fenHistory = [];
 
     SetTheme(cb_currentTheme);
@@ -34,21 +34,26 @@ function Init_Chessboard() {
     };
 
     MovePiece = function (from, to) {
+        
+        
         var move = game.move({
             from: from
             , to: to
             , promotion: 'q'
         });
-
+        
+        if (move === null) return 'snapback';
+        
         checkForTaken(board.position());
         board.position(game.fen());
-
+        turnCount++;
+        
         updateStatus();
     }
     updateStatus = function () {
         checkForTaken(board.position());
         updateDebugLog();
-        turnCount++;
+        
 
 
         if (fenHistory.lengh <= cb_fenHistoryMaxLength)
@@ -57,8 +62,8 @@ function Init_Chessboard() {
             fenHistory.shift();
             fenHistory.push(game.fen());
         }
-
-        AskEngine('INSERT SOURCE', game.turn(), game.fen(), Math.floor(turnCount / 2));
+        
+        AskEngine('INSERT SOURCE', game.turn(), game.fen());
     };
 
     var removeHighlighting = function () {
@@ -128,7 +133,8 @@ function Init_Chessboard() {
 
     board = ChessBoard('Chessboard', cfg);
     board.orientation((game_playerSide === 'w') ? 'white' : 'black');
-
+    
+    turnCount++;
     updateStatus();
     board.highlightSquare = function (s, b) {
         for (x in s) {
@@ -171,7 +177,7 @@ function checkForTaken(boardPosition) {
         if (boardPosition.hasOwnProperty(property))
             pieceCount[boardPosition[property]]++;
 
-        //Count differences to expected counts
+    //Count differences to expected counts
     pieceCount.wP = (-1) * (pieceCount.wP - 8);
     pieceCount.bP = (-1) * (pieceCount.bP - 8);
     pieceCount.bR = (-1) * (pieceCount.bR - 2);
@@ -194,11 +200,22 @@ function checkForTaken(boardPosition) {
         whiteNode.removeChild(whiteNode.firstChild);
     whiteNode.innerHTML = 'CAPTURED WHITE PIECES';
     blackNode.innerHTML = 'CAPTURED BLACK PIECES';
-
-
+    
+    var p =  pieceCount;
+    var blackScore = p.wP + (p.wB * 3) + (p.wK * 3) + (p.wR * 4) +(p.wQ) + (p.wK * 0);
+    var whiteScore = p.bP + (p.bB * 3) + (p.bK * 3) + (p.bR * 4) +(p.bQ) + (p.bK * 0);
+    var divBlackScore = document.getElementById(gui_scoreBlackId);
+    var divWhiteScore = document.getElementById(gui_scoreWhiteId);
+    console.log(blackScore);
+    console.log(whiteScore);
+    divBlackScore.InnerHTML = "Black Score: " + toString(blackScore);
+    divWhiteScore.InnerHTML = "White Score: " + toString(whiteScore);
+    
+    
     for (var property in pieceCount)
         if (pieceCount.hasOwnProperty(property)) {
-            var div = (property.substr(0, 1) == 'w') ? document.getElementById(gui_whiteCapturedId) : document.getElementById(gui_blackCapturedId);
+            var isWhite = property.substr(0, 1) == 'w';
+            var div = isWhite ? document.getElementById(gui_whiteCapturedId) : document.getElementById(gui_blackCapturedId);
             drawImg("img/chesspieces/wikipedia/" + property + ".png", div, pieceCount[property]);
         }
 }
