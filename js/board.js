@@ -94,12 +94,13 @@ function Init_Chessboard() {
 		onDrop: MovePiece,
 		onMouseoutSquare: onMouseoutSquare,
 		onMouseoverSquare: onMouseoverSquare,
-		onSnapEnd: onSnapEnd
+		onSnapEnd: onSnapEnd,
+        pieceTheme: dir_pieceImages + '{piece}' + dir_pieceImagesExtension
 	};
 
 	board = ChessBoard('Chessboard', cfg);
 	board.orientation((game_playerSide === 'w') ? 'white' : 'black');
-
+    
 	turnCount++;
 	updateStatus();
 
@@ -215,12 +216,9 @@ function checkForTaken(boardPosition) {
     htmlElements[2].innerHTML = 'CAPTURED BLACK PIECES: ';
     htmlElements[3].innerHTML = 'CAPTURED WHITE PIECES: ';
     for (var property in p)
-        if (p.hasOwnProperty(property)) {
-            var isWhite = property.substr(0, 1) == 'w';
-            drawImg("img/chesspieces/wikipedia/" + property + ".png", 
+        if (p.hasOwnProperty(property)) drawImg(dir_pieceImages + property + dir_pieceImagesExtension, 
                     (property.substr(0, 1) == 'w') ? htmlElements[3] : htmlElements[2],
                     p[property]);
-        }
 }
 function drawImg(src, container, count) {
 	for (var i = 0; i < count; i++) {
