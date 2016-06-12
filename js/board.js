@@ -62,7 +62,6 @@ function Init_Chessboard() {
 			verbose: true
 		});
 
-		var regex = new RegExp("/^" + game_playerSide + "/");
 		if (game.turn() !== game_playerSide) {
 			return;
 		}
@@ -95,12 +94,12 @@ function Init_Chessboard() {
 		onMouseoutSquare: onMouseoutSquare,
 		onMouseoverSquare: onMouseoverSquare,
 		onSnapEnd: onSnapEnd,
-        pieceTheme: dir_pieceImages + '{piece}' + dir_pieceImagesExtension
+		pieceTheme: dir_pieceImages + '{piece}' + dir_pieceImagesExtension
 	};
 
 	board = ChessBoard('Chessboard', cfg);
 	board.orientation((game_playerSide === 'w') ? 'white' : 'black');
-    
+
 	turnCount++;
 	updateStatus();
 
@@ -123,17 +122,21 @@ function MovePiece(from, to) {
 
 	if (move === null) return 'snapback';
 
-	checkForTaken(board.position());
 	board.position(game.fen());
 	turnCount++;
 
 	updateStatus();
 }
 
-function updateStatus() {
-	checkForTaken(board.position());
-	updateDebugLog();
 
+function updateStatus() {
+
+	var t0 = new Date();
+	checkForTaken(board.position());
+	var t1 = new Date() - t0;
+	//console.log(t1);
+	average.push(t1);
+	updateDebugLog();
 
 
 	if (fenHistory.lengh <= cb_fenHistoryMaxLength)
@@ -154,78 +157,70 @@ function piece(code) {
 }
 
 function checkForTaken(boardPosition) {
-	
-    // p = Piece Count variable
-    var p = {
-        wQ: 0
-        , wR: 0
-        , wB: 0
-        , wN: 0
-        , wP: 0
-        , wK: 0
-        , bQ: 0
-        , bR: 0
-        , bB: 0
-        , bN: 0
-        , bP: 0
-        , bK: 0
-    };
 
-    //Tally each piece
-    for (var property in boardPosition)
-        if (boardPosition.hasOwnProperty(property))
-            p[boardPosition[property]]++;
+	// p = Piece Count variable
+	var p = {
+		wQ: 0,
+		wR: 0,
+		wB: 0,
+		wN: 0,
+		wP: 0,
+		wK: 0,
+		bQ: 0,
+		bR: 0,
+		bB: 0,
+		bN: 0,
+		bP: 0,
+		bK: 0
+	};
 
-    //Count differences to expected counts
-    
-    p.bP = (-1) * (p.bP - 8);
-    p.bR = (-1) * (p.bR - 2);
-    p.bN = (-1) * (p.bN - 2);
-    p.bB = (-1) * (p.bB - 2);
-    p.bQ = (-1) * (p.bQ - 1);
-    p.bK = (-1) * (p.bK - 1);
-    
-    p.wP = (-1) * (p.wP - 8);
-    p.wR = (-1) * (p.wR - 2);
-    p.wN = (-1) * (p.wN - 2);
-    p.wB = (-1) * (p.wB - 2);
-    p.wQ = (-1) * (p.wQ - 1);
-    p.wK = (-1) * (p.wK - 1);
-    
-    blackScore = p.wP + (p.wB * 3) + (p.wN * 3) + (p.wR * 4) + (p.wQ * 9) + (p.wK * 0);
-    whiteScore = p.bP + (p.bB * 3) + (p.bN * 3) + (p.bR * 4) + (p.bQ * 9) + (p.bK * 0);
-    
-    //Remove old pieces and score  
-    var htmlElements = [document.getElementById(gui_scoreBlackId), 
-                        document.getElementById(gui_scoreWhiteId), 
-                        document.getElementById(gui_blackCapturedId),
-                        document.getElementById(gui_whiteCapturedId)];
-    
-    for (var i = 0; i < htmlElements.length; i++)
-            while (htmlElements[i].firstChild)
-                htmlElements[i].removeChild(htmlElements[i].firstChild);
-    
-    var elementScore = document.createElement("p");
-    elementScore.innerHTML = "BLACK SCORE: " + blackScore;
-    htmlElements[0].appendChild(elementScore);
-    var elementScore = document.createElement("p");
-    elementScore.innerHTML = "WHITE SCORE: " + whiteScore;
-    htmlElements[1].appendChild(elementScore);
-    
-    //Display each taken piece from piece count variable p
-    htmlElements[2].innerHTML = 'CAPTURED BLACK PIECES: ';
-    htmlElements[3].innerHTML = 'CAPTURED WHITE PIECES: ';
-    for (var property in p)
-        if (p.hasOwnProperty(property)) drawImg(dir_pieceImages + property + dir_pieceImagesExtension, 
-                    (property.substr(0, 1) == 'w') ? htmlElements[3] : htmlElements[2],
-                    p[property]);
+	//Tally each piece
+	for (var property in boardPosition)
+		if (boardPosition.hasOwnProperty(property))
+			p[boardPosition[property]]++;
+
+		//Count differences to expected counts
+	p.bP = 8 - p.bP;
+	p.bR = 2 - p.bR;
+	p.bN = 2 - p.bN;
+	p.bB = 2 - p.bB;
+	p.bQ = 1 - p.bQ;
+	p.bK = 1 - p.bK;
+
+	p.wP = 8 - p.wP;
+	p.wR = 2 - p.wR;
+	p.wN = 2 - p.wN;
+	p.wB = 2 - p.wB;
+	p.wQ = 1 - p.wQ;
+	p.wK = 1 - p.wK;
+
+	var blackScore = p.wP + (p.wB * 3) + (p.wN * 3) + (p.wR * 4) + (p.wQ * 9);
+	var whiteScore = p.bP + (p.bB * 3) + (p.bN * 3) + (p.bR * 4) + (p.bQ * 9);
+
+	//Remove old pieces and score  
+	var capturedBlack = document.getElementById(gui_blackCapturedId);
+	var capturedWhite = document.getElementById(gui_whiteCapturedId);
+
+	document.getElementById(gui_scoreBlackId).innerHTML = "BLACK SCORE: " + blackScore;
+	document.getElementById(gui_scoreWhiteId).innerHTML = "WHITE SCORE: " + whiteScore;
+
+	//Display each taken piece from piece count variable p
+	capturedBlack.innerHTML = 'CAPTURED BLACK PIECES: ';
+	capturedWhite.innerHTML = 'CAPTURED WHITE PIECES: ';
+
+	for (var property in p)
+		drawImg(dir_pieceImages + property + dir_pieceImagesExtension, (property.charAt(0) == 'w') ? capturedWhite : capturedBlack,
+			p[property]);
+
 }
+
 function drawImg(src, container, count) {
+	var img = document.createElement("img");
+	img.src = src;
+	img.style.height = gui_capturedPieceSize;
+	img.style.width = gui_capturedPieceSize;
+
 	for (var i = 0; i < count; i++) {
-		img = document.createElement("img");
-		img.src = src;
-		img.style.height = gui_capturedPieceSize;
-		img.style.width = gui_capturedPieceSize;
 		container.appendChild(img);
 	}
 }

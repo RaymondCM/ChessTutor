@@ -46,7 +46,7 @@ $(document).ready(function () {
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
 	cb_autoPlay = true;
-	cb_autoPlayDelay = 200;
+	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
 
@@ -58,11 +58,21 @@ $(document).ready(function () {
 	gui_whiteCapturedId = "whiteCaptured";
 	gui_scoreBlackId = "blackScore";
 	gui_scoreWhiteId = "whiteScore";
-    
+
 	gui_capturedPieceSize = "50px";
-    
-    dir_pieceImages = "img/chesspieces/drawn/";
-    dir_pieceImagesExtension = ".png";
+
+	dir_pieceImages = "img/chesspieces/drawn/";
+	dir_pieceImagesExtension = ".png";
+
+	average = [];
+	$("#testBtn").click(function () {
+		var total = 0;
+		for (i = 0; i < average.length; i++)
+			total += average[i];
+		console.log(total / average.length);
+
+
+	});
 
 	Init_Chessboard();
 
@@ -78,5 +88,4 @@ $(document).ready(function () {
 		checkForTaken(board.position());
 	});
 
-	$("#redoBtn").click(function () {});
 });

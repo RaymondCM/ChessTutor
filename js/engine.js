@@ -9,7 +9,7 @@ stockfishEngine.onmessage = function (event) {
 		move = event.data.substring(9, 13);
 
 	$("#suggestedMove").html("SUGGESTED MOVE FOR " + side + ": " + move);
-	console.log(" * Turn: " + (turnCount === 0 ? "1" : Math.floor(turnCount / 2)) + " Side: " + side + " Move: " + move);
+	//console.log(" * Turn: " + (turnCount === 0 ? "1" : Math.floor(turnCount / 2)) + " Side: " + side + " Move: " + move);
 
 	//Make opponent moves
 	if (!game.game_over() && cb_autoPlay || (game_pve && (game_playerSide != side))) {
