@@ -58,6 +58,7 @@ $(document).ready(function () {
 	gui_whiteCapturedId = "whiteCaptured";
 	gui_scoreBlackId = "blackScore";
 	gui_scoreWhiteId = "whiteScore";
+    gui_scorePlayerId = "relativeScore";
     
 	gui_capturedPieceSize = "50px";
     

@@ -194,30 +194,38 @@ function checkForTaken(boardPosition) {
     
     blackScore = p.wP + (p.wB * 3) + (p.wN * 3) + (p.wR * 4) + (p.wQ * 9) + (p.wK * 0);
     whiteScore = p.bP + (p.bB * 3) + (p.bN * 3) + (p.bR * 4) + (p.bQ * 9) + (p.bK * 0);
+    relativeScore = (game_playerSide == 'w') ? (whiteScore - blackScore) : (blackScore - whiteScore);
     
     //Remove old pieces and score  
     var htmlElements = [document.getElementById(gui_scoreBlackId), 
-                        document.getElementById(gui_scoreWhiteId), 
+                        document.getElementById(gui_scoreWhiteId),
+                        document.getElementById(gui_scorePlayerId),
                         document.getElementById(gui_blackCapturedId),
-                        document.getElementById(gui_whiteCapturedId)];
+                        document.getElementById(gui_whiteCapturedId)
+                        ];
     
     for (var i = 0; i < htmlElements.length; i++)
             while (htmlElements[i].firstChild)
                 htmlElements[i].removeChild(htmlElements[i].firstChild);
     
+     
     var elementScore = document.createElement("p");
     elementScore.innerHTML = "BLACK SCORE: " + blackScore;
     htmlElements[0].appendChild(elementScore);
     var elementScore = document.createElement("p");
     elementScore.innerHTML = "WHITE SCORE: " + whiteScore;
     htmlElements[1].appendChild(elementScore);
+    var elementScore = document.createElement("p");
+    elementScore.innerHTML = "YOUR " + ((game_playerSide == 'w') ? "(WHITE'S)" : "(BLACK'S)") + " RELATIVE SCORE: " + relativeScore;
+    htmlElements[2].appendChild(elementScore);
+    
     
     //Display each taken piece from piece count variable p
-    htmlElements[2].innerHTML = 'CAPTURED BLACK PIECES: ';
-    htmlElements[3].innerHTML = 'CAPTURED WHITE PIECES: ';
+    htmlElements[3].innerHTML = 'CAPTURED BLACK PIECES: ';
+    htmlElements[4].innerHTML = 'CAPTURED WHITE PIECES: ';
     for (var property in p)
         if (p.hasOwnProperty(property)) drawImg(dir_pieceImages + property + dir_pieceImagesExtension, 
-                    (property.substr(0, 1) == 'w') ? htmlElements[3] : htmlElements[2],
+                    (property.substr(0, 1) == 'w') ? htmlElements[4] : htmlElements[3],
                     p[property]);
 }
 function drawImg(src, container, count) {
