@@ -194,6 +194,10 @@ function checkForTaken(boardPosition) {
 	var whiteScore = p.bP + (p.bB * 3) + (p.bN * 3) + (p.bR * 4) + (p.bQ * 9);
 	relativeScore = (game_playerSide == 'w') ? (whiteScore - blackScore) : (blackScore - whiteScore);
 
+	var increment = 505 / (74);
+	//$("#advFill").css("width", relativeScore * increment);
+	$("#advFill").css("left", (relativeScore * increment) / 2);
+
 	//Remove old pieces and score  
 	var capturedBlack = document.getElementById(gui_blackCapturedId);
 	var capturedWhite = document.getElementById(gui_whiteCapturedId);

@@ -53,7 +53,8 @@ $(document).ready(function () {
 	/* STOCKFISH */
 	sf_timeOverDepth = false;
 	sf_searchTime = '3000';
-	sf_searchDepth = '20';
+	sf_searchDepth = '5';
+	sf_score = 0;
 
 	/* HTML */
 	gui_blackCapturedId = "blackCaptured";
