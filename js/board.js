@@ -143,7 +143,7 @@ function updateStatus() {
 		fenHistory.push(game.fen());
 	}
 
-	AskEngine(game.fen(), sf_searchDepth);
+	AskEngine(game.fen(), sf_timeOverDepth ? sf_searchTime : sf_searchDepth);
 }
 
 function piece(code) {

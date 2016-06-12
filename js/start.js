@@ -46,12 +46,14 @@ $(document).ready(function () {
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
 	cb_autoPlay = true;
-	cb_autoPlayDelay = 200;
+	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
 
 	/* STOCKFISH */
-	sf_searchDepth = '5';
+    sf_timeOverDepth = false;
+    sf_searchTime = '3000';
+	sf_searchDepth = '20';
 
 	/* HTML */
 	gui_blackCapturedId = "blackCaptured";
@@ -62,7 +64,7 @@ $(document).ready(function () {
     
 	gui_capturedPieceSize = "50px";
     
-    dir_pieceImages = "img/chesspieces/drawn/";
+    dir_pieceImages = "img/chesspieces/skulls/";
     dir_pieceImagesExtension = ".png";
 
 	Init_Chessboard();
