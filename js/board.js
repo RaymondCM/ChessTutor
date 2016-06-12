@@ -146,7 +146,7 @@ function updateStatus() {
 		fenHistory.push(game.fen());
 	}
 
-	AskEngine(game.fen(), sf_searchDepth);
+	AskEngine(game.fen(), sf_timeOverDepth ? sf_searchTime : sf_searchDepth);
 }
 
 function piece(code) {
@@ -196,6 +196,7 @@ function checkForTaken(boardPosition) {
 
 	var blackScore = p.wP + (p.wB * 3) + (p.wN * 3) + (p.wR * 4) + (p.wQ * 9);
 	var whiteScore = p.bP + (p.bB * 3) + (p.bN * 3) + (p.bR * 4) + (p.bQ * 9);
+	relativeScore = (game_playerSide == 'w') ? (whiteScore - blackScore) : (blackScore - whiteScore);
 
 	//Remove old pieces and score  
 	var capturedBlack = document.getElementById(gui_blackCapturedId);
@@ -203,6 +204,7 @@ function checkForTaken(boardPosition) {
 
 	document.getElementById(gui_scoreBlackId).innerHTML = "BLACK SCORE: " + blackScore;
 	document.getElementById(gui_scoreWhiteId).innerHTML = "WHITE SCORE: " + whiteScore;
+	document.getElementById(gui_scorePlayerId).innerHTML = "YOUR " + ((game_playerSide == 'w') ? "(WHITE'S)" : "(BLACK'S)") + " RELATIVE SCORE: " + relativeScore;
 
 	//Display each taken piece from piece count variable p
 	capturedBlack.innerHTML = 'CAPTURED BLACK PIECES: ';

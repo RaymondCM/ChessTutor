@@ -20,5 +20,5 @@ stockfishEngine.onmessage = function (event) {
 //Format string for stockfishEngine message
 function AskEngine(fen, depth) {
 	stockfishEngine.postMessage("position fen " + fen);
-	stockfishEngine.postMessage("go depth " + depth);
+	stockfishEngine.postMessage((sf_timeOverDepth  ? "go movetime " : "go depth ") + depth);
 }
