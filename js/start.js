@@ -37,43 +37,42 @@ $(document).ready(function () {
 		permBlackPossiblePlaces: "rgba(245, 255, 0, 0.55)",
 		boardShape: "Skew"
     }];
-    
-    /* GAME CONFIG */
+
+	/* GAME CONFIG */
 	game_pve = true;
 	game_playerSide = 'b';
-    
-    /* CHESS BOARD */
+
+	/* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
 	cb_autoPlay = true;
-	cb_autoPlayDelay = 50;
+	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
-    
-    /* STOCKFISH */
+
+	/* STOCKFISH */
 	sf_searchDepth = '5';
-    
-    /* HTML */
-    gui_blackCapturedId = "blackCaptured";
-    gui_whiteCapturedId = "whiteCaptured";
-    gui_scoreBlackId = "blackScore";
-    gui_scoreWhiteId = "whiteScore";
-    gui_capturedPieceSize = "50px";
-    
-    
+
+	/* HTML */
+	gui_blackCapturedId = "blackCaptured";
+	gui_whiteCapturedId = "whiteCaptured";
+	gui_scoreBlackId = "blackScore";
+	gui_scoreWhiteId = "whiteScore";
+	gui_capturedPieceSize = "50px";
+
+
 	Init_Chessboard();
-	Init_Stockfish();
 
 	/* BIND FUNCTIONS */
 	$("#undoBtn").click(function () {
 		clearTimeout(cb_autoPlayMove);
 		game.undo();
-        
-        
+
+
 		board.position(game.fen(), false);
 		updateStatus();
-        if (turnCount != 0) turnCount--;
-        checkForTaken(board.position());
+		if (turnCount != 0) turnCount--;
+		checkForTaken(board.position());
 	});
 
 	$("#redoBtn").click(function () {});

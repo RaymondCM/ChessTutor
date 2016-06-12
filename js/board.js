@@ -11,8 +11,7 @@ function Init_Chessboard() {
 	board = "";
 	game = new Chess();
 
-	//Piece Map
-	pieces = {
+	var pieces = {
 		K: "King",
 		N: "Knight",
 		P: "Pawn",
@@ -31,39 +30,6 @@ function Init_Chessboard() {
 			(game.turn() !== game_playerSide)) {
 			return false;
 		}
-	};
-
-	MovePiece = function (from, to) {
-
-
-		var move = game.move({
-			from: from,
-			to: to,
-			promotion: 'q'
-		});
-
-		if (move === null) return 'snapback';
-
-		checkForTaken(board.position());
-		board.position(game.fen());
-		turnCount++;
-
-		updateStatus();
-	}
-	updateStatus = function () {
-		checkForTaken(board.position());
-		updateDebugLog();
-
-
-
-		if (fenHistory.lengh <= cb_fenHistoryMaxLength)
-			fenHistory.push(game.fen());
-		else {
-			fenHistory.shift();
-			fenHistory.push(game.fen());
-		}
-
-		AskstockfishEngine('INSERT SOURCE', game.turn(), game.fen());
 	};
 
 	var removeHighlighting = function () {
@@ -136,6 +102,7 @@ function Init_Chessboard() {
 
 	turnCount++;
 	updateStatus();
+
 	board.highlightSquare = function (s, b) {
 		for (x in s) {
 			highlightSquare(s[x], b);
@@ -143,11 +110,40 @@ function Init_Chessboard() {
 	};
 
 	board.highlightSquare(cb_permHighlighted, true);
-
-
 }
 
+function MovePiece(from, to) {
 
+	var move = game.move({
+		from: from,
+		to: to,
+		promotion: 'q'
+	});
+
+	if (move === null) return 'snapback';
+
+	checkForTaken(board.position());
+	board.position(game.fen());
+	turnCount++;
+
+	updateStatus();
+}
+
+function updateStatus() {
+	checkForTaken(board.position());
+	updateDebugLog();
+
+
+
+	if (fenHistory.lengh <= cb_fenHistoryMaxLength)
+		fenHistory.push(game.fen());
+	else {
+		fenHistory.shift();
+		fenHistory.push(game.fen());
+	}
+
+	AskEngine(game.fen(), sf_searchDepth);
+}
 
 function piece(code) {
 	this.colourLetter = code.substr(0, 1);
@@ -220,7 +216,6 @@ function checkForTaken(boardPosition) {
 		}
 }
 
-
 function drawImg(src, container, count) {
 	for (var i = 0; i < count; i++) {
 		img = document.createElement("img");
@@ -230,7 +225,6 @@ function drawImg(src, container, count) {
 		container.appendChild(img);
 	}
 }
-
 
 function updateDebugLog() {
 	var status = '',
@@ -258,47 +252,17 @@ function updateDebugLog() {
 }
 
 function SetTheme(theme) {
-	addCSS(".square-55d63", cb_shapes[cb_currentTheme.boardShape]);
+	alterCSS(".square-55d63", cb_shapes[cb_currentTheme.boardShape]);
 
 	if (cb_shapes[cb_currentTheme.boardShape] == cb_shapes["Diamond"])
-		addCSS(".square-55d63 img", cb_shapes["DiamondIMGFix"]);
+		alterCSS(".square-55d63 img", cb_shapes["DiamondIMGFix"]);
 
 	alterCSS('.white-1e1d7', theme.whiteSquare, theme.whiteSquareText);
 	alterCSS('.black-3c85d', theme.blackSquare, theme.blackSquareText);
 }
 
-function alterCSS(className, backgroundColour, textColour) {
-
-	//Create CSS var
-	var classCSS = "background-color: " + backgroundColour + ";" + " color:" + textColour + ";"
-
-	//Remove Inline Style/Attr
-	if ($(className).removeProp) {
-		$(className).removeProp('background-color');
-	} else {
-		$(className).removeAttr('background-color');
-	}
-
-	//Create a hidden div for storing CSS information (add to eof)
-	var tempCSSContainer = $('#temp-css-store-c34jw2-f32r12');
-	if (tempCSSContainer.length == 0) {
-		var tempCSSContainer = $('<div id="temp-css-store-c34jw2-f32r12"></div>');
-		tempCSSContainer.hide();
-		tempCSSContainer.appendTo($('body'));
-	}
-
-	//Create a Div for each class element found with className and append to HTML
-	classContainer = tempCSSContainer.find('div[data-class="' + className + '"]');
-	if (classContainer.length == 0) {
-		classContainer = $('<div data-class="' + className + '"></div>');
-		classContainer.appendTo(tempCSSContainer);
-	}
-
-	//Add the additional style to the parent Div and Style it with overridden CSS
-	classContainer.html('<style>' + className + ' {' + classCSS + '}</style>');
-}
-
-function addCSS(className, classCSS) {
+function alterCSS(className, css1, css2) {
+	var classCSS = (typeof css2 === 'undefined' || css2 === "") ? css1 : "background-color: " + css1 + "; color:" + css2 + ";";
 
 	//Remove Inline Style/Attr
 	if ($(className).removeProp) {
