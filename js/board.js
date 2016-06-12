@@ -153,69 +153,75 @@ function piece(code) {
 }
 
 function checkForTaken(boardPosition) {
-	var pieceCount = {
-		wQ: 0,
-		wR: 0,
-		wB: 0,
-		wN: 0,
-		wP: 0,
-		wK: 0,
-		bQ: 0,
-		bR: 0,
-		bB: 0,
-		bN: 0,
-		bP: 0,
-		bK: 0
-	};
+	
+    // p = Piece Count variable
+    var p = {
+        wQ: 0
+        , wR: 0
+        , wB: 0
+        , wN: 0
+        , wP: 0
+        , wK: 0
+        , bQ: 0
+        , bR: 0
+        , bB: 0
+        , bN: 0
+        , bP: 0
+        , bK: 0
+    };
 
-	//Tally each piece
-	for (var property in boardPosition)
-		if (boardPosition.hasOwnProperty(property))
-			pieceCount[boardPosition[property]]++;
+    //Tally each piece
+    for (var property in boardPosition)
+        if (boardPosition.hasOwnProperty(property))
+            p[boardPosition[property]]++;
 
-		//Count differences to expected counts
-	pieceCount.wP = (-1) * (pieceCount.wP - 8);
-	pieceCount.bP = (-1) * (pieceCount.bP - 8);
-	pieceCount.bR = (-1) * (pieceCount.bR - 2);
-	pieceCount.bN = (-1) * (pieceCount.bN - 2);
-	pieceCount.bB = (-1) * (pieceCount.bB - 2);
-	pieceCount.bQ = (-1) * (pieceCount.bQ - 1);
-	pieceCount.bK = (-1) * (pieceCount.bK - 1);
-	pieceCount.wR = (-1) * (pieceCount.wR - 2);
-	pieceCount.wN = (-1) * (pieceCount.wN - 2);
-	pieceCount.wB = (-1) * (pieceCount.wB - 2);
-	pieceCount.wQ = (-1) * (pieceCount.wQ - 1);
-	pieceCount.wK = (-1) * (pieceCount.wK - 1);
-
-	//Remove old pieces
-	var blackNode = document.getElementById(gui_blackCapturedId);
-	while (blackNode.firstChild)
-		blackNode.removeChild(blackNode.firstChild);
-	var whiteNode = document.getElementById(gui_whiteCapturedId);
-	while (whiteNode.firstChild)
-		whiteNode.removeChild(whiteNode.firstChild);
-	whiteNode.innerHTML = 'CAPTURED WHITE PIECES';
-	blackNode.innerHTML = 'CAPTURED BLACK PIECES';
-
-	var p = pieceCount;
-	var blackScore = p.wP + (p.wB * 3) + (p.wK * 3) + (p.wR * 4) + (p.wQ) + (p.wK * 0);
-	var whiteScore = p.bP + (p.bB * 3) + (p.bK * 3) + (p.bR * 4) + (p.bQ) + (p.bK * 0);
-	var divBlackScore = document.getElementById(gui_scoreBlackId);
-	var divWhiteScore = document.getElementById(gui_scoreWhiteId);
-	console.log(blackScore);
-	console.log(whiteScore);
-	divBlackScore.InnerHTML = "Black Score: " + toString(blackScore);
-	divWhiteScore.InnerHTML = "White Score: " + toString(whiteScore);
-
-
-	for (var property in pieceCount)
-		if (pieceCount.hasOwnProperty(property)) {
-			var isWhite = property.substr(0, 1) == 'w';
-			var div = isWhite ? document.getElementById(gui_whiteCapturedId) : document.getElementById(gui_blackCapturedId);
-			drawImg("img/chesspieces/wikipedia/" + property + ".png", div, pieceCount[property]);
-		}
+    //Count differences to expected counts
+    
+    p.bP = (-1) * (p.bP - 8);
+    p.bR = (-1) * (p.bR - 2);
+    p.bN = (-1) * (p.bN - 2);
+    p.bB = (-1) * (p.bB - 2);
+    p.bQ = (-1) * (p.bQ - 1);
+    p.bK = (-1) * (p.bK - 1);
+    
+    p.wP = (-1) * (p.wP - 8);
+    p.wR = (-1) * (p.wR - 2);
+    p.wN = (-1) * (p.wN - 2);
+    p.wB = (-1) * (p.wB - 2);
+    p.wQ = (-1) * (p.wQ - 1);
+    p.wK = (-1) * (p.wK - 1);
+    
+    blackScore = p.wP + (p.wB * 3) + (p.wN * 3) + (p.wR * 4) + (p.wQ * 9) + (p.wK * 0);
+    whiteScore = p.bP + (p.bB * 3) + (p.bN * 3) + (p.bR * 4) + (p.bQ * 9) + (p.bK * 0);
+    
+    //Remove old pieces and score  
+    var htmlElements = [document.getElementById(gui_scoreBlackId), 
+                        document.getElementById(gui_scoreWhiteId), 
+                        document.getElementById(gui_blackCapturedId),
+                        document.getElementById(gui_whiteCapturedId)];
+    
+    for (var i = 0; i < htmlElements.length; i++)
+            while (htmlElements[i].firstChild)
+                htmlElements[i].removeChild(htmlElements[i].firstChild);
+    
+    var elementScore = document.createElement("p");
+    elementScore.innerHTML = "BLACK SCORE: " + blackScore;
+    htmlElements[0].appendChild(elementScore);
+    var elementScore = document.createElement("p");
+    elementScore.innerHTML = "WHITE SCORE: " + whiteScore;
+    htmlElements[1].appendChild(elementScore);
+    
+    //Display each taken piece from piece count variable p
+    htmlElements[2].innerHTML = 'CAPTURED BLACK PIECES: ';
+    htmlElements[3].innerHTML = 'CAPTURED WHITE PIECES: ';
+    for (var property in p)
+        if (p.hasOwnProperty(property)) {
+            var isWhite = property.substr(0, 1) == 'w';
+            drawImg("img/chesspieces/wikipedia/" + property + ".png", 
+                    (property.substr(0, 1) == 'w') ? htmlElements[3] : htmlElements[2],
+                    p[property]);
+        }
 }
-
 function drawImg(src, container, count) {
 	for (var i = 0; i < count; i++) {
 		img = document.createElement("img");
