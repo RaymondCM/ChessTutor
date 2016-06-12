@@ -131,11 +131,7 @@ function MovePiece(from, to) {
 
 function updateStatus() {
 
-	var t0 = new Date();
 	checkForTaken(board.position());
-	var t1 = new Date() - t0;
-	//console.log(t1);
-	average.push(t1);
 	updateDebugLog();
 
 

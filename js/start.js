@@ -51,7 +51,9 @@ $(document).ready(function () {
 	cb_permHighlighted = ["a6"];
 
 	/* STOCKFISH */
-	sf_searchDepth = '5';
+	sf_timeOverDepth = false;
+	sf_searchTime = '3000';
+	sf_searchDepth = '20';
 
 	/* HTML */
 	gui_blackCapturedId = "blackCaptured";
@@ -70,9 +72,14 @@ $(document).ready(function () {
 		for (i = 0; i < average.length; i++)
 			total += average[i];
 		console.log(total / average.length);
-
-
 	});
+
+	gui_scorePlayerId = "relativeScore";
+
+	gui_capturedPieceSize = "50px";
+
+	dir_pieceImages = "img/chesspieces/skulls/";
+	dir_pieceImagesExtension = ".png";
 
 	Init_Chessboard();
 
