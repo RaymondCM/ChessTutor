@@ -194,9 +194,47 @@ function checkForTaken(boardPosition) {
 	var whiteScore = p.bP + (p.bB * 3) + (p.bN * 3) + (p.bR * 4) + (p.bQ * 9);
 	relativeScore = (game_playerSide == 'w') ? (whiteScore - blackScore) : (blackScore - whiteScore);
 
-	var increment = 505 / (74);
+	//var increment = 505 / (74);
 	//$("#advFill").css("width", relativeScore * increment);
-	$("#advFill").css("left", (relativeScore * increment) / 2);
+	//$("#advFill").css("left", (relativeScore * increment) / 2);
+
+	//http://stackoverflow.com/questions/26661999/how-to-increase-the-value-of-a-number-to-the-next-multiple-of-10-100-1000-10
+	RoundedMax = function (a) {
+		var mx = Math.max.apply(Math, a);
+		if (mx == 0) {
+			return 0
+		};
+		var size = Math.floor(Math.log(Math.abs(mx)) / Math.LN10);
+		var magnitude = Math.pow(10, size);
+		var yMax = Math.ceil(mx / magnitude) * magnitude;
+		return yMax;
+	};
+
+	RoundedMin = function (a) {
+		var mn = Math.min.apply(Math, a);
+		if (mn == 0) {
+			return 0
+		};
+		var size = Math.floor(Math.log(Math.abs(mn)) / Math.LN10);
+		var magnitude = Math.pow(10, size);
+		var yMin = Math.floor(mn / magnitude) * magnitude;
+		return yMin;
+	};
+
+	var arr = [sf_scoreBlack, 0, sf_scoreWhite];
+
+	var min = RoundedMin(arr),
+		max = RoundedMax(arr);
+
+	document.getElementById("advLeft").innerHTML = min;
+	document.getElementById("advRight").innerHTML = max;
+
+	var percOfRange = ((sf_scoreWhite - sf_scoreBlack) / (max - min)) * 100;
+
+	console.log(percOfRange.toFixed(2));
+	if (percOfRange < 0)
+		percOfRange = 100 - (-1 * percOfRange);
+	$("#advFill").css("left", percOfRange + "%");
 
 	//Remove old pieces and score  
 	var capturedBlack = document.getElementById(gui_blackCapturedId);

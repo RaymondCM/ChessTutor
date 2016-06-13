@@ -20,6 +20,7 @@
 	background-image: url(../img/advantage.png);
 	background-size: cover;
 	z-index: 999;
+	padding-bottom: 30px;
 }
 
 #advFill {
@@ -29,6 +30,24 @@
 	background-color: black;
 	width: 5px;
 	height: 40px;
-	margin: 0 auto;
+	left: 0;
 	left: -21px;
+}
+
+#advLeft,
+#advRight {
+	z-index: 999;
+	position: absolute;
+	font-size: 20px;
+	top: 40px;
+}
+
+#advRight {
+	float: right;
+	right: 10px;
+}
+
+#advLeft {
+	float: left;
+	left: 10px;
 }

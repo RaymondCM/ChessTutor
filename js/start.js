@@ -40,7 +40,7 @@ $(document).ready(function () {
 
 	/* GAME CONFIG */
 	game_pve = true;
-	game_playerSide = 'b';
+	game_playerSide = 'w';
 
 	/* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
@@ -54,7 +54,10 @@ $(document).ready(function () {
 	sf_timeOverDepth = false;
 	sf_searchTime = '3000';
 	sf_searchDepth = '5';
-	sf_score = 0;
+	sf_scoreWhite = 1;
+	sf_scoreBlack = -1;
+	//Force evaluation at every depth (much better centipawn results) slower results
+	sf_accurateCentipawns = true;
 
 	/* HTML */
 	gui_blackCapturedId = "blackCaptured";
@@ -82,6 +85,7 @@ $(document).ready(function () {
 	dir_pieceImages = "img/chesspieces/skulls/";
 	dir_pieceImagesExtension = ".png";
 
+	Init_Stockfish();
 	Init_Chessboard();
 
 	/* BIND FUNCTIONS */

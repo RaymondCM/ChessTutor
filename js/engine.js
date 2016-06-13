@@ -2,15 +2,19 @@
 var stockfishEngine = typeof STOCKFISH === "function" ? STOCKFISH() : new Worker('js/opensource/stockfish.js');
 var lastPonder = "";
 
+function Init_Stockfish() {
+	if (sf_accurateCentipawns)
+		stockfishEngine.postMessage("setoption name MultiPV value 100");
+}
 stockfishEngine.onmessage = function (event) {
-
+	//console.log(event.data);
 	if (event.data.toString().substr(0, 8) !== 'bestmove') {
 		if (event.data.toString().substr(0, 10) == 'info depth')
 			lastPonder = event.data;
 		return;
 	}
 
-	console.log(getScore(lastPonder));
+	getScore(lastPonder);
 
 	var side = game.turn(),
 		move = event.data.substring(9, 13);
@@ -47,8 +51,12 @@ function getScore(a) {
 
 	var msgObj = infoToObj(a);
 
-	console.log(msgObj);
+	//console.log(msgObj);
 
-	sf_score = (msgObj.score_cp ? msgObj.score_cp : msgObj.score_mate);
-	return (msgObj.score_cp ? "Centipawn Score: " : "Mate Score: ") + sf_score;
+	if (game.turn() === 'w' && msgObj.hasOwnProperty("score_cp"))
+		sf_scoreWhite = msgObj.score_cp;
+	else if (msgObj.hasOwnProperty("score_cp"))
+		sf_scoreBlack = msgObj.score_cp;
+
+	return (msgObj.score_cp ? "Centipawn Score: " : "Mate Score: ") + game.turn() + (game.turn() === 'w' ? sf_scoreWhite : sf_scoreBlack);
 }
