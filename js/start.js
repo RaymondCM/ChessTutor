@@ -45,8 +45,8 @@ $(document).ready(function () {
 	/* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = true;
-	cb_autoPlayDelay = 0;
+	cb_autoPlay = false;
+	cb_autoPlayDelay = 400;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
 	cb_counterScaleMarkings = 2;
@@ -54,7 +54,7 @@ $(document).ready(function () {
 	/* STOCKFISH */
 	sf_timeOverDepth = false;
 	sf_searchTime = '3000';
-	sf_searchDepth = '0';
+	sf_searchDepth = '1';
 	sf_scoreWhite = 1;
 	sf_scoreBlack = -1;
 	//Force evaluation at every depth (much better centipawn results) slower results
