@@ -12,7 +12,6 @@ $(document).ready(function () {
 		Diamond: "-webkit-transform: rotate(-45deg); - moz - transform: rotate(-45 deg); - ms - transform: rotate(-45 deg); - o - transform: rotate(-45 deg);transform: rotate(-45 deg); - webkit - transform - origin: 0 100 % ; - moz - transform - origin: 0 100 % ; - ms - transform - origin: 0 100 % ; - o - transform - origin: 0 100 % ;transform - origin: 0 100 % ;",
 		DiamondIMGFix: "-webkit-transform: rotate(45deg); - moz - transform: rotate(45 deg); - ms - transform: rotate(45 deg); - o - transform: rotate(45 deg);transform: rotate(45 deg); - webkit - transform - origin: 0 100 % ; - moz - transform - origin: 0 100 % ; - ms - transform - origin: 0 100 % ; - o - transform - origin: 0 100 % ;transform - origin: 0 100 % ;"
 	};
-
 	//Eventually enable this obj to be loaded from a file on the server (and/or user account)
 	var cb_themes = [{
 		name: "default",
@@ -93,11 +92,14 @@ $(document).ready(function () {
 	$("#undoBtn").click(function () {
 		clearTimeout(cb_autoPlayMove);
 		game.undo();
-
+		game.undo();
 
 		board.position(game.fen(), false);
 		updateStatus();
-		if (turnCount != 0) turnCount--;
+
+		if (turnCount > 1)
+			turnCount -= 2;
+
 		checkForTaken(board.position());
 	});
 
