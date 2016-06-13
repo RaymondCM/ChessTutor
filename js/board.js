@@ -229,7 +229,7 @@ function checkForTaken(boardPosition) {
 	document.getElementById("advLeft").innerHTML = min;
 	document.getElementById("advRight").innerHTML = max;
 
-	var percOfRange = ((sf_scoreWhite - sf_scoreBlack) / (max - min)) * 100;
+	var percOfRange = ((sf_scoreWhite) / (max - min)) * 100;
 
 	console.log(percOfRange.toFixed(2));
 	if (percOfRange < 0)

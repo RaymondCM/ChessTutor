@@ -53,7 +53,7 @@ $(document).ready(function () {
 	/* STOCKFISH */
 	sf_timeOverDepth = false;
 	sf_searchTime = '3000';
-	sf_searchDepth = '5';
+	sf_searchDepth = '0';
 	sf_scoreWhite = 1;
 	sf_scoreBlack = -1;
 	//Force evaluation at every depth (much better centipawn results) slower results
@@ -82,7 +82,7 @@ $(document).ready(function () {
 
 	gui_capturedPieceSize = "50px";
 
-	dir_pieceImages = "img/chesspieces/skulls/";
+	dir_pieceImages = "img/chesspieces/wikipedia/";
 	dir_pieceImagesExtension = ".png";
 
 	Init_Stockfish();
