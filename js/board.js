@@ -4,6 +4,7 @@ function Init_Chessboard() {
 	fenHistory = [];
 
 	drawScale(cb_counterScaleMarkings);
+
 	SetTheme(cb_currentTheme);
 
 	if (!ct_debug)
@@ -153,15 +154,65 @@ function piece(code) {
 	this.nameWord = pieces[code.substr(1, 2)];
 }
 
+function updateScale(depth) {
+
+	//http://stackoverflow.com/questions/26661999/how-to-increase-the-value-of-a-number-to-the-next-multiple-of-10-100-1000-10
+	RoundedMax = function (a) {
+		var mx = Math.max.apply(Math, a);
+		if (mx == 0) {
+			return 0
+		};
+		var size = Math.floor(Math.log(Math.abs(mx)) / Math.LN10);
+		var magnitude = Math.pow(10, size);
+		var yMax = Math.ceil(mx / magnitude) * magnitude;
+		return yMax;
+	};
+
+	RoundedMin = function (a) {
+		var mn = Math.min.apply(Math, a);
+		if (mn == 0) {
+			return 0
+		};
+		var size = Math.floor(Math.log(Math.abs(mn)) / Math.LN10);
+		var magnitude = Math.pow(10, size);
+		var yMin = Math.floor(mn / magnitude) * magnitude;
+		return yMin;
+	};
+
+	//Create Array of Lower Centipawn Bound to Upper
+	var arr = [sf_scoreBlack, 0, sf_scoreWhite];
+
+	var min = RoundedMin(arr),
+		max = RoundedMax(arr);
+
+	document.getElementById("advLeft").innerHTML = min;
+	document.getElementById("advMid").innerHTML = min + ((max - min) / 2);
+
+	document.getElementById("advRight").innerHTML = max;
+
+	//Calculate Percantage where White falls in Boundry
+	var percOfRangeWhite = ((sf_scoreWhite - min) / (max - min)) * 100;
+	var percOfRangeBlack = ((sf_scoreBlack - min) / (max - min)) * 100;
+	var zeroPosition = ((0.00000000001 - min) / (max - min)) * 100;
+
+	console.log("Score White: " + sf_scoreWhite, "PercOfRange(" + min + "-" + max + "): " + percOfRangeWhite.toFixed(2));
+	console.log("Score Black: " + sf_scoreBlack, "PercOfRange(" + min + "-" + max + "): " + percOfRangeBlack.toFixed(2));
+
+
+	$("#advMarkerWhite").css("width", percOfRangeWhite + "%");
+	$("#advMarkerBlack").css("width", percOfRangeBlack + "%");
+	$("#advMarkerBlack p").html(sf_scoreBlack);
+	$("#advMarkerWhite p").html(sf_scoreWhite);
+}
+
 function drawScale(depth) {
-	//document.getElementById("advCounter").appendChild('<div class="advMarkers advLower "></div> < div class = "advMarkers advQuarter " > < /div> < div class = "advMarkers advMid " > < /div> < div class = "advMarkers advThreeQuarters " > < /div> < div class = "advMarkers advUpper " > < /div>');
 	var divMarkers = ["advLower", "advLowerMid", "advUpperMid", "advUpper"];
 	var elements = [];
 	var depthElements = [];
 
 	for (var i = 0; i < divMarkers.length; i++) {
 		var div = document.createElement('div');
-		div.className = "advMarkers " + divMarkers[i];
+		div.className = "advMarkers " + divMarkers[i] + " adv80";
 		document.getElementById("advScale").appendChild(div);
 		elements.push(div);
 	}
@@ -227,54 +278,7 @@ function checkForTaken(boardPosition) {
 	var whiteScore = p.bP + (p.bB * 3) + (p.bN * 3) + (p.bR * 4) + (p.bQ * 9);
 	relativeScore = (game_playerSide == 'w') ? (whiteScore - blackScore) : (blackScore - whiteScore);
 
-	//var increment = 505 / (74);
-	//$("#advFill").css("width", relativeScore * increment);
-	//$("#advFill").css("left", (relativeScore * increment) / 2);
-
-	//http://stackoverflow.com/questions/26661999/how-to-increase-the-value-of-a-number-to-the-next-multiple-of-10-100-1000-10
-	RoundedMax = function (a) {
-		var mx = Math.max.apply(Math, a);
-		if (mx == 0) {
-			return 0
-		};
-		var size = Math.floor(Math.log(Math.abs(mx)) / Math.LN10);
-		var magnitude = Math.pow(10, size);
-		var yMax = Math.ceil(mx / magnitude) * magnitude;
-		return yMax;
-	};
-
-	RoundedMin = function (a) {
-		var mn = Math.min.apply(Math, a);
-		if (mn == 0) {
-			return 0
-		};
-		var size = Math.floor(Math.log(Math.abs(mn)) / Math.LN10);
-		var magnitude = Math.pow(10, size);
-		var yMin = Math.floor(mn / magnitude) * magnitude;
-		return yMin;
-	};
-
-	//Create Array of Lower Centipawn Bound to Upper
-	var arr = [sf_scoreBlack, 0, sf_scoreWhite];
-
-	var min = RoundedMin(arr),
-		max = RoundedMax(arr);
-
-	document.getElementById("advLeft").innerHTML = min;
-	document.getElementById("advRight").innerHTML = max;
-
-	//Calculate Percantage where White falls in Boundry
-	var percOfRangeWhite = ((sf_scoreWhite - min) / (max - min)) * 100;
-	var percOfRangeBlack = ((sf_scoreBlack - min) / (max - min)) * 100;
-	var zeroPosition = ((0.00000000001 - min) / (max - min)) * 100;
-
-	console.log("Score White: " + sf_scoreWhite, "PercOfRange(" + min + "-" + max + "): " + percOfRangeWhite.toFixed(2));
-	console.log("Score Black: " + sf_scoreBlack, "PercOfRange(" + min + "-" + max + "): " + percOfRangeBlack.toFixed(2));
-
-
-	$("#advMarkerWhite").css("left", percOfRangeWhite + "%");
-	$("#advMarkerBlack").css("left", percOfRangeBlack + "%");
-
+	updateScale();
 
 	//Remove old pieces and score  
 	var capturedBlack = document.getElementById(gui_blackCapturedId);
