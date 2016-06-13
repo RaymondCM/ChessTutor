@@ -45,7 +45,7 @@ $(document).ready(function () {
 	/* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = false;
+	cb_autoPlay = true;
 	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];

@@ -7,7 +7,7 @@ function Init_Stockfish() {
 		stockfishEngine.postMessage("setoption name MultiPV value 100");
 }
 stockfishEngine.onmessage = function (event) {
-	//console.log(event.data);
+	console.log(event.data);
 	if (event.data.toString().substr(0, 8) !== 'bestmove') {
 		if (event.data.toString().substr(0, 10) == 'info depth')
 			lastPonder = event.data;
