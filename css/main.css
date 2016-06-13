@@ -15,23 +15,66 @@
 
 #advCounter {
 	position: relative;
-	width: 500px;
+	display: inline-block;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	width: 496px;
 	height: 40px;
-	background-image: url(../img/advantage.png);
 	background-size: cover;
 	z-index: 999;
 	padding-bottom: 30px;
+	overflow: hidden;
+	background-color: bisque;
 }
 
-#advFill {
-	border: 1px solid red;
-	overflow: hidden;
-	position: relative;
-	background-color: black;
-	width: 5px;
-	height: 40px;
+.advMarkers {
+	border-right: 1px solid black;
+	position: absolute;
+	height: 100%;
+	width: 25%;
+	margin-left: 0px;
 	left: 0;
-	left: -21px;
+}
+
+.advLower {
+	left: 0%;
+}
+
+.advLowerMid {
+	left: 25%;
+}
+
+.advUpperMid {
+	left: 50%;
+}
+
+.advUpper {
+	left: 75%;
+	border: none;
+}
+
+.adv55 {
+	height: 55%;
+}
+
+#advMarkerWhite,
+#advMarkerBlack {
+	display: inline-block;
+	position: absolute;
+	height: 40px;
+	width: 5px;
+	margin-left: -5px;
+	left: 0;
+}
+
+#advMarkerBlack {
+	border: 1px solid white;
+	background-color: red;
+}
+
+#advMarkerWhite {
+	border: 1px solid black;
+	background-color: red;
 }
 
 #advLeft,

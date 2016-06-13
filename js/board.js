@@ -3,6 +3,7 @@ function Init_Chessboard() {
 	turnCount = 0;
 	fenHistory = [];
 
+	drawScale(cb_counterScaleMarkings);
 	SetTheme(cb_currentTheme);
 
 	if (!ct_debug)
@@ -152,6 +153,38 @@ function piece(code) {
 	this.nameWord = pieces[code.substr(1, 2)];
 }
 
+function drawScale(depth) {
+	//document.getElementById("advCounter").appendChild('<div class="advMarkers advLower "></div> < div class = "advMarkers advQuarter " > < /div> < div class = "advMarkers advMid " > < /div> < div class = "advMarkers advThreeQuarters " > < /div> < div class = "advMarkers advUpper " > < /div>');
+	var divMarkers = ["advLower", "advLowerMid", "advUpperMid", "advUpper"];
+	var elements = [];
+	var depthElements = [];
+
+	for (var i = 0; i < divMarkers.length; i++) {
+		var div = document.createElement('div');
+		div.className = "advMarkers " + divMarkers[i];
+		document.getElementById("advScale").appendChild(div);
+		elements.push(div);
+	}
+
+	for (var x = 0; x < depth; x++) {
+
+		depthElements = [];
+
+		for (var i = 0; i < elements.length; i++) {
+			for (var j = 0; j < divMarkers.length; j++) {
+				var div = document.createElement('div');
+				div.className = "advMarkers " + divMarkers[j] + " adv55";
+				elements[i].appendChild(div);
+				depthElements.push(div);
+			}
+		}
+
+		console.log(depthElements);
+		elements = depthElements;
+	}
+}
+
+
 function checkForTaken(boardPosition) {
 
 	// p = Piece Count variable
@@ -221,6 +254,7 @@ function checkForTaken(boardPosition) {
 		return yMin;
 	};
 
+	//Create Array of Lower Centipawn Bound to Upper
 	var arr = [sf_scoreBlack, 0, sf_scoreWhite];
 
 	var min = RoundedMin(arr),
@@ -229,12 +263,18 @@ function checkForTaken(boardPosition) {
 	document.getElementById("advLeft").innerHTML = min;
 	document.getElementById("advRight").innerHTML = max;
 
-	var percOfRange = ((sf_scoreWhite) / (max - min)) * 100;
+	//Calculate Percantage where White falls in Boundry
+	var percOfRangeWhite = ((sf_scoreWhite - min) / (max - min)) * 100;
+	var percOfRangeBlack = ((sf_scoreBlack - min) / (max - min)) * 100;
+	var zeroPosition = ((0.00000000001 - min) / (max - min)) * 100;
 
-	console.log(percOfRange.toFixed(2));
-	if (percOfRange < 0)
-		percOfRange = 100 - (-1 * percOfRange);
-	$("#advFill").css("left", percOfRange + "%");
+	console.log("Score White: " + sf_scoreWhite, "PercOfRange(" + min + "-" + max + "): " + percOfRangeWhite.toFixed(2));
+	console.log("Score Black: " + sf_scoreBlack, "PercOfRange(" + min + "-" + max + "): " + percOfRangeBlack.toFixed(2));
+
+
+	$("#advMarkerWhite").css("left", percOfRangeWhite + "%");
+	$("#advMarkerBlack").css("left", percOfRangeBlack + "%");
+
 
 	//Remove old pieces and score  
 	var capturedBlack = document.getElementById(gui_blackCapturedId);

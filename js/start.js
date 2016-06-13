@@ -49,6 +49,7 @@ $(document).ready(function () {
 	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
+	cb_counterScaleMarkings = 2;
 
 	/* STOCKFISH */
 	sf_timeOverDepth = false;
