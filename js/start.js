@@ -2,7 +2,7 @@ $(document).ready(function () {
 	/*
 	    GLOBAL VARIABLES
 	*/
-	ct_debug = true;
+	ct_debug = false;
 
 	cb_shapes = {
 		Square: "border-radius: 0px;",
@@ -44,8 +44,8 @@ $(document).ready(function () {
 	/* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = false;
-	cb_autoPlayDelay = 400;
+	cb_autoPlay = true;
+	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
 	cb_counterScaleMarkings = 2;
@@ -104,3 +104,14 @@ $(document).ready(function () {
 	});
 
 });
+
+function speedTestFunction(func, v) {
+	var t0 = new Date();
+	if (typeof v !== undefined)
+		func(v);
+	else
+		func();
+	var t1 = new Date() - t0;
+	console.log(t1);
+	average.push(t1);
+}

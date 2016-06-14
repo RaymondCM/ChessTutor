@@ -195,8 +195,8 @@ function updateScale(depth) {
 	var percOfRangeBlack = ((sf_scoreBlack - min) / (max - min)) * 100;
 	var zeroPosition = ((0.00000000001 - min) / (max - min)) * 100;
 
-	console.log("Score White: " + sf_scoreWhite, "PercOfRange(" + min + "-" + max + "): " + percOfRangeWhite.toFixed(2));
-	console.log("Score Black: " + sf_scoreBlack, "PercOfRange(" + min + "-" + max + "): " + percOfRangeBlack.toFixed(2));
+	//console.log("Score White: " + sf_scoreWhite, "PercOfRange(" + min + "-" + max + "): " + percOfRangeWhite.toFixed(2));
+	//console.log("Score Black: " + sf_scoreBlack, "PercOfRange(" + min + "-" + max + "): " + percOfRangeBlack.toFixed(2));
 
 
 	$("#advMarkerWhite").css("width", percOfRangeWhite + "%");
@@ -206,33 +206,33 @@ function updateScale(depth) {
 }
 
 function drawScale(depth) {
-	var divMarkers = ["advLower", "advLowerMid", "advUpperMid", "advUpper"];
-	var elements = [];
-	var depthElements = [];
+	var doc = document,
+		divMarkers = ["advLower", "advLowerMid", "advUpperMid", "advUpper"],
+		frag = doc.createDocumentFragment();
 
 	for (var i = 0; i < divMarkers.length; i++) {
-		var div = document.createElement('div');
+		var div = doc.createElement('div');
 		div.className = "advMarkers " + divMarkers[i] + " adv80";
-		document.getElementById("advScale").appendChild(div);
-		elements.push(div);
+		frag.appendChild(div);
 	}
 
-	for (var x = 0; x < depth; x++) {
-
+	var childNodes = frag.childNodes,
 		depthElements = [];
 
-		for (var i = 0; i < elements.length; i++) {
+	for (var x = 0; x < depth; x++) {
+		depthElements = [];
+		for (var i = 0; i < childNodes.length; i++) {
 			for (var j = 0; j < divMarkers.length; j++) {
-				var div = document.createElement('div');
+				var div = doc.createElement('div');
 				div.className = "advMarkers " + divMarkers[j] + " adv55";
-				elements[i].appendChild(div);
+				childNodes[i].appendChild(div);
 				depthElements.push(div);
 			}
 		}
-
-		console.log(depthElements);
-		elements = depthElements;
+		childNodes = depthElements;
 	}
+
+	doc.getElementById("advScale").appendChild(frag);
 }
 
 
