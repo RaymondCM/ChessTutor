@@ -155,54 +155,39 @@ function piece(code) {
 }
 
 function updateScale(depth) {
+	var doc = document,
+		wScore = sf_scoreWhite,
+		bScore = sf_scoreBlack,
+		rawRange = [bScore, wScore],
+		//Get Min and Max Values From Array (Use 0 instead of Math because 3 bytes cheaper)
+		min = Math.min.apply(0, rawRange),
+		max = Math.max.apply(0, rawRange);
 
-	//http://stackoverflow.com/questions/26661999/how-to-increase-the-value-of-a-number-to-the-next-multiple-of-10-100-1000-10
-	RoundedMax = function (a) {
-		var mx = Math.max.apply(Math, a);
-		if (mx == 0) {
-			return 0
-		};
-		var size = Math.floor(Math.log(Math.abs(mx)) / Math.LN10);
-		var magnitude = Math.pow(10, size);
-		var yMax = Math.ceil(mx / magnitude) * magnitude;
-		return yMax;
-	};
+	//Calculate Min and Max boundrys (for -80 and 720 would give -100 800)
+	if (min != 0) {
+		var magnitude = Math.pow(10, Math.floor(Math.log(Math.abs(min)) / Math.LN10));
+		min = Math.floor(min / magnitude) * magnitude;
+	}
 
-	RoundedMin = function (a) {
-		var mn = Math.min.apply(Math, a);
-		if (mn == 0) {
-			return 0
-		};
-		var size = Math.floor(Math.log(Math.abs(mn)) / Math.LN10);
-		var magnitude = Math.pow(10, size);
-		var yMin = Math.floor(mn / magnitude) * magnitude;
-		return yMin;
-	};
+	if (max != 0) {
+		var magnitude = Math.pow(10, Math.floor(Math.log(Math.abs(max)) / Math.LN10));
+		max = Math.ceil(max / magnitude) * magnitude;
+	}
 
-	//Create Array of Lower Centipawn Bound to Upper
-	var arr = [sf_scoreBlack, 0, sf_scoreWhite];
+	doc.getElementById("advLeft").innerHTML = min;
+	doc.getElementById("advMid").innerHTML = min + ((max - min) / 2);
+	doc.getElementById("advRight").innerHTML = max;
 
-	var min = RoundedMin(arr),
-		max = RoundedMax(arr);
+	//Calculate Percantage of range scores fall
+	var percOfRangeWhite = ((wScore - min) / (max - min)) * 100;
+	var percOfRangeBlack = ((bScore - min) / (max - min)) * 100;
+	//var zeroPosition = ((0.00000000001 - min) / (max - min)) * 100;
 
-	document.getElementById("advLeft").innerHTML = min;
-	document.getElementById("advMid").innerHTML = min + ((max - min) / 2);
-
-	document.getElementById("advRight").innerHTML = max;
-
-	//Calculate Percantage where White falls in Boundry
-	var percOfRangeWhite = ((sf_scoreWhite - min) / (max - min)) * 100;
-	var percOfRangeBlack = ((sf_scoreBlack - min) / (max - min)) * 100;
-	var zeroPosition = ((0.00000000001 - min) / (max - min)) * 100;
-
-	//console.log("Score White: " + sf_scoreWhite, "PercOfRange(" + min + "-" + max + "): " + percOfRangeWhite.toFixed(2));
-	//console.log("Score Black: " + sf_scoreBlack, "PercOfRange(" + min + "-" + max + "): " + percOfRangeBlack.toFixed(2));
-
-
-	$("#advMarkerWhite").css("width", percOfRangeWhite + "%");
-	$("#advMarkerBlack").css("width", percOfRangeBlack + "%");
-	$("#advMarkerBlack p").html(sf_scoreBlack);
-	$("#advMarkerWhite p").html(sf_scoreWhite);
+	//Set width equal to percantage of range the scores occupy
+	doc.getElementById("advMarkerWhite").style.width = percOfRangeWhite + "%";
+	doc.getElementById("advMarkerBlack").style.width = percOfRangeBlack + "%";
+	doc.getElementById("advMarkerWhiteText").innerHTML = wScore;
+	doc.getElementById("advMarkerBlackText").innerHTML = bScore;
 }
 
 function drawScale(depth) {
