@@ -38,13 +38,12 @@ $(document).ready(function () {
     }];
 
 	/* GAME CONFIG */
-	game_pve = true;
-	game_playerSide = 'w';
+    game_playerSide = 'w';
+    game_aiMode = 1; //0: PVE, 1: AUTO
 
 	/* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_currentTheme = cb_themes[0];
-	cb_autoPlay = true;
 	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = ["a6"];
