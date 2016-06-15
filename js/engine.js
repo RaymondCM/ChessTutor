@@ -4,7 +4,7 @@ var lastPonder = "";
 
 function Init_Stockfish() {
 	if (sf_accurateCentipawns)
-		stockfishEngine.postMessage("setoption name MultiPV value 100");
+		stockfishEngine.postMessage("setoption name MultiPV value 50");
 }
 stockfishEngine.onmessage = function (event) {
 	//console.log(event.data);
