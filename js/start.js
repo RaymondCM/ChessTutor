@@ -38,8 +38,8 @@ $(document).ready(function () {
     }];
 
 	/* GAME CONFIG */
-    game_playerSide = 'w';
-    game_aiMode = 1; //0: PVE, 1: AUTO
+	game_playerSide = 'w';
+	game_aiMode = 0; //0: PVE, 1: AUTO, 2: PVP
 
 	/* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
@@ -52,7 +52,7 @@ $(document).ready(function () {
 	/* STOCKFISH */
 	sf_timeOverDepth = false;
 	sf_searchTime = '3000';
-	sf_searchDepth = '1';
+	sf_searchDepth = '10';
 	sf_scoreWhite = 1;
 	sf_scoreBlack = -1;
 	//Force evaluation at every depth (much better centipawn results) slower results

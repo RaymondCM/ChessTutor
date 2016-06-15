@@ -27,9 +27,7 @@ function Init_Chessboard() {
 	var onDragStart = function (source, piece, position, orientation) {
 		if (game.game_over() === true ||
 			(game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-			(game.turn() === 'b' && piece.search(/^w/) !== -1) ||
-
-			(game.turn() !== game_playerSide)) {
+			(game.turn() === 'b' && piece.search(/^w/) !== -1) || game_aiMode === 1 || game.turn() !== game_playerSide) {
 			return false;
 		}
 	};
@@ -64,7 +62,7 @@ function Init_Chessboard() {
 			verbose: true
 		});
 
-		if (game.turn() !== game_playerSide) {
+		if (game.turn() !== game_playerSide || game_aiMode === 1) {
 			return;
 		}
 
@@ -115,6 +113,9 @@ function Init_Chessboard() {
 }
 
 function MovePiece(from, to) {
+
+	if (game_aiMode === 2)
+		game_playerSide = (game_playerSide === 'w' ? 'b' : 'w');
 
 	var move = game.move({
 		from: from,
