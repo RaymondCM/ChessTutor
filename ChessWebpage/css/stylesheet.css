@@ -466,9 +466,238 @@ footer p {
 }
 
 
+ #chessWrap {
+    height: 880px;
+}
+
+.SectionChessClass {
+    text-align: center;
+	width: 1104px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50px;
+}
+
+#board {
+    position: relative;
+	left: 93px;
+	width: 600px !important;
+	height: 600px !important;
+}
+
+#chessSection {
+	height: 605px;
+	position: relative;
+}
 
 
+/* Homebage box section finish */
 
+#playSectionWrap {
+    background-color: #fff;
+}
+
+.playSection {
+    text-align: center;
+    width: 1104px;
+    margin: 0px auto;
+    padding: 42px 0px;
+    height: auto;
+    padding: 81px 0 81px 0;
+}
+
+.playSection h3 {
+	color: #333;
+	font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+	line-height: 1.3em;
+	font-size: 25px;
+	margin: 10px 0 20px 0px;
+
+}
+
+.playSection h4 {
+    color: #555;
+    text-transform: uppercase;
+	font-family: 'Josefin Sans', sans-serif;
+	line-height: 1.3em;
+	font-size: 18px;
+	margin: 10px 0px 20px 0px;
+}
+
+.playSection img {
+    width: 200px;
+    height: auto;
+}
+
+#boardUI {
+   	background: #5C2A21 none repeat scroll 0% 0%;
+	border: 2px solid #222;
+	width: 300px;
+	position: relative;
+	bottom: 600px;
+	left: 698px;
+	margin: 0px;
+	padding: 0px;
+	height: 592px;
+}
+
+#boardUIText {
+    background-color: #F6B983;
+    width: 285px;
+    position: relative;
+    left: 5px;
+    height: 335px;
+    border: 2px solid #222;
+    bottom: 16px;
+}
+
+div#response {
+    text-align: left;
+    font-family: "Open Sans",sans-serif;
+    color: #222;
+    height: 275px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: 0px;
+    position: relative;
+    top: 0px;
+    font-size: 19px;
+    overflow-y: scroll;
+}
+
+#userImage {
+	width: 206px;
+	height: 137px;
+	padding: 12px;
+	border: 2px solid rgb(34, 34, 34);
+	background-color: rgb(246, 185, 131);
+	margin: 0px 0px 21px;
+	position: relative;
+	top: 3px;
+}
+
+p#typing {
+    font-family: "Open Sans",sans-serif;
+    color: #222;
+    height: 21px;
+    margin: 0px;
+    top: 303px;
+    font-size: 14px;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: left;
+    border-top: 2px solid #222;
+    position: absolute;
+    width: 273px;
+}
+
+.board-b72b1 {
+    border: 2px solid #222 !important;
+}
+
+.chessText {
+    text-transform: uppercase;
+    font-family: "Josefin Sans",sans-serif;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+
+}
+
+#chessTitle {
+    color: #F6B983;
+    font-size: 34px;
+    letter-spacing: 0.1em;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+#chessChatText {
+    color: #F6B983;
+    font-size: 19px;
+    letter-spacing: 0.1em;
+}
+
+#chessUser {
+    text-align: left;
+    font-family: "Open Sans",sans-serif;
+    color: #222;
+    margin: 0px;
+    position: relative;
+    top: 0px;
+    font-size: 14px;
+    height: 23px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-bottom: 2px solid #222;
+}
+
+#playerOnline {
+    float: left;
+    position: relative;
+    top: 0px;
+    height: 20px;
+    width: 20px;
+    
+}
+
+.chessboard-63f37 {
+	width: 600px;
+	height: 600px;
+}
+
+#chessWrap h3 {
+	text-transform: uppercase;
+	font-family: 'Josefin Sans', sans-serif;
+	color: #222;
+	font-size: 32px;
+	margin: 20px 0px 0px 0px;
+}
+
+#chessWrap h4 {
+	color: #555;
+	font-family: 'Josefin Sans', sans-serif;
+	line-height: 1.3em;
+	font-size: 27px;
+	margin: 5px 0px 20px 0px;
+	padding: 0 155px;
+}
+
+#chromeError {
+	visibility: hidden;
+}
+
+/* ============= ERROR HANDLING FOR GOOGLE CHROME (BOARD NOT VISIBLE IN CHROME FOR UNKNOWN REASON) ============= */
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+  and (min-resolution:.001dpcm) {
+    #boardUI{
+	    bottom: 604px;
+	   	left: 702px;
+	   	height: 601px;
+    } 
+    #board {
+    	width: 400px;
+    	background: #5C2A21;
+    	height: 392px;
+    	border: 2px solid #222 !important;
+    }
+
+    .chromeError {
+    	visibility: visible;
+    }
+
+    .chromeError h1 {
+    	position: absolute;
+	    top: 37%;
+	    color: #F6B983;
+	    font-size: 34px;
+	    letter-spacing: 0.1em;
+	    margin-bottom: 5px;
+	    margin-top: 0px;
+    }
+}
 
 #backgroundShadow {
 	background: rgba(54, 25, 25, .5);
@@ -719,6 +948,251 @@ footer p {
 	font-weight: bold;
 }
 
+#submitButton {
+	color: #29221f;
+	border: 1px solid #000;
+	text-transform: uppercase;
+	font-size: 12px;
+	text-align: center;
+	padding: 8px 15px 8px 15px;
+	margin-top:0px;
+	height: 35px;
+	letter-spacing: 1.2px;
+	text-transform: uppercase;
+	font-weight: 700;
+	transition: all 0.3s ease 0s;
+	margin-top:11px;
+	background-color: #fff
+}
+
+#submitButton:hover {
+	color: #fff;
+	background: #08A842;
+	border: 1px solid #08A842;
+}
+
+#sideSelect {
+	width: 905px;
+	background: #5C2A21;
+	height: 592px;
+	border: 2px solid #222 !important;
+	position: absolute;
+	z-index: 1;
+	left: 93px;
+	top: 0px;
+}
+
+#sideSelect_inner {
+	width: 905px;
+	background: #F6B983;
+	height: 592px;
+	border: 2px solid #222 !important;
+	position: absolute;
+	z-index: 2;
+	left: 460px;
+	top: 136px;
+}
+
+#sideSelect h1 {
+	color: #5C2A21;
+	font-size: 54px;
+	text-transform: uppercase;
+	font-family: 'Josefin Sans', sans-serif;
+	letter-spacing: 0.1em;
+	margin-bottom: 20px;
+	margin-top: -64px;
+}
+
+#sideSelect_inner {
+	width: 880px;
+	background: #F6B983;
+	height: 568px;
+	border: 2px solid #222 !important;
+	position: relative;
+	z-index: 2;
+	left: 10px;
+	top: 9px;
+}
+
+#sideSelect_inner .button2{
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 1.7em;
+	text-align: center;
+	line-height: 36px;
+	padding: 4px 15px 4px 15px;
+	height: 35px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: all 0.3s ease 0s;
+	margin: 10px;
+	position: relative;
+	top: 159px;
+}
+
+#whiteButton {
+	color: #fff;
+	border: 1px solid #fff;
+}
+
+#blackButton {
+	color: #000 !important;
+	border: 1px solid #000;
+}
+
+#blackButton:hover {
+	border: 1px solid #08A842;
+}
+
+#sideSelect_inner img {
+	width: 52px;
+	height: 100px;
+	position: relative;
+	top: 367px;
+}
+
+#sideSelect_inner #kingWhitePiece {
+	right: 46px;
+}
+
+#sideSelect_inner #kingBlackPiece {
+	left: 46px;
+}
+
+
+
+#board, #boardUI {
+	visibility: hidden;
+}
+
+#sideSelect .button2:active {
+		visibility: visible;
+	 
+}
+
+#response ul {
+		margin: 0px;
+		padding: 0px;	
+}
+
+#sideSelect h3 {
+	color: #5C2A21;
+	font-size: 40px;
+}
+
+#bgDifficulty {
+	background: #F6B983 none repeat scroll 0% 0%;
+	width: 440px;
+	height: 70px;
+	margin: 0px auto;
+	position: relative;
+	top: 31px;
+}
+
+.diffLevel {
+	text-transform: uppercase;
+	font-family: "Josefin Sans",sans-serif;
+	color: #111;
+	font-weight: bold;
+	font-size: 17px;
+	width: 134px;
+	height: 50px;
+	letter-spacing: 0.1em;
+	line-height: 50px;
+	border: 2px solid #5C2A21;
+}
+
+#easyRadio {
+	background: #47741A;
+	transition: all 0.3s ease 0s;	
+}
+
+#mediumRadio {
+	background:#FF851B;
+	transition: all 0.3s ease 0s;
+}
+
+#hardRadio {
+	background:#FF4136;
+	transition: all 0.3s ease 0s;
+}
+
+
+.chatBubble {
+    background-color: rgba(197, 118, 0, 0.42);
+    border-radius: 1em;
+    border: solid 1px rgba(197, 118, 0, 0.66);
+    padding: 0 12px;
+    margin: 4px 0;
+}
+
+/* RADIO BUTTONS CONVERSION TO BUTTONS */
+#bgDifficulty input[type="radio"] {
+	display:none;
+}
+
+#bgDifficulty label {
+	display: inline-block;
+	text-transform: uppercase;
+	font-family: "Josefin Sans",sans-serif;
+	color: #111;
+	font-weight: bold;
+	font-size: 17px;
+	width: 134px;
+	height: 50px;
+	letter-spacing: 0.1em;
+	line-height: 50px;
+	border: 2px solid #5C2A21;
+}
+
+#easyRadio {
+	background: #47741A;
+	transition: all 0.3s ease 0s;
+}
+
+#mediumRadio {
+	background:#FF851B;
+	transition: all 0.3s ease 0s;
+}
+
+#hardRadio {
+	background:#FF4136;
+	transition: all 0.3s ease 0s;
+}
+
+
+
+#bgDifficulty input[type="radio"]:checked + label {
+    border: 2px solid #fff;
+}
+	
+#ReplayButton {
+	text-transform: uppercase;
+	font-family: "Josefin Sans",sans-serif;
+	font-weight: bold;
+	font-size: 27px;
+	width: 205px;
+	height: 64px;
+	letter-spacing: 0.1em;
+	line-height: 30px;
+	position: relative;
+	bottom: 341px;
+	background: #AE0000 none repeat scroll 0% 0%;
+	border: 2px solid #222;
+	color: #222;
+	cursor: pointer;
+	transition: all 0.3s ease 0s;
+}
+
+#ReplayButton:hover {
+	color: #fff;
+	background: #08A842;
+	border: 1px solid #08A842;
+}
+	
+.tutorPageSection p {
+	text-align: justify !important;
+}
 
 
 /* =================================== over 1000 lines of CSS...well ....========================= */
