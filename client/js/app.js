@@ -89,6 +89,7 @@ $(document).ready(function () {
 
 	socket.on('join-status', function (message) {
 		game_playerSide = message[1];
+		board.orientation(((game_playerSide == 'w') ? "white" : "black"));
 		if (message[0] === 2) {
 			socket.emit("game-ready", $("#joinText").val());
 		}
