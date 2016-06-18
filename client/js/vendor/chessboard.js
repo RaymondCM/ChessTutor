@@ -1644,7 +1644,7 @@
 
 			// mouse enter / leave square
 			boardEl.on('mouseenter', '.' + CSS.square, mouseenterSquare)
-				.on('mouseleave', '.' + CSS.square, mouseleaveSquare);
+				.on('mouseleave', '.' + CSS.square, mouseleaveSquare).on('click', '.' + CSS.square, mouseenterSquare);
 
 			// IE doesn't like the events on the window object, but other browsers
 			// perform better that way

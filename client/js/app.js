@@ -221,6 +221,7 @@ function Init_Chessboard() {
 		boardTheme: cb_boardTheme
 	};
 
+	$
 	board = ChessBoard('Chessboard', cfg);
 	board.orientation((game_playerSide === 'w') ? 'white' : 'black');
 
