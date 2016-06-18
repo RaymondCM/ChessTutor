@@ -5,9 +5,10 @@ var path = require('path');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.use(express.static(path.join(__dirname, 'client', {
+//app.use(express.static(path.join(__dirname, 'client', { maxAge: '1d' })));
+app.use(express.static(__dirname + '/client', {
 	maxAge: '1d'
-})));
+}));
 
 app.get('/', function (req, res) {
 	res.sendfile('client/index.html');
