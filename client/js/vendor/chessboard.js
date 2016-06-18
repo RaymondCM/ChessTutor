@@ -1519,16 +1519,21 @@
 			beginDraggingPiece(square, CURRENT_POSITION[square],
 				e.changedTouches[0].pageX, e.changedTouches[0].pageY);
 
-
-			// get the piece on this square
-			var piece = false;
-			if (CURRENT_POSITION.hasOwnProperty(square) === true) {
-				piece = CURRENT_POSITION[square];
+			if (cfg.hasOwnProperty('onMouseoverSquare') == true && cfg.hasOwnProperty('onMouseoutSquare') == true) {
+				//Get the piece at this square
+				var piece = false;
+				if (CURRENT_POSITION.hasOwnProperty(square) === true) {
+					piece = CURRENT_POSITION[square];
+				}
+				//If mouse enter and leave functions are specified in config simulate them here
+				cfg.onMouseoverSquare(square, piece, deepCopy(CURRENT_POSITION),
+					CURRENT_ORIENTATION);
+				//Since no mouse out even simulate with end timer 1000 ms 
+				setTimeout(function () {
+					cfg.onMouseoutSquare(square, piece, deepCopy(CURRENT_POSITION),
+						CURRENT_ORIENTATION);
+				}, 1000);
 			}
-
-			// execute their function
-			cfg.onMouseoverSquare(square, piece, deepCopy(CURRENT_POSITION),
-				CURRENT_ORIENTATION);
 		}
 
 		function mousedownSparePiece(e) {
