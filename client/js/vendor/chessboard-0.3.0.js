@@ -636,17 +636,15 @@
 
 		function cacheImages() {
 			var pieces = ['wK', 'wQ', 'wR', 'wB', 'wN', 'wP', 'bK', 'bQ', 'bR', 'bB', 'bN', 'bP'];
+			//For each piece in array get base 64 data URI from piece theme defined in app.js board config and store in a cache
+			//If when being built it exists in cache copy it
 			pieces.forEach(function (piece) {
 				var img = new Image()
 				img.onload = function () {
-					imgCache[piece] = getBase64Image(piece)
+					imgCache[piece] = cfg.pieceTheme(piece);
 				}
 				img.src = buildPieceImgSrc(piece)
 			})
-
-			function getBase64Image(p) {
-				return cfg.pieceTheme(p);
-			}
 		}
 
 		function buildPieceImgSrc(piece) {
