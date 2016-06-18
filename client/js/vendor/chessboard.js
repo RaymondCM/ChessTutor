@@ -1518,6 +1518,17 @@
 			e = e.originalEvent;
 			beginDraggingPiece(square, CURRENT_POSITION[square],
 				e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+
+
+			// get the piece on this square
+			var piece = false;
+			if (CURRENT_POSITION.hasOwnProperty(square) === true) {
+				piece = CURRENT_POSITION[square];
+			}
+
+			// execute their function
+			cfg.onMouseoverSquare(square, piece, deepCopy(CURRENT_POSITION),
+				CURRENT_ORIENTATION);
 		}
 
 		function mousedownSparePiece(e) {
@@ -1644,7 +1655,7 @@
 
 			// mouse enter / leave square
 			boardEl.on('mouseenter', '.' + CSS.square, mouseenterSquare)
-				.on('mouseleave', '.' + CSS.square, mouseleaveSquare).on('click', '.' + CSS.square, mouseenterSquare);
+				.on('mouseleave', '.' + CSS.square, mouseleaveSquare);
 
 			// IE doesn't like the events on the window object, but other browsers
 			// perform better that way
