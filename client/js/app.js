@@ -415,7 +415,7 @@ function checkForTaken(boardPosition) {
 
 	document.getElementById(gui_scoreBlackId).innerHTML = "BLACK SCORE: " + blackScore;
 	document.getElementById(gui_scoreWhiteId).innerHTML = "WHITE SCORE: " + whiteScore;
-	document.getElementById(gui_scorePlayerId).innerHTML = "YOUR " + ((game_playerSide == 'w') ? "(WHITE'S)" : "(BLACK'S)") + " RELATIVE SCORE: " + relativeScore;
+	document.getElementById(gui_scorePlayerId).innerHTML = ((game_playerSide == 'w') ? "WHITE'S" : "BLACK'S") + " RELATIVE SCORE: " + relativeScore;
 
 	//Display each taken piece from piece count variable p
 	capturedBlack.innerHTML = 'CAPTURED BLACK PIECES: ';

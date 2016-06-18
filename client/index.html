@@ -18,7 +18,7 @@
 <body>
 	<div class="row">
 		<div class="large-6 medium-6 small-12 column">
-			<h4>Chessboard</h4>
+			<h4 class="text-center">Chessboard</h4>
 			<div class="callout">
 				<div id="Chessboard" class="large-12">
 
@@ -51,25 +51,8 @@
 		</div>
 
 		<div class="large-6 medium-6 small-12 column">
-			<h4>Debug</h4>
+			<h4 class="text-center">Debug</h4>
 			<div class="callout">
-				<div id="blackCaptured">
-					BLACK CAPTURES:
-				</div>
-				<div id="whiteCaptured">
-					WHITE CAPTURES:
-				</div>
-
-				<div id="whiteScore">
-					WHITE SCORE:
-				</div>
-				<div id="blackScore">
-					BLACK SCORE:
-				</div>
-				<div id="relativeScore">
-					YOUR RELATIVE SCORE:
-				</div>
-
 				<div class="small expanded button-group" id="gameMode">
 					<a class="button secondary success" id="pveBtn">Player vs Engine</a>
 					<a class="button secondary" id="eveBtn">Stockfish Auto</a>
@@ -88,14 +71,34 @@
 					</div>
 				</div>
 
-				<div id="Debug">
-					<div id="fen"></div>
-					<div id="pgn"></div>
-					<div id="status"></div>
-					<div id="check"></div>
-					<div id="checkmate"></div>
-					<div id="suggestedMove"></div>
+				<div class="alert callout">
+					<div id="blackCaptured">
+						BLACK CAPTURES:
+					</div>
+					<div id="whiteCaptured">
+						WHITE CAPTURES:
+					</div>
+
+					<div id="whiteScore">
+						WHITE SCORE:
+					</div>
+					<div id="blackScore">
+						BLACK SCORE:
+					</div>
+					<div id="relativeScore">
+						YOUR RELATIVE SCORE:
+					</div>
+
+					<div id="Debug">
+						<div id="fen"></div>
+						<div id="pgn"></div>
+						<div id="status"></div>
+						<div id="check"></div>
+						<div id="checkmate"></div>
+						<div id="suggestedMove"></div>
+					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
