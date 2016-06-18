@@ -1,0 +1,116 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chess Tutor Prototype</title>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="css/foundation.css">
+	<link rel="stylesheet" href="/css/app.css">
+	<link rel="stylesheet" href="css/chessboard-0.3.0.css">
+	<!--------->
+
+</head>
+
+<body>
+	<div class="row">
+		<div class="large-6 medium-6 small-6 column">
+			<h4>Chessboard</h4>
+			<div class="callout">
+				<div id="Chessboard" class="large-12">
+
+				</div>
+
+				<div id="advCounter" class="large-12">
+					<span id="advLeft">Left</span>
+
+					<div id="advMarkerWhite">
+						<p id="advMarkerWhiteText"> 1</p>
+					</div>
+					<div id="advMarkerBlack">
+						<p id="advMarkerBlackText">
+							-1
+						</p>
+					</div>
+					<div id="advScale">
+
+					</div>
+
+					<div>
+						<ul class="ruler" data-items="10"></ul>
+					</div>
+
+					<span id="advMid">Right</span>
+
+					<span id="advRight">Right</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="large-6 medium-6 small-6 column">
+			<h4>Debug</h4>
+			<div class="callout">
+				<div id="blackCaptured">
+					BLACK CAPTURES:
+				</div>
+				<div id="whiteCaptured">
+					WHITE CAPTURES:
+				</div>
+
+				<div id="whiteScore">
+					WHITE SCORE:
+				</div>
+				<div id="blackScore">
+					BLACK SCORE:
+				</div>
+				<div id="relativeScore">
+					YOUR RELATIVE SCORE:
+				</div>
+
+				<div class="small expanded button-group" id="gameMode">
+					<a class="button secondary success" id="pveBtn">Player vs Engine</a>
+					<a class="button secondary" id="eveBtn">Stockfish Auto</a>
+					<a class="button secondary" id="pvpBtn">Player vs Player</a>
+				</div>
+
+				<div class="expanded button-group">
+					<a class="button warning" id="undoBtn">Undo</a>
+					<a class="button alert" id="resetBtn">Reset</a>
+				</div>
+
+				<div class="input-group" id="joinRooms">
+					<input class="input-group-field" type="text" id="joinText" disabled="true">
+					<div class="input-group-button">
+						<input type="submit" class="button" id="joinBtn" value="Join a Room" disabled="true">
+					</div>
+				</div>
+
+				<div id="Debug">
+					<div id="fen"></div>
+					<div id="pgn"></div>
+					<div id="status"></div>
+					<div id="check"></div>
+					<div id="checkmate"></div>
+					<div id="suggestedMove"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h4 style="position:fixed;bottom:10px;margin: 0 auto;text-align:center;width:100%" id="sessionID">ID</h4>
+
+	<!-- JAVASCRIPT -->
+	<script src="/js/vendor/chess.js"></script>
+	<script src="/js/vendor/chessboard-0.3.0.js"></script>
+	<script src="/js/vendor/socket.io.js"></script>
+	<script src="/js/vendor/jquery.js"></script>
+	<script src="/js/vendor/what-input.js"></script>
+	<script src="/js/vendor/foundation.js"></script>
+	<script src="/js/app.js"></script>
+	<!---------------->
+</body>
+
+</html>

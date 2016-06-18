@@ -1,0 +1,10 @@
+{
+  "name": "Chess-Tutor-Online",
+  "version": "0.0.1",
+  "description": "Multiplayer online chess designed to help you learn.",
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^1.4.6"
+  },
+  "devDependencies": {}
+}
