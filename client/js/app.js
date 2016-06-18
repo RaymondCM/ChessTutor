@@ -206,7 +206,7 @@ function Init_Chessboard() {
 	};
 
 	var onSnapEnd = function () {
-		board.position(game.fen());
+		board.position(game.fen(), false);
 	};
 
 	var cfg = {
@@ -275,7 +275,7 @@ function MovePiece(from, to) {
 
 	if (move === null) return 'snapback';
 
-	board.position(game.fen());
+	board.position(game.fen(), false);
 	turnCount++;
 	updateStatus();
 }
