@@ -3,9 +3,7 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var http = require('http').Server(app);
-var io = require('socket.io')(app);
-
-app.set('port', (process.env.PORT || 5000));
+var io = require('socket.io')(http);
 
 app.use(express.static(path.join(__dirname, 'client')));
 
@@ -77,10 +75,6 @@ io.on('connection', function (socket) {
 	socket.emit(socket.id);
 	console.log(socket.id + " connected");
 	socket.join(socket.id);
-});
-
-app.listen(app.get('port'), function () {
-	console.log('Node app is running on port', app.get('port'));
 });
 
 http.listen(3000, function () {
