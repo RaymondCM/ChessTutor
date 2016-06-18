@@ -527,7 +527,7 @@ function Init_Stockfish() {
 		//console.log(" * Turn: " + (turnCount === 0 ? "1" : Math.floor(turnCount / 2)) + " Side: " + side + " Move: " + move);
 
 		//Make opponent moves
-		if (!game.game_over() && (game_aiMode === 1) || (game_aiMode === 0) && (game_playerSide != side)) {
+		if (!game.game_over() && (game_aiMode === 1) || !game.game_over() && (game_aiMode === 0) && (game_playerSide != side)) {
 			cb_autoPlayMove = setTimeout(MovePiece, cb_autoPlayDelay, move.substr(0, 2), move.substr(2, 4));
 		}
 	}
