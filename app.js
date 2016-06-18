@@ -11,16 +11,8 @@ app.use(express.static(__dirname + '/client', {
 }));
 
 app.get('/', function (req, res) {
+	res.setHeader('Cache-Control', 'client, max-age=31557600');
 	res.sendfile('client/index.html');
-});
-
-app.get('/getThemes', function (req, res) {
-
-	fs.readFile('./client/themes/themes.json', 'utf8', function (err, data) {
-		if (err) throw err;
-		res.send(data);
-	});
-
 });
 
 var multiplayer = io.of('/multiplayer-chess');
@@ -49,6 +41,7 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('chess move', function (msg) {
+		console.log("Sending moved to " + msg[2] + "\nfrom:" + msg[0] + " to:" + msg[1]);
 		io.sockets.connected[msg[2]].emit('chess moved', msg);
 	});
 

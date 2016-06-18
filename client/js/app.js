@@ -6,15 +6,6 @@ $(document).ready(function () {
 	*/
 	ct_debug = false;
 
-	var cb_themes;
-	$.get('/getThemes', function (res) {
-			cb_themes = JSON.parse(res);
-		})
-		.done(function () {
-			cb_currentTheme = cb_themes[cb_currentTheme];
-			//SetTheme(cb_currentTheme);
-		});
-
 	/* GAME CONFIG */
 	game_playerSide = 'w';
 	game_aiMode = 0; //0: PVE, 1: AUTO, 2: PVP
@@ -22,12 +13,11 @@ $(document).ready(function () {
 
 	/* CHESS BOARD */
 	cb_autoPlayMove = setTimeout(function () {}, 0);
-	cb_currentTheme = 0;
 	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
 	cb_permHighlighted = [];
-	cb_counterScaleMarkings = 2;
 	cb_displayMarkers = false;
+	cb_counterScaleMarkings = 2;
 	cb_pieceTheme = metro_piece_theme;
 	cb_boardTheme = metro_board_theme;
 
@@ -41,16 +31,6 @@ $(document).ready(function () {
 	sf_accurateCentipawns = false;
 
 	/* HTML */
-	gui_blackCapturedId = "blackCaptured";
-	gui_whiteCapturedId = "whiteCaptured";
-	gui_scoreBlackId = "blackScore";
-	gui_scoreWhiteId = "whiteScore";
-
-	gui_capturedPieceSize = "50px";
-
-
-	gui_scorePlayerId = "relativeScore";
-
 	gui_capturedPieceSize = "50px";
 
 
@@ -127,6 +107,8 @@ $(document).ready(function () {
 	});
 
 	socket.on("chess moved", function (msg) {
+		console.log("Recieving From->To:" + msg[0] + msg[1]);
+
 		MovePiece(msg[0], msg[1]);
 	});
 
@@ -258,12 +240,9 @@ function resetGame(mode) {
 		$("#joinRooms :input").attr("disabled", false);
 	else
 		$("#joinRooms :input").attr("disabled", true);
-
 }
 
 function MovePiece(from, to) {
-	if (game_aiMode === 2 && game_gotOponent)
-		socket.emit("chess move", [from, to, socket_oponentID]);
 
 	//	if (game_aiMode === 2)
 	//		game_playerSide = (game_playerSide === 'w' ? 'b' : 'w');
@@ -275,6 +254,13 @@ function MovePiece(from, to) {
 	});
 
 	if (move === null) return 'snapback';
+
+	//If playing online and not your turn send move to update oponent
+	//Game !== player side because game side changed on game.move != null
+	if (game_aiMode === 2 && game_gotOponent && game.turn() !== game_playerSide) {
+		console.log("Sending From->To:" + from + to);
+		socket.emit("chess move", [from, to, socket_oponentID]);
+	}
 
 	board.position(game.fen(), false);
 	turnCount++;
@@ -366,7 +352,7 @@ function drawScale(depth) {
 
 
 function checkForTaken(boardPosition) {
-
+	var doc = document;
 	// p = Piece Count variable
 	var p = {
 		wQ: 0,
@@ -410,12 +396,12 @@ function checkForTaken(boardPosition) {
 	if (cb_displayMarkers) updateScale();
 
 	//Remove old pieces and score  
-	var capturedBlack = document.getElementById(gui_blackCapturedId);
-	var capturedWhite = document.getElementById(gui_whiteCapturedId);
+	var capturedBlack = doc.getElementById("blackCaptured");
+	var capturedWhite = doc.getElementById("whiteCaptured");
 
-	document.getElementById(gui_scoreBlackId).innerHTML = "BLACK SCORE: " + blackScore;
-	document.getElementById(gui_scoreWhiteId).innerHTML = "WHITE SCORE: " + whiteScore;
-	document.getElementById(gui_scorePlayerId).innerHTML = ((game_playerSide == 'w') ? "WHITE'S" : "BLACK'S") + " RELATIVE SCORE: " + relativeScore;
+	doc.getElementById("blackScore").innerHTML = "BLACK SCORE: " + blackScore;
+	doc.getElementById("whiteScore").innerHTML = "WHITE SCORE: " + whiteScore;
+	doc.getElementById("relativeScore").innerHTML = ((game_playerSide == 'w') ? "WHITE'S" : "BLACK'S") + " RELATIVE SCORE: " + relativeScore;
 
 	//Display each taken piece from piece count variable p
 	capturedBlack.innerHTML = 'CAPTURED BLACK PIECES: ';
