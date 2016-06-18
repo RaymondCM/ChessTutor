@@ -261,7 +261,8 @@ function resetGame(mode) {
 }
 
 function MovePiece(from, to) {
-	socket.emit("chess move", [from, to, socket_oponentID]);
+	if (game_aiMode === 2 && game_gotOponent)
+		socket.emit("chess move", [from, to, socket_oponentID]);
 
 	//	if (game_aiMode === 2)
 	//		game_playerSide = (game_playerSide === 'w' ? 'b' : 'w');
