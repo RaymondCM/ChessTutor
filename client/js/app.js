@@ -12,7 +12,7 @@ $(document).ready(function () {
 		})
 		.done(function () {
 			cb_currentTheme = cb_themes[cb_currentTheme];
-			SetTheme(cb_currentTheme);
+			//SetTheme(cb_currentTheme);
 		});
 
 	/* GAME CONFIG */
@@ -28,6 +28,9 @@ $(document).ready(function () {
 	cb_permHighlighted = [];
 	cb_counterScaleMarkings = 2;
 	cb_displayMarkers = false;
+	cb_pieceTheme = metro_piece_theme;
+	cb_boardTheme = metro_board_theme;
+
 	/* STOCKFISH */
 	sf_timeOverDepth = false;
 	sf_searchTime = '3000';
@@ -35,7 +38,7 @@ $(document).ready(function () {
 	sf_scoreWhite = 1;
 	sf_scoreBlack = -1;
 	//Force evaluation at every depth (much better centipawn results) slower results
-	sf_accurateCentipawns = true;
+	sf_accurateCentipawns = false;
 
 	/* HTML */
 	gui_blackCapturedId = "blackCaptured";
@@ -45,15 +48,11 @@ $(document).ready(function () {
 
 	gui_capturedPieceSize = "50px";
 
-	dir_pieceImages = "img/chesspieces/drawn/";
-	dir_pieceImagesExtension = ".png";
 
 	gui_scorePlayerId = "relativeScore";
 
 	gui_capturedPieceSize = "50px";
 
-	dir_pieceImages = "img/chesspieces/wikipedia/";
-	dir_pieceImagesExtension = ".png";
 
 	Init_Stockfish();
 	Init_Chessboard();
@@ -168,7 +167,17 @@ function Init_Chessboard() {
 	};
 
 	var removeHighlighting = function () {
-		$('#Chessboard .square-55d63').css('background', '');
+		$('#Chessboard .square-55d63').css('background-color', '');
+
+		var wcol = cfg.boardTheme[0];
+		var bcol = cfg.boardTheme[1];
+
+		$(".white-1e1d7").css("background-color", wcol)
+		$(".white-1e1d7").css("color", bcol)
+
+		$(".black-3c85d").css("background-color", bcol)
+		$(".black-3c85d").css("color", wcol)
+
 		if (cb_permHighlighted.length !== 0)
 			board.highlightSquare(cb_permHighlighted, true);
 	};
@@ -208,7 +217,8 @@ function Init_Chessboard() {
 		onMouseoutSquare: onMouseoutSquare,
 		onMouseoverSquare: onMouseoverSquare,
 		onSnapEnd: onSnapEnd,
-		pieceTheme: dir_pieceImages + '{piece}' + dir_pieceImagesExtension
+		pieceTheme: cb_pieceTheme,
+		boardTheme: cb_boardTheme
 	};
 
 	board = ChessBoard('Chessboard', cfg);
@@ -231,11 +241,8 @@ function Init_Chessboard() {
 }
 
 function highlightSquare(square, aiHighlight) {
-	var colourWhite = !aiHighlight ? cb_currentTheme.whitePossiblePlaces : cb_currentTheme.permWhitePossiblePlaces,
-		colourBlack = !aiHighlight ? cb_currentTheme.blackPossiblePlaces : cb_currentTheme.permBlackPossiblePlaces;
-
 	var squareEl = $('#Chessboard .square-' + square);
-	squareEl.css('background', squareEl.hasClass('black-3c85d') === true ? colourBlack : colourWhite);
+	squareEl.css('background', squareEl.hasClass('black-3c85d') === true ? cb_boardTheme[2] : cb_boardTheme[3]);
 }
 
 function resetGame(mode) {
@@ -254,7 +261,6 @@ function resetGame(mode) {
 }
 
 function MovePiece(from, to) {
-
 	socket.emit("chess move", [from, to, socket_oponentID]);
 
 	//	if (game_aiMode === 2)
@@ -414,7 +420,7 @@ function checkForTaken(boardPosition) {
 	capturedWhite.innerHTML = 'CAPTURED WHITE PIECES: ';
 
 	for (var property in p)
-		drawImg(dir_pieceImages + property + dir_pieceImagesExtension, (property.charAt(0) == 'w') ? capturedWhite : capturedBlack,
+		drawImg(cb_pieceTheme(property), (property.charAt(0) == 'w') ? capturedWhite : capturedBlack,
 			p[property]);
 
 }
@@ -505,7 +511,7 @@ function Init_Stockfish() {
 		stockfishEngine.postMessage("setoption name MultiPV value 50");
 
 	stockfishEngine.onmessage = function (event) {
-		console.log(event.data);
+		//console.log(event.data);
 		if (event.data.toString().substr(0, 8) !== 'bestmove') {
 			if (event.data.toString().substr(0, 10) == 'info depth')
 				lastPonder = event.data;
