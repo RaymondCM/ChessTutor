@@ -136,6 +136,7 @@ socket.on('game-ready', function (roomSockets) {
 	}
 
 	game_gotOponent = true;
+	console.log();
 });
 
 socket.on("chess moved", function (msg) {
