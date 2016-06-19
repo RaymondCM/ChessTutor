@@ -35,9 +35,15 @@ multiplayer.on('connection', function (client) {
 
 multiplayer.emit('Currently in multiplayer-chess lobby', 'everyone!');
 
+
+
 io.on('connection', function (socket) {
+
 	socket.on('disconnect', function () {
 		console.log(socket.id + ' disconnected');
+
+		if (socket.roomID !== undefined)
+			io.in(socket.roomID).emit('disconnected', "Left");
 	});
 
 	socket.on('chess move', function (msg) {
@@ -46,32 +52,50 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('join', function (roomID) {
+		//Only allow one room at a time
+		if (socket.roomID !== undefined)
+			socket.leave(socket.roomID);
+
 		var room = io.sockets.adapter.rooms[roomID];
+
 		if (typeof room === 'undefined') {
 			socket.join(roomID);
+			socket.roomID = roomID;
 			io.sockets.connected[socket.id].emit("join-status", [1, 'w']);
+			io.sockets.connected[socket.id].emit('client-id', [socket.id, roomID]);
 
 			console.log("1" + " in " + roomID);
 		} else if (room.length < 2) {
 			socket.join(roomID);
+			socket.roomID = roomID;
 			io.sockets.connected[socket.id].emit("join-status", [room.length, 'b']);
+			io.sockets.connected[socket.id].emit('client-id', [socket.id, roomID]);
 
 			console.log(room.length + " in " + roomID);
 		} else {
-			io.sockets.connected[socket.id].emit('error', "Max Clients Reached");
+			io.sockets.connected[socket.id].emit("join-status", null);
+			io.sockets.connected[socket.id].emit('client-id', [socket.id, "ERR:Max-Clients"]);
 		}
-
-		io.sockets.connected[socket.id].emit('game-id', socket.id);
 	});
 
-	socket.on('game-ready', function (roomID) {
-		io.in(roomID).emit('game-ready', io.sockets.adapter.rooms[roomID].sockets);
+	socket.on('leave', function (roomID) {
+		socket.leave(roomID);
+		io.in(roomID).emit('disconnected', "Left");
 	});
 
-	socket.emit(socket.id);
+	socket.on('ready', function (roomID) {
+		io.in(roomID).emit('game-ready', getSocketsinRoom(roomID));
+	});
+
+	socket.emit('client-id', [socket.id, "No Room"]);
 	console.log(socket.id + " connected");
-	socket.join(socket.id);
+	//Join a room with your ID
+	//socket.join(socket.id);
 });
+
+function getSocketsinRoom(roomID) {
+	return io.sockets.adapter.rooms[roomID].sockets;
+}
 
 http.listen(process.env.PORT || 3000, function () {
 	console.log('listening on *:' + http.address().port);

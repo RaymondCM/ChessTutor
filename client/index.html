@@ -61,7 +61,7 @@
 
 				<div class="expanded button-group">
 					<a class="button warning" id="undoBtn">Undo</a>
-					<a class="button alert" id="resetBtn">Reset</a>
+					<a class="button warning-alert" id="resetBtn">Reset</a>
 				</div>
 
 				<div class="input-group" id="joinRooms">
@@ -71,23 +71,23 @@
 					</div>
 				</div>
 
-				<div class="alert callout">
-					<div id="blackCaptured">
-						BLACK CAPTURES:
-					</div>
-					<div id="whiteCaptured">
-						WHITE CAPTURES:
-					</div>
+				<a class="expanded button alert" id="leaveBtn">Leave</a>
 
-					<div id="whiteScore">
-						WHITE SCORE:
-					</div>
-					<div id="blackScore">
-						BLACK SCORE:
-					</div>
-					<div id="relativeScore">
-						YOUR RELATIVE SCORE:
-					</div>
+				<div class="warning callout" id="gameInfo">
+					<p id="blackCaptured">
+						Black Captures:
+					</p>
+					<p id="whiteCaptured">
+						White Captures:
+					</p>
+
+					<p id="whiteScore">
+					</p>
+					<p id="blackScore">
+					</p>
+					<p id="relativeScore">
+						Score:
+					</p>
 
 					<div id="Debug">
 						<div id="fen"></div>
@@ -103,7 +103,9 @@
 		</div>
 	</div>
 
-	<h4 style="position:fixed;bottom:10px;margin: 0 auto;text-align:center;width:100%" id="sessionID">ID</h4>
+	<div class="alert callout" style="position:fixed;bottom:10px;margin: 0 auto;text-align:center;width:100%">
+		<p id="sessionID"></p>
+	</div>
 
 	<!-- JAVASCRIPT -->
 	<script src="/js/vendor/chess.js"></script>

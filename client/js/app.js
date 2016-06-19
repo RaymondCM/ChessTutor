@@ -1,9 +1,15 @@
-$(document).foundation();
+var socket = io();
 
 $(document).ready(function () {
 	/*
 	    GLOBAL VARIABLES
 	*/
+	//Hide on JS so sizing is still calculated for css
+	$("#joinRooms :input").attr("disabled", true);
+	$("#joinRooms").hide();
+	$("#leaveBtn").hide();
+	$(document).foundation();
+
 	ct_debug = false;
 
 	/* GAME CONFIG */
@@ -33,11 +39,15 @@ $(document).ready(function () {
 	/* HTML */
 	gui_capturedPieceSize = "50px";
 
+	/* WEB SOCKETS */
+	socket_sessionID = null;
+	socket_oponentID = null;
+	socket_roomID = null;
 
 	Init_Stockfish();
 	Init_Chessboard();
 
-	/* BIND FUNCTIONS */
+	/* BIND ALL BUTTON CLICKS */
 	$("#undoBtn").click(function () {
 		clearTimeout(cb_autoPlayMove);
 		game.undo();
@@ -51,9 +61,6 @@ $(document).ready(function () {
 
 		checkForTaken(board.position());
 	});
-
-	socket_sessionID = null;
-	socket_oponentID = null;
 
 	$("#resetBtn").click(function () {
 		resetGame(game_aiMode);
@@ -77,45 +84,67 @@ $(document).ready(function () {
 		$(this).addClass("success");
 	});
 
-	socket = io();
-	socket.on('game-id', function (message) {
-		socket_sessionID = message;
-		document.getElementById("sessionID").innerHTML = socket_sessionID;
+	$("#leaveBtn").click(function () {
+		restartGameAterOnline();
 	});
 
-	socket.on('error', function (error) {
-		console.log("Error: " + error);
-	});
+});
 
-	socket.on('join-status', function (message) {
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------O    N    L    I    N    E----------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+socket.on('client-id', function (message) {
+	socket_sessionID = message[0];
+	document.getElementById("sessionID").innerHTML = "Room:" + message[1] + "=>SocketID:" + socket_sessionID;
+});
+
+$("#joinBtn").click(function () {
+	socket_roomID = $("#joinText").val();
+	socket.emit("join", socket_roomID);
+});
+
+socket.on('join-status', function (message) {
+	if (message !== null) {
+		$("#joinRooms :input").attr("disabled", true);
+		$("#joinRooms").hide();
+		$("#gameMode a").hide();
+		$("#leaveBtn").show();
+
 		game_playerSide = message[1];
 		board.orientation(((game_playerSide == 'w') ? "white" : "black"));
+
 		if (message[0] === 2) {
-			socket.emit("game-ready", $("#joinText").val());
+			socket.emit("ready", socket_roomID);
 		}
+
 		console.log("Join Status: " + message.join("=>"));
-	});
+	} else {
+		console.log("Couldn't join room (Room Clients Max)");
+	}
+});
 
-	socket.on('game-ready', function (roomSockets) {
-		console.log("Ready.");
+socket.on('game-ready', function (roomSockets) {
+	console.log("Ready.");
 
-		for (var name in roomSockets) {
-			if (socket_sessionID != name)
-				socket_oponentID = name;
-		}
+	for (var name in roomSockets) {
+		if (socket_sessionID != name)
+			socket_oponentID = name;
+	}
 
-		game_gotOponent = true;
-	});
+	game_gotOponent = true;
+});
 
-	socket.on("chess moved", function (msg) {
-		console.log("Recieving From->To:" + msg[0] + msg[1]);
+socket.on("chess moved", function (msg) {
+	console.log("Recieving From->To:" + msg[0] + msg[1]);
 
-		MovePiece(msg[0], msg[1]);
-	});
+	MovePiece(msg[0], msg[1]);
+});
 
-	$("#joinBtn").click(function () {
-		socket.emit("join", $("#joinText").val());
-	});
+socket.on('disconnected', function (message) {
+	restartGameAterOnline();
 });
 
 //-----------------------------------------------------------------------------
@@ -229,18 +258,43 @@ function highlightSquare(square, aiHighlight) {
 	squareEl.css('background', squareEl.hasClass('black-3c85d') === true ? cb_boardTheme[2] : cb_boardTheme[3]);
 }
 
+function restartGameAterOnline(reason) {
+	console.log("Terminating Game: Opponent Left");
+	$("#gameMode>a.success").removeClass("success");
+	$("#pveBtn").addClass("success");
+
+	$("#joinRooms :input").attr("disabled", false);
+	$("#gameMode a").show();
+	$("#leaveBtn").hide();
+
+	document.getElementById("sessionID").innerHTML = "Game Ended (Opposition/You Left) => Started PVE Game";
+	resetGame(0);
+}
+
 function resetGame(mode) {
+	//Change this (Might not always call)
+	if (game_aiMode === 2) {
+		socket.emit("leave", socket_roomID);
+		console.log("Left Game Room:" + socket_roomID);
+		socket_roomID = null;
+	}
+
 	game.reset();
 	board.position(game.fen(), false);
-	updateStatus();
 	turnCount = 0;
 	checkForTaken(board.position());
 	game_aiMode = mode;
 
-	if (game_aiMode === 2)
+	if (game_aiMode === 2) {
 		$("#joinRooms :input").attr("disabled", false);
-	else
+		$("#joinRooms").show();
+	} else {
+		$("#leaveBtn").hide();
 		$("#joinRooms :input").attr("disabled", true);
+		$("#joinRooms").hide();
+	}
+
+	updateStatus();
 }
 
 function MovePiece(from, to) {
@@ -400,13 +454,13 @@ function checkForTaken(boardPosition) {
 	var capturedBlack = doc.getElementById("blackCaptured");
 	var capturedWhite = doc.getElementById("whiteCaptured");
 
-	doc.getElementById("blackScore").innerHTML = "BLACK SCORE: " + blackScore;
-	doc.getElementById("whiteScore").innerHTML = "WHITE SCORE: " + whiteScore;
-	doc.getElementById("relativeScore").innerHTML = ((game_playerSide == 'w') ? "WHITE'S" : "BLACK'S") + " RELATIVE SCORE: " + relativeScore;
+	//doc.getElementById("blackScore").innerHTML = "BLACK SCORE: " + blackScore;
+	//doc.getElementById("whiteScore").innerHTML = "WHITE SCORE: " + whiteScore;
+	doc.getElementById("relativeScore").innerHTML = ((game_playerSide == 'w') ? "Whites" : "Blacks") + " Score: " + relativeScore;
 
 	//Display each taken piece from piece count variable p
-	capturedBlack.innerHTML = 'CAPTURED BLACK PIECES: ';
-	capturedWhite.innerHTML = 'CAPTURED WHITE PIECES: ';
+	capturedBlack.innerHTML = 'White captures: ';
+	capturedWhite.innerHTML = 'Black captures: ';
 
 	for (var property in p)
 		drawImg(cb_pieceTheme(property), (property.charAt(0) == 'w') ? capturedWhite : capturedBlack,

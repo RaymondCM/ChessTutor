@@ -115,3 +115,21 @@
 	text-align: center;
 	bottom: 0px;
 }
+
+#gameInfo p {
+	line-height: .5;
+}
+
+
+/*Add Another Colour to BTN foundation*/
+
+.button.warning-alert {
+	background-color: #ff5800;
+	color: #fefefe;
+}
+
+.button.warning-alert:hover,
+.button.warning-alert:focus {
+	background-color: #ce4700;
+	color: #fefefe;
+}
