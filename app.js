@@ -87,6 +87,15 @@ io.on('connection', function (socket) {
 		io.in(roomID).emit('game-ready', getSocketsinRoom(roomID));
 	});
 
+	socket.on('reset-game', function (roomID) {
+		io.in(roomID).emit('reset-boards');
+	});
+
+	socket.on('undomove-game', function (roomID) {
+		io.in(roomID).emit('undo-move');
+	});
+
+
 	socket.emit('client-id', [socket.id, "No Room"]);
 	console.log(socket.id + " connected");
 	//Join a room with your ID

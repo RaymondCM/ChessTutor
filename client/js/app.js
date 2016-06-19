@@ -49,21 +49,22 @@ $(document).ready(function () {
 
 	/* BIND ALL BUTTON CLICKS */
 	$("#undoBtn").click(function () {
-		clearTimeout(cb_autoPlayMove);
-		game.undo();
-		game.undo();
-
-		board.position(game.fen(), false);
-		updateStatus();
-
-		if (turnCount > 1)
-			turnCount -= 2;
-
-		checkForTaken(board.position());
+		if (game_aiMode == 2) {
+			console.log("Requesting Undo Last Half Move");
+			socket.emit("undomove-game", socket_roomID);
+		} else {
+			clearTimeout(cb_autoPlayMove);
+			undoHalfMoves(2);
+		}
 	});
 
 	$("#resetBtn").click(function () {
-		resetGame(game_aiMode);
+		if (game_aiMode === 2) {
+			console.log("Requesting Board Reset");
+			socket.emit("reset-game", socket_roomID);
+		} else {
+			resetGame(game_aiMode);
+		}
 	});
 
 	$("#pveBtn").click(function () {
@@ -145,6 +146,16 @@ socket.on("chess moved", function (msg) {
 
 socket.on('disconnected', function (message) {
 	restartGameAterOnline();
+});
+
+socket.on('reset-boards', function () {
+	console.log("Resetting Board from Request");
+	resetBoard();
+});
+
+socket.on('undo-move', function () {
+	console.log("Undoing Move from Request");
+	undoHalfMoves(1);
 });
 
 //-----------------------------------------------------------------------------
@@ -271,7 +282,23 @@ function restartGameAterOnline(reason) {
 	resetGame(0);
 }
 
+function undoHalfMoves(number) {
+	clearTimeout(cb_autoPlayMove);
+	for (var i = 0; i < number; i++) {
+		game.undo();
+		if (turnCount > 1)
+			turnCount--;
+	}
+
+	board.position(game.fen(), false);
+	checkForTaken(board.position());
+
+	updateStatus();
+}
+
 function resetGame(mode) {
+	clearTimeout(cb_autoPlayMove);
+
 	//Change this (Might not always call)
 	if (game_aiMode === 2) {
 		socket.emit("leave", socket_roomID);
@@ -279,10 +306,7 @@ function resetGame(mode) {
 		socket_roomID = null;
 	}
 
-	game.reset();
-	board.position(game.fen(), false);
-	turnCount = 0;
-	checkForTaken(board.position());
+	resetBoard();
 	game_aiMode = mode;
 
 	if (game_aiMode === 2) {
@@ -295,6 +319,13 @@ function resetGame(mode) {
 	}
 
 	updateStatus();
+}
+
+function resetBoard() {
+	game.reset();
+	board.position(game.fen(), false);
+	turnCount = 0;
+	checkForTaken(board.position());
 }
 
 function MovePiece(from, to) {
