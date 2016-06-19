@@ -1,3 +1,8 @@
+.disableSave {
+	-webkit-user-select: none;
+	-webkit-touch-callout: none;
+}
+
 #Debug {
 	position: fixed;
 	height: 100%;

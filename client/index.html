@@ -4,7 +4,9 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!--This Tag Prevents Zooming On Mobiles (DEFAULT TAG)(<meta name="viewport" content="width=device-width, initial-scale=1.0">)-->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 	<title>Chess Tutor Prototype</title>
 
 	<!-- CSS -->
@@ -20,7 +22,7 @@
 		<div class="large-6 medium-6 small-12 column">
 			<h4 class="text-center">Chessboard</h4>
 			<div class="callout">
-				<div id="Chessboard" class="large-12">
+				<div id="Chessboard" class="large-12 disableSave" oncontextmenu="return false;">
 
 				</div>
 
