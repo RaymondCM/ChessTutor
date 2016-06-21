@@ -5,8 +5,10 @@ var path = require('path');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+app.disable("x-powered-by");
+
 //app.use(express.static(path.join(__dirname, 'client', { maxAge: '1d' })));
-app.use(express.static(__dirname + '/client', {
+app.use(express.static(__dirname + '/public', {
 	maxAge: '1d'
 }));
 
@@ -14,28 +16,6 @@ app.get('/', function (req, res) {
 	res.setHeader('Cache-Control', 'client, max-age=31557600');
 	res.sendfile('client/index.html');
 });
-
-var multiplayer = io.of('/multiplayer-chess');
-var users = 0;
-
-multiplayer.on('connection', function (client) {
-
-	client.on('disconnect', function () {
-		console.log(client.id + ' disconnected');
-	});
-
-	client.on('join', function (roomID) {
-		client.join(roomID);
-
-		client.broadcast.to(roomID).emit('game-id', client.id);
-	});
-
-	console.log(client.id + " connected.");
-});
-
-multiplayer.emit('Currently in multiplayer-chess lobby', 'everyone!');
-
-
 
 io.on('connection', function (socket) {
 
