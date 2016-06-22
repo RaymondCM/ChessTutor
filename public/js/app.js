@@ -35,9 +35,13 @@ $(document).ready(function () {
 	sf_scoreBlack = -1;
 	//Force evaluation at every depth (much better centipawn results) slower results
 	sf_accurateCentipawns = false;
+    
+    /* TUTOR */
+    t_enable = false;
 
 	/* HTML */
 	gui_capturedPieceSize = "50px";
+    gui_tutorResponse = 'tutorText';
 
 	/* WEB SOCKETS */
 	socket_sessionID = null;
@@ -46,6 +50,7 @@ $(document).ready(function () {
 
 	Init_Stockfish();
 	Init_Chessboard();
+    t_enable && Init_tutor();
 
 	/* BIND ALL BUTTON CLICKS */
 	$("#undoBtn").click(function () {
@@ -640,6 +645,31 @@ function getScore(a) {
 	updateScale();
 	return (msgObj.score_cp ? "Centipawn Score: " : "Mate Score: ") + game.turn() + (game.turn() === 'w' ? sf_scoreWhite : sf_scoreBlack);
 }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//--------------------------T    U    T    O    R------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+function Init_tutor (){
+    tutor = {
+        bestMove: null,
+        side: null,
+        
+        };
+    
+    tutor.setKnowledge('a', 'b');
+console.writeLine(tutor);
+}
+
+function 
+function PushMessage (text){
+    var responseBox = document.getElementById(gui_tutorResponse);
+    var message = document.createElement('p');
+    message.innerHTML = text;
+    responseBox.appendChild(message);
+}
+
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
