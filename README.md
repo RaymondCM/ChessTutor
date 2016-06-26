@@ -12,7 +12,7 @@ A simple web based application that invites beginners to furthur develop intrest
 
 ## Usage
 
-Most recent deploy [link](http://chesstutor.herokuapp.com).
+Most recent deploy [Chess Tutor on Heroku](http://chesstutor.herokuapp.com).
 
 ## Contributing
 
