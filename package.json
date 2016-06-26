@@ -1,14 +1,26 @@
 {
-	"name": "Chess-Tutor-Online",
-
-	"version": "0.0.1",
-	"description": "Multiplayer online chess designed to help you learn.",
+	"name": "Chess-Tutor",
+	"private": true,
+	"main": "server.js",
+	"author": "Raymond Kirk, Luke Jackson",
+	"version": "1.0.0",
+	"description": "A simple web based application that invites beginners to furthur develop intrest and skill in Chess using artficial inteligence.",
 	"dependencies": {
-		"express": "^4.10.2",
-		"socket.io": "^1.4.6"
-	},
-	"devDependencies": {},
-	"scripts": {
-		"start": "node app.js"
+		"bcrypt-nodejs": "latest",
+		"body-parser": "~1.0.0",
+		"connect-flash": "~0.1.1",
+		"cookie-parser": "~1.0.0",
+		"ejs": "~0.8.5",
+		"express": "~4.0.0",
+		"express-handlebars": "^3.0.0",
+		"express-session": "~1.0.0",
+		"method-override": "~1.0.0",
+		"mongoose": "~3.8.1",
+		"morgan": "~1.0.0",
+		"passport": "~0.1.17",
+		"passport-facebook": "~1.0.2",
+		"passport-google-oauth": "~0.1.5",
+		"passport-local": "~0.1.6",
+		"passport-twitter": "~1.0.2"
 	}
 }

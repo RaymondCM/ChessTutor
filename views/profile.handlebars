@@ -1,0 +1,99 @@
+<br>
+
+<div class="row">
+	{{#if message}}
+	<div class="callout alert">
+		{{message}}
+	</div>
+	{{/if}}
+	<div class="small-12 column text-center">
+		<h3>Profile Page</h3>
+		<a href="/logout" class="button alert">Logout</a>
+	</div>
+</div>
+
+<div class="row" data-equalizer>
+
+	<!-- LOCAL -->
+	<div class="large-6 small-12 columns button secondary profileBox">
+		<div class="profileBox-content" data-equalizer-watch>
+			<h4>Local</h4> {{#if user.local.email}}
+			<p>
+				<strong>ID</strong>: {{ user._id }}
+				<br>
+				<strong>Email</strong>: {{user.local.email }}
+				<br>
+				<strong>Password</strong>: {{user.local.password }}
+			</p>
+
+			<a href="/unlink/local" class="button alert">Delete Account</a> {{else}}
+			<a href="/connect/local" class="button secondary">Connect Local Account</a> {{/if}}
+		</div>
+	</div>
+
+	<!-- FACEBOOK -->
+	<div class="large-6 small-12 columns button primary profileBox">
+		<div class="profileBox-content" data-equalizer-watch>
+			<h4>Facebook</h4> {{#if user.facebook.token}}
+			<p>
+				<strong>ID</strong>: {{ user.facebook.id }}
+				<br>
+				<strong>Token</strong>: {{user.facebook.token }}
+				<br>
+				<strong>Email</strong>: {{user.facebook.email }}
+				<br>
+				<strong>Name</strong>: {{user.facebook.name }}
+			</p>
+
+			<a href="/unlink/facebook" class="button alert">Unlink</a> {{else}}
+			<a href="/connect/facebook" class="button primary">Connect Facebook</a> {{/if}}
+
+		</div>
+
+	</div>
+
+</div>
+<div class="row" data-equalizer>
+
+	<!-- TWITTER -->
+	<div class="large-6 small-12 columns button primary profileBox" data-equalizer-watch>
+		<div class="profileBox-content">
+			<h4>Twitter</h4> {{#if user.twitter.token }}
+			<p>
+				<strong>ID</strong>: {{user.twitter.id }}
+				<br>
+				<strong>Token</strong>: {{user.twitter.token }}
+				<br>
+				<strong>Display Name</strong>: {{user.twitter.displayName }}
+				<br>
+				<strong>Username</strong>: {{user.twitter.username }}
+			</p>
+
+			<a href="/unlink/twitter" class="button alert">Unlink</a> {{else}}
+			<a href="/connect/twitter" class="button primary">Connect Twitter</a> {{/if}}
+
+		</div>
+
+	</div>
+
+	<!-- GOOGLE -->
+	<div class="large-6 small-12 columns button warning profileBox" data-equalizer-watch>
+		<div class="profileBox-content">
+			<h4>Google+</h4> {{#if user.google.token}}
+			<p>
+				<strong>ID</strong>: {{user.google.id}}
+				<br>
+				<strong>Token</strong>: {{user.google.token}}
+				<br>
+				<strong>Email</strong>: {{user.google.email}}
+				<br>
+				<strong>Name</strong>: {{user.google.name}}
+			</p>
+
+			<a href="/unlink/google" class="button alert">Unlink</a> {{else}}
+			<a href="/connect/google" class="button warning">Connect Google</a> {{/if}}
+
+		</div>
+
+	</div>
+</div>

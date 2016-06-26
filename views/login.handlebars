@@ -1,0 +1,30 @@
+<br>
+<div class="row">
+	<div class="small-6 column">
+
+		<h3>Login</h3> {{#if message}}
+		<div class="callout alert">
+			{{message}}
+		</div>
+		{{/if}}
+
+		<!-- LOGIN FORM -->
+		<form action="/login" method="post">
+
+			<label>Email</label>
+			<input type="text" name="email">
+
+			<label>Password</label>
+			<input type="password" name="password">
+
+
+			<button type="submit" class="button success">Login</button>
+		</form>
+
+		<hr>
+
+		<p>Need an account? <a href="/signup">Signup</a></p>
+		<p>Or go <a href="/">Home</a>.</p>
+
+	</div>
+</div>
