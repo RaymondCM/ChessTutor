@@ -6,7 +6,7 @@ module.exports = function (app, passport) {
 	//With every render pass an object to be interpretted by handlebars that will
 	//allow different stylings dependant on whether the user is logged in.
 	app.get('/', function (req, res) {
-		res.render('index.handlebars', {
+		res.render('play.handlebars', {
 			isLoggedIn: req.isAuthenticated()
 		});
 	});
