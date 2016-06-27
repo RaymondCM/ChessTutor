@@ -224,6 +224,7 @@ function undoHalfMoves(number) {
 }
 
 function resetGame(mode) {
+    board.highlightSquare(cb_permHighlighted, false);
 	clearTimeout(cb_autoPlayMove);
 
 	resetBoard();
@@ -255,7 +256,7 @@ function MovePiece(from, to) {
 
 	board.position(game.fen(), false);
     t_enable && t_moveMade(from, to, game.turn(), turnCount);
-    t_enable && calcUndeveloped(board.position());
+    t_enable && tutorKnowledge.calcUndeveloped(board.position());
 	turnCount++;
 	updateStatus();
 }
@@ -559,6 +560,17 @@ function getScore(a) {
 //-----------------------------------------------------------------------------
 function Init_tutor (boardPosition){
     //Get undeveloped pieces from starting position
+    var undevelopedFunction = function (boardPosition){
+        var undevelopedPieces = {};
+        for (var property in boardPosition)
+		if (startPosition.hasOwnProperty(property) &&
+           (boardPosition[property].substr(0, 1) === game_playerSide) &&
+           (boardPosition[property] === startPosition[property]))
+                    undevelopedPieces[property] = startPosition[property];
+    
+        tutorKnowledge.undevelopedPieces = undevelopedPieces;
+        tutorKnowledge.undevelopedPiecesCount = Object.keys(undevelopedPieces).length;
+    };
     
     tutorKnowledge = {
         bestMove: null,
@@ -568,9 +580,10 @@ function Init_tutor (boardPosition){
         castlePossible: true,
         playerMoves: [],
         opponentMoves: [],
-        turnCount: turnCount
+        turnCount: turnCount,
+        calcUndeveloped: undevelopedFunction
     };
-    calcUndeveloped(boardPosition);
+    tutorKnowledge.calcUndeveloped(boardPosition);
 }
 
 function calcUndeveloped(boardPosition){
@@ -593,8 +606,7 @@ function t_moveMade(from, to, side, turnCount){
 function t_onEngine(from, to) {
     t_PushMessage("Engine says: " + from + " " + to);
     tutorKnowledge.bestMove = {from: from, to: to};
-    cb_permHighlighted = [from, to];
-    board.highlightSquare(cb_permHighlighted, false, ["#ffff00", "#ffff00"]);
+    board.highlightSquare([from, to], false, ["#ffff00", "#ffff00"]);
     console.log(tutorKnowledge);
     
 }
@@ -605,6 +617,8 @@ function t_PushMessage (text){
     message.innerHTML = text;
     responseBox.appendChild(message);
 }
+
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //--------------------U    T    I    L    I    T    Y--------------------------
