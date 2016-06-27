@@ -37,7 +37,7 @@ $(document).ready(function () {
 	sf_accurateCentipawns = false;
 
 	/* TUTOR */
-	t_enable = false;
+	t_enable = true;
 
 	/* HTML */
 	gui_capturedPieceSize = "50px";
@@ -49,8 +49,8 @@ $(document).ready(function () {
 	socket_roomID = null;
 
 	Init_Stockfish();
-	Init_Chessboard();
-	t_enable && Init_tutor();
+	Init_Chessboard(); 
+	t_enable && Init_tutor(board.position());
 
 	/* BIND ALL BUTTON CLICKS */
 	$("#undoBtn").click(function () {
@@ -354,6 +354,7 @@ function MovePiece(from, to) {
 	}
 
 	board.position(game.fen(), false);
+    t_moveMade(from, to, game.turn(), turnCount);
 	turnCount++;
 	updateStatus();
 }
@@ -601,7 +602,11 @@ function Init_Stockfish() {
 
 		var side = game.turn(),
 			move = event.data.substring(9, 13);
-
+        
+        //Give the tutor the best move
+        if ((game_playerSide === side) && t_enable)
+            t_onEngine(move.substr(0, 2), move.substr(2, 4));
+        
 		$("#suggestedMove").html("SUGGESTED MOVE FOR " + side + ": " + move);
 		//console.log(" * Turn: " + (turnCount === 0 ? "1" : Math.floor(turnCount / 2)) + " Side: " + side + " Move: " + move);
 
@@ -651,25 +656,49 @@ function getScore(a) {
 //--------------------------T    U    T    O    R------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-function Init_tutor() {
-	tutor = {
-		bestMove: null,
-		side: null,
-
-	};
-
-	tutor.setKnowledge('a', 'b');
-	console.writeLine(tutor);
+function Init_tutor (boardPosition){
+    //Get undeveloped pieces from starting position
+    tutorKnowledge = {
+        bestMove: null,
+        side: game_playerSide,
+        undevelopedPieces: null,
+        undevelopedPiecesCount: null,
+        castlePossible: true,
+        playerMoves: [],
+        opponentMoves: [],
+        turnCount: turnCount
+    };
+    calcUndeveloped(boardPosition);
 }
 
-function PushMessage(text) {
-	var responseBox = document.getElementById(gui_tutorResponse);
-	var message = document.createElement('p');
-	message.innerHTML = text;
-	responseBox.appendChild(message);
+function calcUndeveloped(boardPosition){
+    var undevelopedPieces = {};
+    for (var property in boardPosition)
+		if (boardPosition.hasOwnProperty(property))
+			if (boardPosition[property].substr(0, 1) === game_playerSide)
+                undevelopedPieces[property] = boardPosition[property];
+    tutorknowledge.undevelopedPieces = undevelopedPieces;
+    tutorknowledge.undevelopedPiecesCount = Object.keys(undevelopedPieces).length;
 }
 
+function t_moveMade(from, to, side, turnCount){
+    (side === game_playerSide) ? tutorKnowledge.playerMoves.push({from: from, to: to}) : tutorKnowledge.opponentMoves.push({from: from, to: to});
+    tutorKnowledge.turnCount = turnCount;
+}
 
+function t_onEngine(from, to) {
+    t_PushMessage("Engine says: " + from + " " + to);
+    tutorKnowledge.bestMove = {from: from, to: to};
+    console.log(tutorKnowledge.undevelopedPieces);
+    console.log(tutorKnowledge);
+}
+
+function t_PushMessage (text){
+    var responseBox = document.getElementById(gui_tutorResponse);
+    var message = document.createElement('p');
+    message.innerHTML = text;
+    responseBox.appendChild(message);
+}
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //--------------------U    T    I    L    I    T    Y--------------------------
