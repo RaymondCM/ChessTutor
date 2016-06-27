@@ -227,7 +227,7 @@ function undoHalfMoves(number) {
 }
 
 function resetGame(mode) {
-    board.highlightSquare(cb_permHighlighted, false);
+	board.highlightSquare(cb_permHighlighted, false);
 	clearTimeout(cb_autoPlayMove);
 
 	resetBoard();
@@ -258,8 +258,8 @@ function MovePiece(from, to) {
 	if (move === null) return 'snapback';
 
 	board.position(game.fen(), false);
-    t_enable && t_moveMade(from, to, game.turn(), turnCount);
-    t_enable && tutorKnowledge.calcUndeveloped(board.position());
+	t_enable && t_moveMade(from, to, game.turn(), turnCount);
+	t_enable && tutorKnowledge.calcUndeveloped(board.position());
 	turnCount++;
 	updateStatus();
 }
@@ -563,33 +563,33 @@ function getScore(a) {
 //--------------------------T    U    T    O    R------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-<<<<<<< HEAD
-function Init_tutor (boardPosition){
-    //Get undeveloped pieces from starting position
-    var undevelopedFunction = function (boardPosition){
-        var undevelopedPieces = {};
-        for (var property in boardPosition)
-		if (startPosition.hasOwnProperty(property) &&
-           (boardPosition[property].substr(0, 1) === game_playerSide) &&
-           (boardPosition[property] === startPosition[property]))
-                    undevelopedPieces[property] = startPosition[property];
-    
-        tutorKnowledge.undevelopedPieces = undevelopedPieces;
-        tutorKnowledge.undevelopedPiecesCount = Object.keys(undevelopedPieces).length;
-    };
-    
-    tutorKnowledge = {
-        bestMove: null,
-        side: game_playerSide,
-        undevelopedPieces: null,
-        undevelopedPiecesCount: null,
-        castlePossible: true,
-        playerMoves: [],
-        opponentMoves: [],
-        turnCount: turnCount,
-        calcUndeveloped: undevelopedFunction
-    };
-    tutorKnowledge.calcUndeveloped(boardPosition);
+
+function Init_tutor(boardPosition) {
+	//Get undeveloped pieces from starting position
+	var undevelopedFunction = function (boardPosition) {
+		var undevelopedPieces = {};
+		for (var property in boardPosition)
+			if (startPosition.hasOwnProperty(property) &&
+				(boardPosition[property].substr(0, 1) === game_playerSide) &&
+				(boardPosition[property] === startPosition[property]))
+				undevelopedPieces[property] = startPosition[property];
+
+		tutorKnowledge.undevelopedPieces = undevelopedPieces;
+		tutorKnowledge.undevelopedPiecesCount = Object.keys(undevelopedPieces).length;
+	};
+
+	tutorKnowledge = {
+		bestMove: null,
+		side: game_playerSide,
+		undevelopedPieces: null,
+		undevelopedPiecesCount: null,
+		castlePossible: true,
+		playerMoves: [],
+		opponentMoves: [],
+		turnCount: turnCount,
+		calcUndeveloped: undevelopedFunction
+	};
+	tutorKnowledge.calcUndeveloped(boardPosition);
 }
 
 function calcUndeveloped(boardPosition) {
@@ -616,10 +616,14 @@ function t_moveMade(from, to, side, turnCount) {
 }
 
 function t_onEngine(from, to) {
-    t_PushMessage("Engine says: " + from + " " + to);
-    tutorKnowledge.bestMove = {from: from, to: to};
-    board.highlightSquare([from, to], false, ["#ffff00", "#ffff00"]);
-    console.log(tutorKnowledge);
+	t_PushMessage("Engine says: " + from + " " + to);
+	tutorKnowledge.bestMove = {
+		from: from,
+		to: to
+	};
+	cb_permHighlighted.squares = [from, to];
+	board.highlightSquare(cb_permHighlighted.squares, false, cb_permHighlighted.colours);
+	console.log(tutorKnowledge);
 }
 
 function t_PushMessage(text) {
