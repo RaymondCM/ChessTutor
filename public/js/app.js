@@ -35,19 +35,13 @@ $(document).ready(function () {
 	sf_scoreBlack = -1;
 	//Force evaluation at every depth (much better centipawn results) slower results
 	sf_accurateCentipawns = false;
-<<<<<<< HEAD
     
     /* TUTOR */
-    t_enable = true;
-=======
-
-	/* TUTOR */
-	t_enable = false;
->>>>>>> origin/master
+    t_enable = false;
 
 	/* HTML */
 	gui_capturedPieceSize = "50px";
-	gui_tutorResponse = 'tutorText';
+    gui_tutorResponse = 'tutorText';
 
 	/* WEB SOCKETS */
 	socket_sessionID = null;
@@ -56,11 +50,7 @@ $(document).ready(function () {
 
 	Init_Stockfish();
 	Init_Chessboard();
-<<<<<<< HEAD
-    t_enable && Init_tutor(board.position());
-=======
-	t_enable && Init_tutor();
->>>>>>> origin/master
+    t_enable && Init_tutor();
 
 	/* BIND ALL BUTTON CLICKS */
 	$("#undoBtn").click(function () {
@@ -345,6 +335,9 @@ function resetBoard() {
 
 function MovePiece(from, to) {
 
+	//	if (game_aiMode === 2)
+	//		game_playerSide = (game_playerSide === 'w' ? 'b' : 'w');
+
 	var move = game.move({
 		from: from,
 		to: to,
@@ -352,20 +345,15 @@ function MovePiece(from, to) {
 	});
 
 	if (move === null) return 'snapback';
-    
-    
-    
+
 	//If playing online and not your turn send move to update oponent
 	//Game !== player side because game side changed on game.move != null
 	if (game_aiMode === 2 && game_gotOponent && game.turn() !== game_playerSide) {
 		console.log("Sending From->To:" + from + to);
 		socket.emit("chess move", [from, to, socket_oponentID]);
 	}
-    
-    
+
 	board.position(game.fen(), false);
-    //Pass the move information to the tutor
-    t_moveMade(from, to, game.turn(), turnCount);
 	turnCount++;
 	updateStatus();
 }
@@ -610,21 +598,17 @@ function Init_Stockfish() {
 		}
 
 		getScore(lastPonder);
+
 		var side = game.turn(),
 			move = event.data.substring(9, 13);
-        
-        //Give the tutor the best move
-        if ((game_playerSide === side) && t_enable)
-            t_onEngine(move.substr(0, 2), move.substr(2, 4));
-        
+
 		$("#suggestedMove").html("SUGGESTED MOVE FOR " + side + ": " + move);
 		//console.log(" * Turn: " + (turnCount === 0 ? "1" : Math.floor(turnCount / 2)) + " Side: " + side + " Move: " + move);
-        
+
 		//Make opponent moves
 		if (!game.game_over() && (game_aiMode === 1) || !game.game_over() && (game_aiMode === 0) && (game_playerSide != side)) {
 			cb_autoPlayMove = setTimeout(MovePiece, cb_autoPlayDelay, move.substr(0, 2), move.substr(2, 4));
-        
-        }
+		}
 	}
 }
 
@@ -645,10 +629,13 @@ function getScore(a) {
 			} else
 				d = (d == "" ? b[e] : d + '_' + b[e]);
 		}
+
 		return c;
 	};
 
 	var msgObj = infoToObj(a);
+
+	//console.log(msgObj);
 
 	if (game.turn() === 'w' && msgObj.hasOwnProperty("score_cp"))
 		sf_scoreWhite = msgObj.score_cp;
@@ -664,63 +651,23 @@ function getScore(a) {
 //--------------------------T    U    T    O    R------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-<<<<<<< HEAD
-
-function Init_tutor (boardPosition){
-    //Get undeveloped pieces from starting position
-    var myStartingPosition = {};
-    for (var property in boardPosition)
-		if (boardPosition.hasOwnProperty(property))
-			if (boardPosition[property].substr(0, 1) === game_playerSide)
-                myStartingPosition[property] = boardPosition[property];
-    
-    tutorKnowledge = {
+function Init_tutor (){
+    tutor = {
         bestMove: null,
-        side: game_playerSide,
-        undevelopedPieces: myStartingPosition,
-        undevelopedPiecesCount: Object.keys(myStartingPosition).length,
-        castlePossible: true,
-        playerMoves: [],
-        opponentMoves: [],
-        turnCount: turnCount
-    };
+        side: null,
+        
+        };
+    
+    tutor.setKnowledge('a', 'b');
+console.writeLine(tutor);
 }
 
-function t_moveMade(from, to, side, turnCount){
-    (side === game_playerSide) ? tutorKnowledge.playerMoves.push({from: from, to: to}) : tutorKnowledge.opponentMoves.push({from: from, to: to});
-    tutorKnowledge.turnCount = turnCount;
-}
-
-function t_onEngine(from, to) {
-    t_PushMessage("Engine says: " + from + " " + to);
-    tutorKnowledge.bestMove = {from: from, to: to};
-    t_PushMessage(tutorKnowledge.undevelopedPieces);
-    console.log(tutorKnowledge);
-}
-
-function t_PushMessage (text){
+function 
+function PushMessage (text){
     var responseBox = document.getElementById(gui_tutorResponse);
     var message = document.createElement('p');
     message.innerHTML = text;
     responseBox.appendChild(message);
-=======
-function Init_tutor() {
-	tutor = {
-		bestMove: null,
-		side: null,
-
-	};
-
-	tutor.setKnowledge('a', 'b');
-	console.writeLine(tutor);
-}
-
-function PushMessage(text) {
-	var responseBox = document.getElementById(gui_tutorResponse);
-	var message = document.createElement('p');
-	message.innerHTML = text;
-	responseBox.appendChild(message);
->>>>>>> origin/master
 }
 
 
