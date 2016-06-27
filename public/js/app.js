@@ -41,10 +41,12 @@ $(document).ready(function () {
 	socket_sessionID = null;
 	socket_oponentID = null;
 	socket_roomID = null;
-
+    
 	Init_Stockfish();
 	Init_Chessboard(); 
-	t_enable && Init_tutor(board.position());
+    startPosition = board.position();
+	t_enable && Init_tutor(startPosition);
+    
 
 	/* BIND ALL BUTTON CLICKS */
 	$("#undoBtn").click(function () {
@@ -174,9 +176,9 @@ function Init_Chessboard() {
 	turnCount++;
 	updateStatus();
 
-	board.highlightSquare = function (s, b) {
+	board.highlightSquare = function (s, b, c) {
 		for (x in s) {
-			highlightSquare(s[x], b);
+			highlightSquare(s[x], b, c);
 		}
 	};
 
@@ -187,9 +189,11 @@ function Init_Chessboard() {
 	$(window).resize(board.resize);
 }
 
-function highlightSquare(square, aiHighlight) {
+function highlightSquare(square, aiHighlight, colour) {
+    if (typeof colour === 'undefined')
+        colour = [cb_boardTheme[2], cb_boardTheme[3]];
 	var squareEl = $('#Chessboard .square-' + square);
-	squareEl.css('background', squareEl.hasClass('black-3c85d') === true ? cb_boardTheme[2] : cb_boardTheme[3]);
+	squareEl.css('background', squareEl.hasClass('black-3c85d') === true ? colour[0] : colour[1]);
 }
 
 function restartGameAterOnline(reason) {
@@ -250,7 +254,8 @@ function MovePiece(from, to) {
 	if (move === null) return 'snapback';
 
 	board.position(game.fen(), false);
-    t_moveMade(from, to, game.turn(), turnCount);
+    t_enable && t_moveMade(from, to, game.turn(), turnCount);
+    t_enable && calcUndeveloped(board.position());
 	turnCount++;
 	updateStatus();
 }
@@ -554,6 +559,7 @@ function getScore(a) {
 //-----------------------------------------------------------------------------
 function Init_tutor (boardPosition){
     //Get undeveloped pieces from starting position
+    
     tutorKnowledge = {
         bestMove: null,
         side: game_playerSide,
@@ -570,11 +576,13 @@ function Init_tutor (boardPosition){
 function calcUndeveloped(boardPosition){
     var undevelopedPieces = {};
     for (var property in boardPosition)
-		if (boardPosition.hasOwnProperty(property))
-			if (boardPosition[property].substr(0, 1) === game_playerSide)
-                undevelopedPieces[property] = boardPosition[property];
-    tutorknowledge.undevelopedPieces = undevelopedPieces;
-    tutorknowledge.undevelopedPiecesCount = Object.keys(undevelopedPieces).length;
+		if (startPosition.hasOwnProperty(property) &&
+           (boardPosition[property].substr(0, 1) === game_playerSide) &&
+           (boardPosition[property] === startPosition[property]))
+                    undevelopedPieces[property] = startPosition[property];
+    
+    tutorKnowledge.undevelopedPieces = undevelopedPieces;
+    tutorKnowledge.undevelopedPiecesCount = Object.keys(undevelopedPieces).length;
 }
 
 function t_moveMade(from, to, side, turnCount){
@@ -585,8 +593,10 @@ function t_moveMade(from, to, side, turnCount){
 function t_onEngine(from, to) {
     t_PushMessage("Engine says: " + from + " " + to);
     tutorKnowledge.bestMove = {from: from, to: to};
-    console.log(tutorKnowledge.undevelopedPieces);
+    cb_permHighlighted = [from, to];
+    board.highlightSquare(cb_permHighlighted, false, ["#ffff00", "#ffff00"]);
     console.log(tutorKnowledge);
+    
 }
 
 function t_PushMessage (text){
