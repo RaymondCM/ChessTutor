@@ -1,13 +1,7 @@
-var socket = io();
-
 $(document).ready(function () {
 	/*
 	    GLOBAL VARIABLES
 	*/
-	//Hide on JS so sizing is still calculated for css
-	$("#joinRooms :input").attr("disabled", true);
-	$("#joinRooms").hide();
-	$("#leaveBtn").hide();
 	$(document).foundation();
 
 	ct_debug = false;
@@ -54,22 +48,12 @@ $(document).ready(function () {
 
 	/* BIND ALL BUTTON CLICKS */
 	$("#undoBtn").click(function () {
-		if (game_aiMode == 2) {
-			console.log("Requesting Undo Last Half Move");
-			socket.emit("undomove-game", socket_roomID);
-		} else {
-			clearTimeout(cb_autoPlayMove);
-			undoHalfMoves(2);
-		}
+		clearTimeout(cb_autoPlayMove);
+		undoHalfMoves((game_aiMode == 2 ? 1 : 2));
 	});
 
 	$("#resetBtn").click(function () {
-		if (game_aiMode === 2) {
-			console.log("Requesting Board Reset");
-			socket.emit("reset-game", socket_roomID);
-		} else {
-			resetGame(game_aiMode);
-		}
+		resetGame(game_aiMode);
 	});
 
 	$("#pveBtn").click(function () {
@@ -90,10 +74,6 @@ $(document).ready(function () {
 		$(this).addClass("success");
 	});
 
-	$("#leaveBtn").click(function () {
-		restartGameAterOnline();
-	});
-
 });
 
 //-----------------------------------------------------------------------------
@@ -102,66 +82,6 @@ $(document).ready(function () {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-socket.on('client-id', function (message) {
-	socket_sessionID = message[0];
-	document.getElementById("sessionID").innerHTML = "Room:" + message[1] + "=>SocketID:" + socket_sessionID;
-});
-
-$("#joinBtn").click(function () {
-	socket_roomID = $("#joinText").val();
-	socket.emit("join", socket_roomID);
-});
-
-socket.on('join-status', function (message) {
-	if (message !== null) {
-		$("#joinRooms :input").attr("disabled", true);
-		$("#joinRooms").hide();
-		$("#gameMode a").hide();
-		$("#leaveBtn").show();
-
-		game_playerSide = message[1];
-		board.orientation(((game_playerSide == 'w') ? "white" : "black"));
-
-		if (message[0] === 2) {
-			socket.emit("ready", socket_roomID);
-		}
-
-		console.log("Join Status: " + message.join("=>"));
-	} else {
-		console.log("Couldn't join room (Room Clients Max)");
-	}
-});
-
-socket.on('game-ready', function (roomSockets) {
-	console.log("Ready.");
-
-	for (var name in roomSockets) {
-		if (socket_sessionID != name)
-			socket_oponentID = name;
-	}
-
-	game_gotOponent = true;
-});
-
-socket.on("chess moved", function (msg) {
-	console.log("Recieving From->To:" + msg[0] + msg[1]);
-
-	MovePiece(msg[0], msg[1]);
-});
-
-socket.on('disconnected', function (message) {
-	restartGameAterOnline();
-});
-
-socket.on('reset-boards', function () {
-	console.log("Resetting Board from Request");
-	resetBoard();
-});
-
-socket.on('undo-move', function () {
-	console.log("Undoing Move from Request");
-	undoHalfMoves(1);
-});
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -188,8 +108,7 @@ function Init_Chessboard() {
 	var onDragStart = function (source, piece, position, orientation) {
 		if (game.game_over() === true ||
 			(game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-			(game.turn() === 'b' && piece.search(/^w/) !== -1) || game_aiMode === 1 || game.turn() !== game_playerSide ||
-			(game_aiMode === 2 && !game_gotOponent)) {
+			(game.turn() === 'b' && piece.search(/^w/) !== -1) || game_aiMode === 1 || game.turn() !== game_playerSide) {
 			return false;
 		}
 	};
@@ -211,8 +130,7 @@ function Init_Chessboard() {
 	};
 
 	var onMouseoverSquare = function (square, piece) {
-		if (game_aiMode === 2 && !game_gotOponent)
-			return false;
+
 		// get list of possible moves for this square
 		var moves = game.moves({
 			square: square,
@@ -304,24 +222,12 @@ function undoHalfMoves(number) {
 function resetGame(mode) {
 	clearTimeout(cb_autoPlayMove);
 
-	//Change this (Might not always call)
-	if (game_aiMode === 2) {
-		socket.emit("leave", socket_roomID);
-		console.log("Left Game Room:" + socket_roomID);
-		socket_roomID = null;
-	}
-
 	resetBoard();
 	game_aiMode = mode;
 
-	if (game_aiMode === 2) {
-		$("#joinRooms :input").attr("disabled", false);
-		$("#joinRooms").show();
-	} else {
-		$("#leaveBtn").hide();
-		$("#joinRooms :input").attr("disabled", true);
-		$("#joinRooms").hide();
-	}
+	$("#leaveBtn").hide();
+	$("#joinRooms :input").attr("disabled", true);
+	$("#joinRooms").hide();
 
 	updateStatus();
 }
@@ -335,9 +241,6 @@ function resetBoard() {
 
 function MovePiece(from, to) {
 
-	//	if (game_aiMode === 2)
-	//		game_playerSide = (game_playerSide === 'w' ? 'b' : 'w');
-
 	var move = game.move({
 		from: from,
 		to: to,
@@ -345,13 +248,6 @@ function MovePiece(from, to) {
 	});
 
 	if (move === null) return 'snapback';
-
-	//If playing online and not your turn send move to update oponent
-	//Game !== player side because game side changed on game.move != null
-	if (game_aiMode === 2 && game_gotOponent && game.turn() !== game_playerSide) {
-		console.log("Sending From->To:" + from + to);
-		socket.emit("chess move", [from, to, socket_oponentID]);
-	}
 
 	board.position(game.fen(), false);
     t_moveMade(from, to, game.turn(), turnCount);
@@ -361,6 +257,7 @@ function MovePiece(from, to) {
 
 function updateStatus() {
 
+	game_playerSide = (game_playerSide == 'w' ? 'b' : 'w');
 	checkForTaken(board.position());
 	if (ct_debug) updateDebugLog();
 
@@ -371,8 +268,7 @@ function updateStatus() {
 		fenHistory.push(game.fen());
 	}
 
-	if (game_aiMode !== 2)
-		AskEngine(game.fen(), sf_timeOverDepth ? sf_searchTime : sf_searchDepth);
+	AskEngine(game.fen(), sf_timeOverDepth ? sf_searchTime : sf_searchDepth);
 }
 
 function updateScale(depth) {

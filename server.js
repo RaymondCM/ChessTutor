@@ -19,6 +19,9 @@ var session = require('express-session');
 
 var databaseURL = require('./config/database.js');
 
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
 //----------Server-Config-------------
 
 //Connect to the Database (URL defined in './config/database.js' as stated above).
@@ -61,7 +64,9 @@ app.use(express.static(__dirname + '/public'));
 //Pass in the fully configured passport and app to routes when loading in.
 require('./app/routes.js')(app, passport);
 
+require('./app/socket.js')(io);
+
 //Start the Server
-app.listen(port, function () {
+server.listen(port, function () {
 	console.log('Started Chess Tutor on :*' + port);
 });
