@@ -15,7 +15,10 @@ $(document).ready(function () {
 	cb_autoPlayMove = setTimeout(function () {}, 0);
 	cb_autoPlayDelay = 0;
 	cb_fenHistoryMaxLength = 10;
-	cb_permHighlighted = [];
+	cb_permHighlighted = {
+		squares: [],
+		colours: ["#ffff00", "#ffff00"]
+	};
 	cb_displayMarkers = false;
 	cb_counterScaleMarkings = 2;
 	cb_pieceTheme = metro_piece_theme;
@@ -41,12 +44,12 @@ $(document).ready(function () {
 	socket_sessionID = null;
 	socket_oponentID = null;
 	socket_roomID = null;
-    
+
 	Init_Stockfish();
-	Init_Chessboard(); 
-    startPosition = board.position();
+	Init_Chessboard();
+	startPosition = board.position();
 	t_enable && Init_tutor(startPosition);
-    
+
 
 	/* BIND ALL BUTTON CLICKS */
 	$("#undoBtn").click(function () {
@@ -128,7 +131,7 @@ function Init_Chessboard() {
 		$(".black-3c85d").css("color", wcol)
 
 		if (cb_permHighlighted.length !== 0)
-			board.highlightSquare(cb_permHighlighted, true);
+			board.highlightSquare(cb_permHighlighted.squares, true, cb_permHighlighted.colours);
 	};
 
 	var onMouseoverSquare = function (square, piece) {
@@ -176,9 +179,9 @@ function Init_Chessboard() {
 	turnCount++;
 	updateStatus();
 
-	board.highlightSquare = function (s, b, c) {
-		for (x in s) {
-			highlightSquare(s[x], b, c);
+	board.highlightSquare = function (array, perm, colours) {
+		for (item in array) {
+			highlightSquare(array[item], perm, colours);
 		}
 	};
 
@@ -189,9 +192,9 @@ function Init_Chessboard() {
 	$(window).resize(board.resize);
 }
 
-function highlightSquare(square, aiHighlight, colour) {
-    if (typeof colour === 'undefined')
-        colour = [cb_boardTheme[2], cb_boardTheme[3]];
+function highlightSquare(square, perm, colour) {
+	if (typeof colour === 'undefined')
+		colour = [cb_boardTheme[2], cb_boardTheme[3]];
 	var squareEl = $('#Chessboard .square-' + square);
 	squareEl.css('background', squareEl.hasClass('black-3c85d') === true ? colour[0] : colour[1]);
 }
@@ -263,7 +266,9 @@ function MovePiece(from, to) {
 
 function updateStatus() {
 
-	game_playerSide = (game_playerSide == 'w' ? 'b' : 'w');
+	if (game_aiMode == 2)
+		game_playerSide = (game_playerSide == 'w' ? 'b' : 'w');
+
 	checkForTaken(board.position());
 	if (ct_debug) updateDebugLog();
 
@@ -504,11 +509,11 @@ function Init_Stockfish() {
 
 		var side = game.turn(),
 			move = event.data.substring(9, 13);
-        
-        //Give the tutor the best move
-        if ((game_playerSide === side) && t_enable)
-            t_onEngine(move.substr(0, 2), move.substr(2, 4));
-        
+
+		//Give the tutor the best move
+		if ((game_playerSide === side) && t_enable)
+			t_onEngine(move.substr(0, 2), move.substr(2, 4));
+
 		$("#suggestedMove").html("SUGGESTED MOVE FOR " + side + ": " + move);
 		//console.log(" * Turn: " + (turnCount === 0 ? "1" : Math.floor(turnCount / 2)) + " Side: " + side + " Move: " + move);
 
@@ -558,6 +563,7 @@ function getScore(a) {
 //--------------------------T    U    T    O    R------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
+<<<<<<< HEAD
 function Init_tutor (boardPosition){
     //Get undeveloped pieces from starting position
     var undevelopedFunction = function (boardPosition){
@@ -586,21 +592,27 @@ function Init_tutor (boardPosition){
     tutorKnowledge.calcUndeveloped(boardPosition);
 }
 
-function calcUndeveloped(boardPosition){
-    var undevelopedPieces = {};
-    for (var property in boardPosition)
+function calcUndeveloped(boardPosition) {
+	var undevelopedPieces = {};
+	for (var property in boardPosition)
 		if (startPosition.hasOwnProperty(property) &&
-           (boardPosition[property].substr(0, 1) === game_playerSide) &&
-           (boardPosition[property] === startPosition[property]))
-                    undevelopedPieces[property] = startPosition[property];
-    
-    tutorKnowledge.undevelopedPieces = undevelopedPieces;
-    tutorKnowledge.undevelopedPiecesCount = Object.keys(undevelopedPieces).length;
+			(boardPosition[property].substr(0, 1) === game_playerSide) &&
+			(boardPosition[property] === startPosition[property]))
+			undevelopedPieces[property] = startPosition[property];
+
+	tutorKnowledge.undevelopedPieces = undevelopedPieces;
+	tutorKnowledge.undevelopedPiecesCount = Object.keys(undevelopedPieces).length;
 }
 
-function t_moveMade(from, to, side, turnCount){
-    (side === game_playerSide) ? tutorKnowledge.playerMoves.push({from: from, to: to}) : tutorKnowledge.opponentMoves.push({from: from, to: to});
-    tutorKnowledge.turnCount = turnCount;
+function t_moveMade(from, to, side, turnCount) {
+	(side === game_playerSide) ? tutorKnowledge.playerMoves.push({
+		from: from,
+		to: to
+	}): tutorKnowledge.opponentMoves.push({
+		from: from,
+		to: to
+	});
+	tutorKnowledge.turnCount = turnCount;
 }
 
 function t_onEngine(from, to) {
@@ -608,14 +620,13 @@ function t_onEngine(from, to) {
     tutorKnowledge.bestMove = {from: from, to: to};
     board.highlightSquare([from, to], false, ["#ffff00", "#ffff00"]);
     console.log(tutorKnowledge);
-    
 }
 
-function t_PushMessage (text){
-    var responseBox = document.getElementById(gui_tutorResponse);
-    var message = document.createElement('p');
-    message.innerHTML = text;
-    responseBox.appendChild(message);
+function t_PushMessage(text) {
+	var responseBox = document.getElementById(gui_tutorResponse);
+	var message = document.createElement('p');
+	message.innerHTML = text;
+	responseBox.appendChild(message);
 }
 
 
