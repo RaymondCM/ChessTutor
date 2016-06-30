@@ -118,22 +118,6 @@ function Init_Chessboard() {
 		}
 	};
 
-	var removeHighlighting = function () {
-		$('#Chessboard .square-55d63').css('background-color', '');
-
-		var wcol = cfg.boardTheme[0];
-		var bcol = cfg.boardTheme[1];
-
-		$(".white-1e1d7").css("background-color", wcol)
-		$(".white-1e1d7").css("color", bcol)
-
-		$(".black-3c85d").css("background-color", bcol)
-		$(".black-3c85d").css("color", wcol)
-
-		if (cb_permHighlighted.length !== 0)
-			board.highlightSquare(cb_permHighlighted.squares, true, cb_permHighlighted.colours);
-	};
-
 	var onMouseoverSquare = function (square, piece) {
 
 		// get list of possible moves for this square
@@ -191,6 +175,22 @@ function Init_Chessboard() {
 	//Resize with window
 	$(window).resize(board.resize);
 }
+
+function removeHighlighting (){
+		$('#Chessboard .square-55d63').css('background-color', '');
+
+		var wcol = cb_boardTheme[0];
+		var bcol = cb_boardTheme[1];
+
+		$(".white-1e1d7").css("background-color", wcol)
+		$(".white-1e1d7").css("color", bcol)
+
+		$(".black-3c85d").css("background-color", bcol)
+		$(".black-3c85d").css("color", wcol)
+
+		if (cb_permHighlighted.length !== 0)
+			board.highlightSquare(cb_permHighlighted.squares, true, cb_permHighlighted.colours);
+	};
 
 function highlightSquare(square, perm, colour) {
 	if (typeof colour === 'undefined')
@@ -261,6 +261,7 @@ function MovePiece(from, to) {
 	t_enable && t_moveMade(from, to, game.turn(), turnCount);
 	t_enable && tutorKnowledge.calcUndeveloped(board.position());
 	turnCount++;
+    tutorKnowledge.turnCount = turnCount;
 	updateStatus();
 }
 
@@ -278,7 +279,7 @@ function updateStatus() {
 		fenHistory.shift();
 		fenHistory.push(game.fen());
 	}
-
+    
 	AskEngine(game.fen(), sf_timeOverDepth ? sf_searchTime : sf_searchDepth);
 }
 
@@ -621,6 +622,8 @@ function t_onEngine(from, to) {
 		from: from,
 		to: to
 	};
+    cb_permHighlighted.squares = [];
+    removeHighlighting();
 	cb_permHighlighted.squares = [from, to];
 	board.highlightSquare(cb_permHighlighted.squares, false, cb_permHighlighted.colours);
 	console.log(tutorKnowledge);
@@ -633,6 +636,31 @@ function t_PushMessage(text) {
 	responseBox.appendChild(message);
 }
 
+function t_formulateResponse(){
+    var responseRaw = {
+        
+                      }
+}
+
+//Find the best key value pair in the knowledge
+function t_bestTopic(){
+    var weights = {
+        bestMove: 0,
+		side: 0,
+		undevelopedPieces: 0,
+		undevelopedPiecesCount: 0,
+		castlePossible: 0,
+		playerMoves: 0,
+		opponentMoves: 0,
+		turnCount: 0,
+		calcUndeveloped: 0        
+    };
+    
+    if ((tutorKnowledge.turnCount > 2) && (tutorKnowledge.turnCount < 9))
+            weights.turnCount = 10;
+    else
+        weights.turnCount = tutorKnowledge.turnCount;
+}
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
