@@ -1,6 +1,6 @@
 # Chess Tutor
 
-A simple web based application that invites beginners to furthur develop intrest and skill in Chess using artficial inteligence. Multiplayer temporarily removed in commit f8f1b66d60fb4e35b6c5b324cc7b084212e18633.
+A simple web based application that invites beginners to furthur develop intrest and skill in Chess using artficial inteligence. Multiplayer temporarily removed in commit https://github.com/RaymondKirk/ChessTutor/commit/f8f1b66d60fb4e35b6c5b324cc7b084212e18633.
 
 ## Installation
 
