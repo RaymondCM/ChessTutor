@@ -30,8 +30,3 @@ TODO: Write history
 
 Raymond Kirk
 Luke Jackson
-Ryan Hilister
-
-## License
-
-What licence?
